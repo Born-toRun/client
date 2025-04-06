@@ -1,0 +1,145 @@
+@import 'tailwindcss/utilities' layer(utilities);
+
+/* Typography */
+@utility display-lg {
+  @apply text-[57px] leading-[64px] tracking-[-0.25px] font-normal;
+}
+
+@utility display-md {
+  @apply text-[45px] leading-[52px] font-normal;
+}
+
+@utility display-sm {
+  @apply text-[36px] leading-[44px] font-normal;
+}
+
+@utility headline-lg {
+  @apply text-[32px] leading-[40px] font-bold;
+}
+
+@utility headline-md {
+  @apply text-[28px] leading-[36px] font-bold;
+}
+
+@utility headline-sm {
+  @apply text-[24px] leading-[32px] font-bold;
+}
+
+@utility title-xl {
+  @apply text-[22px] leading-[28px] font-bold;
+}
+
+@utility title-lg {
+  @apply text-[18px] leading-[26px] font-bold;
+}
+
+@utility title-md {
+  @apply text-[16px] leading-[24px] tracking-[0.15px] font-medium;
+}
+
+@utility title-sm {
+  @apply text-[14px] leading-[20px] tracking-[0.1px] font-medium;
+}
+
+@utility label-lg {
+  @apply text-[18px] font-bold;
+}
+
+@utility label-md {
+  @apply text-[16px] font-bold;
+}
+
+@utility label-sm {
+  @apply text-[14px] tracking-[0.25px] font-medium;
+}
+
+@utility label-xs {
+  @apply text-[12px] tracking-[0.4px] font-medium;
+}
+
+@utility label-2xs {
+  @apply text-[10px] tracking-[0.4px] font-bold;
+}
+
+@utility body-lg {
+  @apply text-[16px] leading-[24px] tracking-[0.5px];
+}
+
+@utility body-md {
+  @apply text-[14px] leading-[20px] tracking-[0.25px];
+}
+
+@utility body-sm {
+  @apply text-[12px] leading-[16px] tracking-[0.4px];
+}
+
+@utility body-xs {
+  @apply text-[10px] leading-[14px] tracking-[0.4px];
+}
+
+/* font weight */
+/* Font Weight Utilities */
+@utility font-thin {
+  @apply font-[100];
+}
+
+@utility font-extralight {
+  @apply font-[200];
+}
+
+@utility font-light {
+  @apply font-[300];
+}
+
+@utility font-normal {
+  @apply font-[400];
+}
+
+@utility font-medium {
+  @apply font-[500];
+}
+
+@utility font-semibold {
+  @apply font-[600];
+}
+
+@utility font-bold {
+  @apply font-[700];
+}
+
+@utility font-extrabold {
+  @apply font-[800];
+}
+
+@utility font-black {
+  @apply font-[900];
+}
+
+/* Shadow */
+@utility elevation-10 {
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@utility elevation-20 {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+@utility elevation-30 {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+@utility elevation-40 {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.14);
+}
+
+@utility elevation-50 {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.16);
+}
+
+@utility elevation-60 {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+@utility elevation-70 {
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+}
