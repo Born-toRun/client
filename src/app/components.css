@@ -143,3 +143,24 @@
 @utility elevation-70 {
   box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
 }
+
+/* radius */
+@utility round-full {
+  @apply rounded-full;
+}
+
+@utility round-lg {
+  @apply rounded-[14px];
+}
+
+@utility round-md {
+  @apply rounded-[10px];
+}
+
+@utility round-sm {
+  @apply rounded-[8px];
+}
+
+@utility round-xs {
+  @apply rounded-[4px];
+}
