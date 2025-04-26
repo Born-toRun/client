@@ -1,48 +1,39 @@
-@import 'tailwindcss/preflight' layer(base);
-@import 'tailwindcss/utilities' layer(utilities);
-@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss';
 
 @import './components.css';
 
 @theme {
-  /* === Primary === */
-  --color-primary-G500: #39974d;
-  --color-primary-G400: #50c85a;
-  --color-primary-G300: #67eb72;
+  --color-primary-500: #39974d;
+  --color-primary-400: #50c85a;
+  --color-primary-300: #67eb72;
 
-  /* === Secondary === */
-  --color-secondary-N900: #111111;
-  --color-secondary-N800: #2a2a2a;
-  --color-secondary-N500: #555555;
-  --color-secondary-N200: #777777;
-  --color-secondary-N90: #949494;
-  --color-secondary-N60: #b7b7b7;
-  --color-secondary-N40: #dfdfdf;
-  --color-secondary-N30: #efefef;
-  --color-secondary-N10: #fcfcfc;
+  --color-secondary-900: #111111;
+  --color-secondary-800: #2a2a2a;
+  --color-secondary-500: #555555;
+  --color-secondary-200: #777777;
+  --color-secondary-90: #949494;
+  --color-secondary-60: #b7b7b7;
+  --color-secondary-40: #dfdfdf;
+  --color-secondary-30: #efefef;
+  --color-secondary-10: #fcfcfc;
 
-  /* === Basic Colors === */
   --color-black: #000000;
   --color-white: #ffffff;
 
-  /* === System - Blue === */
-  --color-system-b-B500: #0747a6;
-  --color-system-b-B400: #0052cc;
-  --color-system-b-B50: #deebff;
+  --color-system-b-500: #0747a6;
+  --color-system-b-400: #0052cc;
+  --color-system-b-50: #deebff;
 
-  /* === System - Green === */
-  --color-system-g-G500: #006644;
-  --color-system-g-G400: #00875a;
-  --color-system-g-G50: #e3fcef;
+  --color-system-g-500: #006644;
+  --color-system-g-400: #00875a;
+  --color-system-g-50: #e3fcef;
 
-  /* === System - Yellow === */
-  --color-system-y-Y500: #ff8b00;
-  --color-system-y-Y400: #ff991f;
-  --color-system-y-Y50: #fffae6;
+  --color-system-y-500: #ff8b00;
+  --color-system-y-400: #ff991f;
+  --color-system-y-50: #fffae6;
 
-  /* === System - Red === */
-  --color-system-r-R500: #bf2600;
-  --color-system-r-R400: #de350b;
-  --color-system-r-R300: #ff5630;
-  --color-system-r-R50: #ffebe6;
+  --color-system-r-500: #bf2600;
+  --color-system-r-400: #de350b;
+  --color-system-r-300: #ff5630;
+  --color-system-r-50: #ffebe6;
 }
