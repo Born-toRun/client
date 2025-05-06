@@ -1,3 +1,4 @@
+import { feedCategoryLabel } from "./../../constants/index";
 export interface FeedListParams {
   category?: FEEDCategory;
   searchKeyword?: string;
@@ -54,4 +55,4 @@ export interface FeedListResponse {
   empty: boolean;
 }
 
-export type FEEDCategory = 'COMMUNITY' | 'MARATHON';
+export type FEEDCategory = keyof typeof feedCategoryLabel;
