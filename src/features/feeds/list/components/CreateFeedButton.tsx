@@ -13,20 +13,20 @@ export default function CreateFeedButton({ isScrolled }: Props) {
   return (
     <Link href={"#"} className="flex fixed right-[16px] bottom-[24px]">
       <div className="bg-primary-400 h-[48px] round-full flex items-center gap-[4px] px-[16px]">
+        <PlusIcon />
         <AnimatePresence initial={false}>
           {!isScrolled && (
-            <motion.div
-              key="plus-icon"
+            <motion.span
+              key="add-text"
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
               transition={{ duration: 0.2 }}
-              className="overflow-hidden flex items-center"
+              className="label-md text-white overflow-hidden inline-block whitespace-nowrap"
             >
-              <PlusIcon />
-            </motion.div>
+              글쓰기
+            </motion.span>
           )}
-          <span className="label-md text-white">글쓰기</span>
         </AnimatePresence>
       </div>
     </Link>
