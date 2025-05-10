@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useGetFeesListQuery } from "./hooks/queries";
 import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
+import { useScrollPosition } from "@/features/hooks/useScroll";
 
 import MainHeader from "@/components/header/MainHeader";
 import Tabs from "@/components/Tabs";
@@ -11,6 +12,7 @@ import CheckBox from "@/components/CheckBox";
 
 import { FEEDCategory } from "./types";
 import { feedCategoryLabel } from "../constants";
+import CreateFeedButton from "./components/CreateFeedButton";
 
 export default function FeedContainer() {
   const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(
@@ -32,15 +34,18 @@ export default function FeedContainer() {
   });
 
   const feedList = data?.pages.flatMap((feed) => feed.content) ?? [];
+  const isScrolled = useScrollPosition(20);
 
   return (
     <div>
-      <MainHeader />
-      <Tabs
-        options={feedListTabOptions}
-        selectedTabs={selectedTabs}
-        onSelectedTab={setSelectedTabs}
-      />
+      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
+      <div className="pt-[68px] mb-[16px]">
+        <Tabs
+          options={feedListTabOptions}
+          selectedTabs={selectedTabs}
+          onSelectedTab={setSelectedTabs}
+        />
+      </div>
       <div className="px-[16px] flex items-center h-[40px]">
         <CheckBox
           text="크루 공개 글 보기"
@@ -48,10 +53,11 @@ export default function FeedContainer() {
           checked={isMyCrew}
         />
       </div>
-      <div className="">
-        <FeedList list={feedList} />
-        {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
-      </div>
+
+      <FeedList list={feedList} />
+      {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
+
+      <CreateFeedButton isScrolled={isScrolled} />
     </div>
   );
 }
