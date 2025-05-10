@@ -11,8 +11,7 @@ export default function Header({ title, left, right, ...rest }: Props) {
   return (
     <header
       className={clsx(
-        "flex items-center justify-between relative py-[14px] px-[8px] ",
-        rest.className
+        "flex items-center justify-between relative py-[14px] px-[8px]"
       )}
     >
       {left ? <div>{left}</div> : <div />}
