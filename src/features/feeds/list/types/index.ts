@@ -11,26 +11,7 @@ export interface FeedListResponse {
   totalPages: number;
   totalElements: number;
   size: number;
-  content: {
-    id: number;
-    imageUris: string[];
-    contents: string;
-    viewQty: number;
-    recommendationQty: number;
-    commentQty: number;
-    registeredAt: string;
-    writer: {
-      userName: string;
-      crewName: string;
-      profileImageUri: string;
-      isAdmin: boolean;
-      isManager: boolean;
-    };
-    viewer: {
-      hasMyRecommendation: boolean;
-      hasMyComment: boolean;
-    };
-  }[];
+  content: FeedContent[];
   number: number;
   sort: {
     empty: boolean;
@@ -55,4 +36,24 @@ export interface FeedListResponse {
   empty: boolean;
 }
 
+export type FeedContent = {
+  id: number;
+  imageUris: string[];
+  contents: string;
+  viewQty: number;
+  recommendationQty: number;
+  commentQty: number;
+  registeredAt: string;
+  writer: {
+    userName: string;
+    crewName: string;
+    profileImageUri: string;
+    isAdmin: boolean;
+    isManager: boolean;
+  };
+  viewer: {
+    hasMyRecommendation: boolean;
+    hasMyComment: boolean;
+  };
+};
 export type FEEDCategory = keyof typeof feedCategoryLabel;

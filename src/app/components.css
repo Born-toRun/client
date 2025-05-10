@@ -144,7 +144,7 @@
 
 /* radius */
 @utility round-full {
-  @apply rounded-full;
+  @apply rounded-[100px];
 }
 
 @utility round-lg {

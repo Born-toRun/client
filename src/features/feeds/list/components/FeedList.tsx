@@ -1,12 +1,23 @@
 "use client";
 
+import Divider from "@/components/Divider";
+import FeedItem from "./FeedItem";
+
 import { FeedListResponse } from "../types";
 
 interface Props {
-  list?: FeedListResponse[];
+  list?: FeedListResponse["content"];
 }
 
 export default function FeedList({ list }: Props) {
-  console.log(list);
-  return <div className=""></div>;
+  return (
+    <ul>
+      {list?.map((feed) => (
+        <li key={feed.id}>
+          <FeedItem feed={feed} />
+          <Divider size={1} />
+        </li>
+      ))}
+    </ul>
+  );
 }
