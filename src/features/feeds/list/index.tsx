@@ -9,10 +9,10 @@ import MainHeader from "@/components/header/MainHeader";
 import Tabs from "@/components/Tabs";
 import FeedList from "./components/FeedList";
 import CheckBox from "@/components/CheckBox";
+import CreateFeedButton from "./components/CreateFeedButton";
 
 import { FEEDCategory } from "./types";
 import { feedCategoryLabel } from "../constants";
-import CreateFeedButton from "./components/CreateFeedButton";
 
 export default function FeedContainer() {
   const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(
