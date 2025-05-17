@@ -15,9 +15,14 @@ import KakaoIcon from '@/icons/kakao-icon.svg';
 interface Props {
   open: boolean;
   onOpenChange: () => void;
+  callback?: () => void;
 }
 
 export default function LoginBottomSheet({ onOpenChange, open }: Props) {
+  const handleLoginRedirect = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login`;
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -49,6 +54,7 @@ export default function LoginBottomSheet({ onOpenChange, open }: Props) {
         <SheetFooter>
           <button
             type='button'
+            onClick={handleLoginRedirect}
             className='text-black bg-[#FEE500] rounded-[12px] w-full flex justify-center items-center h-[56px] gap-[8px] mt-[16px]'
           >
             <KakaoIcon />
