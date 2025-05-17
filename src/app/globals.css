@@ -1,6 +1,8 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@import './components.css';
+@import "./components.css";
+
+@import "tw-animate-css";
 
 @theme {
   --color-primary-500: #39974d;

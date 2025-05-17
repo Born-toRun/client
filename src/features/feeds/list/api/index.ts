@@ -1,6 +1,6 @@
-import { runApi } from "@/client/runClient";
-import { FeedListParams } from "../types";
-import { apiRoutes } from "@/constants/route";
+import { runApi } from '@/client/runClient';
+import { FeedListParams } from '../types';
+import { apiRoutes } from '@/constants/route';
 
 const getFeedList = async (params: FeedListParams) => {
   const response = await (
