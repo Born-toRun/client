@@ -11,7 +11,7 @@ export default function LoginRequestPage() {
   const router = useRouter();
   const params = useSearchParams();
   const accessToken = params.get('accessToken');
-  const isMember = params.get('isMember');
+  const isMember = params.get('isMember') === 'true';
 
   useEffect(
     function redirectUrl() {
