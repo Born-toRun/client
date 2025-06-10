@@ -9,10 +9,9 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   inputSize: 'lg' | 'md';
   isRequired?: boolean;
   isOptional?: boolean;
-  isSelect?: boolean;
 }
 
-export default function Input({ label, inputSize, variants, isSelect, ...rest }: Props) {
+export default function Input({ label, inputSize, variants, ...rest }: Props) {
   const disabled = rest.disabled;
   const inputSizeStyleMap = {
     lg: 'h-[48px]',
