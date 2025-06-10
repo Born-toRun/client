@@ -29,7 +29,7 @@ jobs:
         run: pnpm build
 
       - name: docker image build
-        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-client -f docker/Dockerfile .
+        run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-client -f docker/Dockerfile .
 
       # docker hub login
       - name: docker login
