@@ -51,7 +51,7 @@ export default function FeedContainer() {
         loginModal.open();
       }
     },
-    [error]
+    [error, loginModal]
   );
 
   // 임시 회원탈퇴

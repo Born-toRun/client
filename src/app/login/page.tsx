@@ -32,7 +32,7 @@ export default function LoginRequestPage() {
         }
       }
     },
-    [isMember]
+    [isMember, accessToken, router]
   );
 
   return <>Loading....</>;

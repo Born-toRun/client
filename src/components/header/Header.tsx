@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLElement> {
   right?: React.ReactNode;
 }
 
-export default function Header({ title, left, right, ...rest }: Props) {
+export default function Header({ title, left, right }: Props) {
   return (
     <header
       className={clsx(
