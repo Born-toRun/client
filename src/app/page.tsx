@@ -1,4 +1,4 @@
-import FeedContainer from '@/features/feeds/list';
+import FeedContainer from "@/features/feeds/list";
 
 export default function Home() {
   return (

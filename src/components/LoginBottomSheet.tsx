@@ -1,5 +1,7 @@
 "use client";
-
+import CloseIcon from "@/icons/close-icon.svg";
+import DialogImageIcon from "@/icons/dialog-img.svg";
+import KakaoIcon from "@/icons/kakao-icon.svg";
 import {
   Sheet,
   SheetContent,
@@ -8,9 +10,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./Sheet";
-import DialogImageIcon from "@/icons/dialog-img.svg";
-import CloseIcon from "@/icons/close-icon.svg";
-import KakaoIcon from "@/icons/kakao-icon.svg";
 
 interface Props {
   open: boolean;

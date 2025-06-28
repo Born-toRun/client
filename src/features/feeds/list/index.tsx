@@ -1,38 +1,38 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useGetFeesListQuery } from './hooks/queries';
-import { useIntersectionObserver } from '@/features/hooks/useIntersectionObserver';
-import { useScrollPosition } from '@/features/hooks/useScroll';
-import { useModal } from '@/features/hooks/useModal';
-
-import MainHeader from '@/components/header/MainHeader';
-import Tabs from '@/components/Tabs';
-import FeedList from './components/FeedList';
-import CheckBox from '@/components/CheckBox';
-import CreateFeedButton from './components/CreateFeedButton';
-import LoginBottomSheet from '@/components/LoginBottomSheet';
-import CustomDialog from '@/components/CustomDialog';
-import Button from '@/components/Button';
-
-import { FEEDCategory } from './types';
-import { feedCategoryLabel } from '../constants';
-import { runApi } from '@/client/runClient';
-import { apiRoutes } from '@/constants/route';
-import { deleteCookie } from 'cookies-next';
-import { ACCESS_TOKEN } from '@/constants/common';
+"use client";
+import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
+import { useModal } from "@/features/hooks/useModal";
+import { useScrollPosition } from "@/features/hooks/useScroll";
+import { useEffect, useState } from "react";
+import { useGetFeesListQuery } from "./hooks/queries";
+import Button from "@/components/Button";
+import CheckBox from "@/components/CheckBox";
+import CustomDialog from "@/components/CustomDialog";
+import MainHeader from "@/components/header/MainHeader";
+import LoginBottomSheet from "@/components/LoginBottomSheet";
+import Tabs from "@/components/Tabs";
+import CreateFeedButton from "./components/CreateFeedButton";
+import FeedList from "./components/FeedList";
+import { runApi } from "@/client/runClient";
+import { ACCESS_TOKEN } from "@/constants/common";
+import { apiRoutes } from "@/constants/route";
+import { deleteCookie } from "cookies-next";
+import { feedCategoryLabel } from "../constants";
+import { FEEDCategory } from "./types";
 
 export default function FeedContainer() {
   const loginModal = useModal();
   const loginBottomSheet = useModal();
 
-  const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(feedCategoryLabel.COMMUNITY);
+  const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(
+    feedCategoryLabel.COMMUNITY
+  );
   const [isMyCrew, setIsMyCrew] = useState(false);
 
-  const { data, isPending, hasNextPage, fetchNextPage, error } = useGetFeesListQuery({
-    isMyCrew,
-    category: selectedTabs as FEEDCategory,
-  });
+  const { data, isPending, hasNextPage, fetchNextPage, error } =
+    useGetFeesListQuery({
+      isMyCrew,
+      category: selectedTabs as FEEDCategory,
+    });
 
   const { setTargetRef } = useIntersectionObserver({
     onIntersect: () => {
@@ -74,21 +74,28 @@ export default function FeedContainer() {
       </div>
       <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
       <div className="pt-[68px] mb-[16px]">
-        <Tabs options={feedListTabOptions} selectedTabs={selectedTabs} onSelectedTab={setSelectedTabs} />
+        <Tabs
+          options={feedListTabOptions}
+          selectedTabs={selectedTabs}
+          onSelectedTab={setSelectedTabs}
+        />
       </div>
       <div className="px-[16px] flex items-center h-[40px]">
-        <CheckBox text="크루 공개 글 보기" onChange={() => setIsMyCrew((prev) => !prev)} checked={isMyCrew} />
+        <CheckBox
+          text="크루 공개 글 보기"
+          onChange={() => setIsMyCrew((prev) => !prev)}
+          checked={isMyCrew}
+        />
       </div>
-
       <FeedList list={feedList} />
       {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
-
       <CustomDialog
         open={loginModal.isActive}
         onOpenChange={loginModal.close}
         contents={{
-          title: '로그인이 필요해요',
-          description: '러네이서 회원이 되면 러닝 모임 관리와 소통이 훨씬 간편해져요!',
+          title: "로그인이 필요해요",
+          description:
+            "러네이서 회원이 되면 러닝 모임 관리와 소통이 훨씬 간편해져요!",
         }}
         footer={
           <div className="flex w-full justify-between gap-[8px]">
@@ -114,7 +121,6 @@ export default function FeedContainer() {
           </div>
         }
       />
-
       <LoginBottomSheet
         onOpenChange={() => {
           loginBottomSheet.close();
@@ -122,7 +128,6 @@ export default function FeedContainer() {
         }}
         open={loginBottomSheet.isActive}
       />
-
       <CreateFeedButton isScrolled={isScrolled} />
     </div>
   );
@@ -131,10 +136,10 @@ export default function FeedContainer() {
 const feedListTabOptions: { key: FEEDCategory; label: string }[] = [
   {
     key: feedCategoryLabel.COMMUNITY,
-    label: '커뮤니티',
+    label: "커뮤니티",
   },
   {
     key: feedCategoryLabel.MARKET,
-    label: '마켓',
+    label: "마켓",
   },
 ];

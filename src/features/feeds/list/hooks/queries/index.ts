@@ -1,13 +1,13 @@
-import { apiRoutes } from '@/constants/route';
+import { apiRoutes } from "@/constants/route";
 import {
   InfiniteData,
   keepPreviousData,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
-} from '@tanstack/react-query';
-import { FeedListParams, FeedListResponse } from '../../types';
-import { getFeedList } from '../../api';
-import { AxiosError } from 'axios';
+} from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { getFeedList } from "../../api";
+import { FeedListParams, FeedListResponse } from "../../types";
 
 export const useGetFeesListQuery = (
   params: FeedListParams,
@@ -28,7 +28,7 @@ export const useGetFeesListQuery = (
         ...params,
         // size는 default로 10
         size: 10,
-        lastFeedId: typeof pageParam === 'number' ? pageParam : 0,
+        lastFeedId: typeof pageParam === "number" ? pageParam : 0,
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
