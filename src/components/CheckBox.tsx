@@ -22,13 +22,11 @@ export default function CheckBox({ text, ...rest }: Props) {
       <div
         className={clsx(
           "relative size-[16px] round-xs flex border items-center justify-center",
-          disabled && "border-secondary-40 bg-secondary-40 ",
-          checked &&
-            "border-0 bg-primary-400 hover:bg-primary-300 active:bg-primary-500",
-          checkedAndDisabled &&
-            "border-0 bg-secondary-40 hover:bg-secondary-40 active:bg-secondary-40",
+          disabled && "border-n-40 bg-n-40 ",
+          checked && "border-0 bg-rg-400 hover:bg-rg-300 active:bg-rg-500",
+          checkedAndDisabled && "border-0 bg-n-40 hover:bg-n-40 active:bg-n-40",
           defaultState &&
-            "border-secondary-40 hover:bg-secondary-10 hover:border-secondary-60 active:bg-secondary-30 active:border-secondary-90"
+            "border-n-40 hover:bg-n-10 hover:border-n-60 active:bg-n-30 active:border-n-90"
         )}
       >
         <input

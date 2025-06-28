@@ -34,7 +34,7 @@ export default function FeedHeader({
 
       <div className="flex flex-col gap-[4px] py-[2px] w-full">
         <p className="body-sm text-black">{userName}</p>
-        <div className="flex items-center body-sm text-secondary-60 gap-[4px]">
+        <div className="flex items-center body-sm text-n-60 gap-[4px]">
           <p>{crewName}</p>
           <span>·</span>
           <p>{date}</p>

@@ -1,9 +1,16 @@
-'use client';
+"use client";
 
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from './Sheet';
-import DialogImageIcon from '@/icons/dialog-img.svg';
-import CloseIcon from '@/icons/close-icon.svg';
-import KakaoIcon from '@/icons/kakao-icon.svg';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "./Sheet";
+import DialogImageIcon from "@/icons/dialog-img.svg";
+import CloseIcon from "@/icons/close-icon.svg";
+import KakaoIcon from "@/icons/kakao-icon.svg";
 
 interface Props {
   open: boolean;
@@ -14,12 +21,15 @@ interface Props {
 export default function LoginBottomSheet({ onOpenChange, open }: Props) {
   const handleLoginRedirect = () => {
     window.location.href =
-      'https://api.born-to-run.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login';
+      "https://api.born-to-run.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login";
   };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full h-[640px] p-[16px] pb-[164px] bg-white rounded-t-[8px]" side="bottom">
+      <SheetContent
+        className="w-full h-[640px] p-[16px] pb-[164px] bg-white rounded-t-[8px]"
+        side="bottom"
+      >
         <SheetHeader className="flex w-full items-center h-[32px] justify-end">
           <button onClick={onOpenChange}>
             <CloseIcon />
@@ -32,9 +42,12 @@ export default function LoginBottomSheet({ onOpenChange, open }: Props) {
           </div>
 
           <div className="flex flex-col gap-[8px] py-[16px] w-full">
-            <SheetTitle className="headline-md text-center">본투런과 함께 뛰어요!</SheetTitle>
-            <SheetDescription className="text-secondary-200 text-center">
-              반가워요! 본투런 회원이 되어 간편한 러닝 모임 관리와 러너들과의 소통을 경험해보세요!
+            <SheetTitle className="headline-md text-center">
+              본투런과 함께 뛰어요!
+            </SheetTitle>
+            <SheetDescription className="text-n-200 text-center">
+              반가워요! 본투런 회원이 되어 간편한 러닝 모임 관리와 러너들과의
+              소통을 경험해보세요!
             </SheetDescription>
           </div>
         </div>

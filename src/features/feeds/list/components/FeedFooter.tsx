@@ -31,7 +31,7 @@ export default function FeedFooter({
           {hasMyComment ? <ActiveCommentIcon /> : <CommentIcon />}
           <span
             className={clsx(
-              hasMyComment ? "text-primary-400" : "text-secondary-200",
+              hasMyComment ? "text-rg-400" : "text-n-200",
               "body-sm"
             )}
           >
@@ -47,7 +47,7 @@ export default function FeedFooter({
           {hasMyRecommendation ? <ActiveLikeIcon /> : <LikeIcon />}
           <span
             className={clsx(
-              hasMyRecommendation ? "text-primary-400" : "text-secondary-200",
+              hasMyRecommendation ? "text-rg-400" : "text-n-200",
               "body-sm"
             )}
           >
@@ -58,7 +58,7 @@ export default function FeedFooter({
       <li className="w-[104px] h-[32px] flex items-center">
         <div className="flex items-center gap-[4px] pr-[16px] justify-end w-full">
           <ViewIcon />
-          <span className="text-secondary-200 body-sm">
+          <span className="text-n-200 body-sm">
             {formatFeedCount(viewQty, "조회")}
           </span>
         </div>

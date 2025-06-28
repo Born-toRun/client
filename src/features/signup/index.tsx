@@ -12,11 +12,11 @@ export default function Signup() {
         <button></button>
       </header>
       <section className="px-4">
-        <div className="py-4 mb-6 title-xl text-secondary-900">
+        <div className="py-4 mb-6 title-xl text-n-900">
           이름과 크루를 알려주세요
         </div>
         <div className="flex flex-col gap-6 mb-10">
-          <p className="title-lg text-secondary-900">개인정보</p>
+          <p className="title-lg text-n-900">개인정보</p>
           <Input label="이름" variants="default" inputSize="md" />
           <Input
             label="인스타그램 ID (선택)"
@@ -25,8 +25,8 @@ export default function Signup() {
           />
         </div>
         <div>
-          <p className="mb-2 title-lg text-secondary-900">크루 정보</p>
-          <p className="mb-6 body-lg text-secondary-200">
+          <p className="mb-2 title-lg text-n-900">크루 정보</p>
+          <p className="mb-6 body-lg text-n-200">
             소속된 크루를 선택해주세요. 혹시 크루가 없다면, 크루 신규 생성이
             필요해요.
           </p>

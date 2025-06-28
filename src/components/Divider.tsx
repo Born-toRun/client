@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function Divider({ size }: Props) {
-  return <div style={{ height: size }} className="w-full bg-secondary-30" />;
+  return <div style={{ height: size }} className="w-full bg-n-30" />;
 }

@@ -1,6 +1,4 @@
-'use client';
-
-import clsx from 'clsx';
+"use client";
 
 import {
   Sheet,
@@ -9,10 +7,10 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from './Sheet';
-import DialogImageIcon from '@/icons/dialog-img.svg';
-import ChevronBackIcon from '@/icons/chevron-back-icon.svg';
-import CloseIcon from '@/icons/close-icon.svg';
+} from "./Sheet";
+import DialogImageIcon from "@/icons/dialog-img.svg";
+import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
+import CloseIcon from "@/icons/close-icon.svg";
 
 interface Props {
   open: boolean;
@@ -22,7 +20,7 @@ interface Props {
     description: string;
   };
   footer?: React.ReactNode;
-  variants?: 'default' | 'hasImage';
+  variants?: "default" | "hasImage";
 }
 
 export default function CustomBottomSheet({
@@ -32,22 +30,22 @@ export default function CustomBottomSheet({
   footer,
   variants,
 }: Props) {
-  const hasImage = variants === 'hasImage';
+  const hasImage = variants === "hasImage";
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
         {hasImage && (
-          <div className='relative size-[175px] mb-[16px]'>
+          <div className="relative size-[175px] mb-[16px]">
             <DialogImageIcon />
           </div>
         )}
 
-        <SheetHeader className='mb-[16px]'>
-          <div className='border-2 border-red-500'>
+        <SheetHeader className="mb-[16px]">
+          <div className="border-2 border-red-500">
             <div>
               <ChevronBackIcon />
             </div>
-            <SheetTitle className='title-lg text-black'>
+            <SheetTitle className="title-lg text-black">
               {contents?.title}
             </SheetTitle>
             <div>
@@ -55,7 +53,7 @@ export default function CustomBottomSheet({
             </div>
           </div>
 
-          <SheetDescription className='body-lg text-secondary-200 mt-[16px] text-left'>
+          <SheetDescription className="body-lg text-n-200 mt-[16px] text-left">
             {contents?.description}
           </SheetDescription>
         </SheetHeader>

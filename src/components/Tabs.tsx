@@ -26,7 +26,7 @@ export default function Tabs<T extends string>({
           >
             <span
               className={clsx(
-                isSelected ? "text-black" : "text-secondary-60",
+                isSelected ? "text-black" : "text-n-60",
                 "title-xl"
               )}
             >
@@ -35,7 +35,7 @@ export default function Tabs<T extends string>({
             {isSelected && (
               <motion.div
                 layoutId="tab-indicator"
-                className="absolute bottom-0 round-full h-[4px] bg-primary-400 w-[16px] m-auto"
+                className="absolute bottom-0 round-full h-[4px] bg-rg-400 w-[16px] m-auto"
               />
             )}
           </li>

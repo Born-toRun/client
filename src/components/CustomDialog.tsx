@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Dialog,
@@ -7,9 +7,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './Dialog';
-import DialogImageIcon from '@/icons/dialog-img.svg';
-import clsx from 'clsx';
+} from "./Dialog";
+import DialogImageIcon from "@/icons/dialog-img.svg";
+import clsx from "clsx";
 
 interface Props {
   open: boolean;
@@ -19,7 +19,7 @@ interface Props {
     description: string;
   };
   footer?: React.ReactNode;
-  variants?: 'default' | 'hasImage';
+  variants?: "default" | "hasImage";
 }
 
 export default function CustomDialog({
@@ -27,27 +27,27 @@ export default function CustomDialog({
   onOpenChange,
   contents,
   footer,
-  variants = 'default',
+  variants = "default",
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='bg-white p-[24px] pb-[8px] round-sm w-[312px]'>
-        {variants === 'hasImage' && (
-          <div className='relative size-[175px] mb-[16px]'>
+      <DialogContent className="bg-white p-[24px] pb-[8px] round-sm w-[312px]">
+        {variants === "hasImage" && (
+          <div className="relative size-[175px] mb-[16px]">
             <DialogImageIcon />
           </div>
         )}
 
-        <DialogHeader className='mb-[16px]'>
+        <DialogHeader className="mb-[16px]">
           <DialogTitle
             className={clsx(
-              variants === 'hasImage' ? 'text-center' : 'text-left',
-              'whitespace-pre-line title-lg'
+              variants === "hasImage" ? "text-center" : "text-left",
+              "whitespace-pre-line title-lg"
             )}
           >
             {contents?.title}
           </DialogTitle>
-          <DialogDescription className='text-left text-secondary-200 body-lg'>
+          <DialogDescription className="text-left text-n-200 body-lg">
             {contents?.description}
           </DialogDescription>
         </DialogHeader>
