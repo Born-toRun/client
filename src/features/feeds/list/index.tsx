@@ -68,11 +68,17 @@ export default function FeedContainer() {
     <div>
       <div className="border-2 py-2">
         임시 회원탈퇴
-        <button type="button" onClick={handleWithdraw}>
+        <button
+          type="button"
+          onClick={handleWithdraw}
+        >
           탈퇴
         </button>
       </div>
-      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
+      <MainHeader
+        selectedTabs={selectedTabs}
+        isScrolled={isScrolled}
+      />
       <div className="pt-[68px] mb-[16px]">
         <Tabs
           options={feedListTabOptions}

@@ -21,11 +21,11 @@ export default function Signup() {
   return (
     <main>
       <header className="flex items-center justify-between h-[56px] p-2">
-        <button className="flex items-center justify-center w-[40px] h-[40px]">
+        <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
           <ChevronBackIcon />
         </button>
         <h1></h1>
-        <button className="flex items-center justify-center w-[40px] h-[40px]">
+        <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
           <UnnamedIcon />
         </button>
       </header>
@@ -114,7 +114,7 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm"
+            className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto"
           >
             가입 완료
           </button>

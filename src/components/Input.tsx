@@ -32,7 +32,7 @@ export default function Input({
   };
 
   return (
-    <label className="flex flex-col md:flex-row md:items-center gap-2">
+    <label className="flex flex-col gap-2">
       <span className="flex items-center">
         <p className="text-n-200 mr-1">{label}</p>
         {isRequired && <RequiredIcon />}
@@ -41,7 +41,7 @@ export default function Input({
       <input
         {...rest}
         className={clsx(
-          "py-[12px] px-[16px] placeholder:text-n-60 placeholder:body-lg text-black title-md caret-rg-400 focus:border-rg-400 not-placeholder-shown:bg-n-10 not-placeholder-shown:border-n-40 border outline-0 round-xs",
+          "flex-1 py-[12px] px-[16px] placeholder:text-n-60 placeholder:body-lg text-black title-md caret-rg-400 focus:border-rg-400 not-placeholder-shown:bg-n-10 not-placeholder-shown:border-n-40 border outline-0 round-xs",
           inputSizeStyleMap[inputSize],
           inputVariantStyleMap[variants],
           disabled && "bg-n-40 text-n-60 border-0"

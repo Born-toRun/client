@@ -1,18 +1,18 @@
 export const apiRoutes = {
   feeds: {
-    list: '/api/v1/feeds',
+    list: "/api/v1/feeds",
   },
   auth: {
-    withdraw: '/api/v1/users',
+    withdraw: "/api/v1/users",
   },
 };
 
 export const pageRoutes = {
   feeds: {
-    list: '/',
+    list: "/",
   },
   auth: {
-    login: '/oauth2/authorization',
-    signup: '/signup',
+    login: "/oauth2/authorization",
+    signup: "/signup",
   },
 };
