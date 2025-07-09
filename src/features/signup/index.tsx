@@ -42,6 +42,7 @@ export default function Signup() {
               inputSize="lg"
               name="name"
               autoComplete="name"
+              placeholder="실명을 입력해주세요"
               isRequired
             />
             <Input
@@ -50,6 +51,7 @@ export default function Signup() {
               inputSize="lg"
               name="instagramId"
               autoComplete="off"
+              placeholder="ID를 입력해주세요"
               isOptional
             />
           </div>
@@ -63,7 +65,7 @@ export default function Signup() {
               <button
                 type="button"
                 className={clsx(
-                  "px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
+                  "cursor-pointer px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
                   hasCrew && "border-rg-400 text-rg-400"
                 )}
                 onClick={handleHasCrew}
@@ -73,7 +75,7 @@ export default function Signup() {
               <button
                 type="button"
                 className={clsx(
-                  "px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
+                  "cursor-pointer px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
                   !hasCrew && "border-rg-400 text-rg-400"
                 )}
                 onClick={handleHasCrew}

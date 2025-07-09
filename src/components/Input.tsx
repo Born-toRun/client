@@ -10,6 +10,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   inputSize: "lg" | "md";
   isRequired?: boolean;
   isOptional?: boolean;
+  placeholder?: string;
 }
 
 export default function Input({
@@ -18,6 +19,7 @@ export default function Input({
   variants,
   isRequired,
   isOptional,
+  placeholder,
   ...rest
 }: Props) {
   const disabled = rest.disabled;
@@ -39,6 +41,7 @@ export default function Input({
         {isOptional && <span className="text-n-60"> (선택)</span>}
       </span>
       <input
+        placeholder={placeholder}
         {...rest}
         className={clsx(
           "flex-1 py-[12px] px-[16px] placeholder:text-n-60 placeholder:body-lg text-black title-md caret-rg-400 focus:border-rg-400 not-placeholder-shown:bg-n-10 not-placeholder-shown:border-n-40 border outline-0 round-xs",
