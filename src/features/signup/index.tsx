@@ -4,9 +4,20 @@ import Input from "@/components/Input";
 import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
 import UnnamedIcon from "@/icons/unnamed-icon.svg";
 import clsx from "clsx";
+import Select from "@/components/Select";
+
+const options = [
+  { value: "option1", label: "크루이름" },
+  { value: "option2", label: "크루이름 2" },
+  { value: "option3", label: "크루이름 3" },
+  { value: "option4", label: "크루이름 4" },
+  { value: "option5", label: "크루이름 5" },
+  { value: "option6", label: "크루이름 6" },
+];
 
 export default function Signup() {
-  const [hasCrew, setHasCrew] = useState(false);
+  const [hasCrew, setHasCrew] = useState(true);
+  const [selectedCrew, setSelectedCrew] = useState("");
 
   const handleHasCrew = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -16,6 +27,10 @@ export default function Signup() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(e.target);
+  };
+
+  const handleSelectCrew = (value: string) => {
+    setSelectedCrew(value);
   };
 
   return (
@@ -84,13 +99,13 @@ export default function Signup() {
               </button>
             </div>
             {hasCrew && (
-              <Input
-                label="크루 이름"
+              <Select
+                label="크루 선택"
+                value={selectedCrew}
+                options={options}
                 variants="default"
                 inputSize="lg"
-                name="crewName"
-                autoComplete="off"
-                isRequired
+                onChange={handleSelectCrew}
               />
             )}
             {!hasCrew && (
