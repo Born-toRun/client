@@ -5,6 +5,9 @@ export const apiRoutes = {
   auth: {
     withdraw: "/api/v1/users",
   },
+  crews: {
+    list: "/api/v1/crews",
+  },
 };
 
 export const pageRoutes = {

@@ -5,6 +5,7 @@ import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
 import UnnamedIcon from "@/icons/unnamed-icon.svg";
 import clsx from "clsx";
 import Select from "@/components/Select";
+import { useGetCrewListQuery } from "./hooks";
 
 const options = [
   { value: "option1", label: "크루이름" },
@@ -18,6 +19,8 @@ const options = [
 export default function Signup() {
   const [hasCrew, setHasCrew] = useState(true);
   const [selectedCrew, setSelectedCrew] = useState("");
+  const { data: crewList } = useGetCrewListQuery();
+  console.log(crewList);
 
   const handleHasCrew = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
