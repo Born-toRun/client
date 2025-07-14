@@ -13,6 +13,7 @@ export const apiRoutes = {
 export const pageRoutes = {
   feeds: {
     list: "/",
+    write: "/write",
   },
   auth: {
     login: "/oauth2/authorization",

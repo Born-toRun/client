@@ -65,16 +65,7 @@ export default function FeedContainer() {
   };
 
   return (
-    <div>
-      <div className="border-2 py-2">
-        임시 회원탈퇴
-        <button
-          type="button"
-          onClick={handleWithdraw}
-        >
-          탈퇴
-        </button>
-      </div>
+    <>
       <MainHeader
         selectedTabs={selectedTabs}
         isScrolled={isScrolled}
@@ -95,6 +86,9 @@ export default function FeedContainer() {
       </div>
       <FeedList list={feedList} />
       {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
+      <div className="fixed bottom-[58px] w-full max-w-[786px] mx-auto flex justify-end px-[16px] pb-[24px]">
+        <CreateFeedButton isScrolled={isScrolled} />
+      </div>
       <CustomDialog
         open={loginModal.isActive}
         onOpenChange={loginModal.close}
@@ -134,8 +128,7 @@ export default function FeedContainer() {
         }}
         open={loginBottomSheet.isActive}
       />
-      <CreateFeedButton isScrolled={isScrolled} />
-    </div>
+    </>
   );
 }
 
