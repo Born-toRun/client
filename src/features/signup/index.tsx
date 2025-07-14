@@ -6,33 +6,35 @@ import UnnamedIcon from "@/icons/unnamed-icon.svg";
 import clsx from "clsx";
 import Select from "@/components/Select";
 import { useGetCrewListQuery } from "./hooks";
+import { useForm } from "react-hook-form";
 
-const options = [
-  { value: "option1", label: "크루이름" },
-  { value: "option2", label: "크루이름 2" },
-  { value: "option3", label: "크루이름 3" },
-  { value: "option4", label: "크루이름 4" },
-  { value: "option5", label: "크루이름 5" },
-  { value: "option6", label: "크루이름 6" },
-];
+interface SignupFormData {
+  crewName?: string;
+  crewLocation?: string;
+  selectedCrew?: string;
+  hasCrew: boolean;
+}
 
 export default function Signup() {
+  const { register, handleSubmit, watch } = useForm<SignupFormData>();
   const [hasCrew, setHasCrew] = useState(true);
-  const [selectedCrew, setSelectedCrew] = useState("");
+  const [selectedCrew, setSelectedCrew] = useState<number | null>(null);
   const { data: crewList } = useGetCrewListQuery();
-  console.log(crewList);
+  const crewListOptions = crewList?.details.map((crew) => ({
+    value: crew.id,
+    label: crew.crewName,
+  }));
 
   const handleHasCrew = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setHasCrew(!hasCrew);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(e.target);
+  const signupClickHandler = (data: SignupFormData) => {
+    console.log(data);
   };
 
-  const handleSelectCrew = (value: string) => {
+  const handleSelectCrew = (value: number) => {
     setSelectedCrew(value);
   };
 
@@ -48,7 +50,7 @@ export default function Signup() {
         </button>
       </header>
       <section className="px-4 pb-[168px]">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(signupClickHandler)}>
           <div className="py-4 mb-6 title-xl text-n-900">
             이름과 크루를 알려주세요
           </div>
@@ -105,7 +107,7 @@ export default function Signup() {
               <Select
                 label="크루 선택"
                 value={selectedCrew}
-                options={options}
+                options={crewListOptions ?? []}
                 variants="default"
                 inputSize="lg"
                 onChange={handleSelectCrew}
@@ -134,7 +136,7 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto"
+            className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto cursor-pointer"
           >
             가입 완료
           </button>

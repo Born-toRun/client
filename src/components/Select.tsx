@@ -6,25 +6,25 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./Sheet";
 
 type InputVariants = "default" | "error";
 
-export interface Option {
-  value: string;
+export interface Option<T = string> {
+  value: T;
   label: string;
 }
 
-interface Props {
+interface Props<T = string> {
   label: string;
-  value?: string;
-  options: Option[];
+  value: T | null;
+  options: Option<T>[];
   variants: InputVariants;
   inputSize: "lg" | "md";
   isRequired?: boolean;
   isOptional?: boolean;
   placeholder?: string;
-  onChange: (value: string) => void;
+  onChange: (value: T) => void;
   disabled?: boolean;
 }
 
-export default function SelectModalTrigger({
+export default function Select<T = string>({
   label,
   value,
   options,
@@ -32,8 +32,9 @@ export default function SelectModalTrigger({
   inputSize,
   onChange,
   ...rest
-}: Props) {
+}: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState<T | null>(value);
 
   const disabled = rest.disabled;
   const inputSizeStyleMap = {
@@ -45,8 +46,15 @@ export default function SelectModalTrigger({
     error: "border-system-r-400 caret-system-r-400 bg-white",
   };
 
-  const handleSelect = (value: string) => {
-    onChange(value);
+  const handleSelect = (value: T) => {
+    setSelectedValue(value);
+  };
+
+  const handleClose = () => {
+    if (selectedValue) {
+      onChange(selectedValue);
+    }
+    setIsOpen(false);
   };
 
   return (
@@ -68,8 +76,8 @@ export default function SelectModalTrigger({
         <DropDownIcon />
       </button>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent side="bottom">
-          <div className="">
+        <SheetContent side="bottom" className="max-w-[768px] mx-auto">
+          <div className="w-full">
             <SheetHeader>
               <div className="flex items-center justify-between bg-white rounded-t-lg pt-4 px-4">
                 <BackIcon />
@@ -82,30 +90,28 @@ export default function SelectModalTrigger({
             <ul className="flex flex-col items-center gap-8 max-h-[284px] overflow-y-auto bg-white py-6 px-4">
               {options.map((option) => (
                 <li
-                  key={option.value}
+                  key={String(option.value)}
                   className="h-6 w-full"
                   onClick={() => handleSelect(option.value)}
                 >
                   <label className="flex items-center gap-2 cursor-pointer w-full">
-                    {/* 숨겨진 라디오 input */}
                     <input
                       type="radio"
                       name="select-radio"
-                      value={option.value}
-                      checked={value === option.value}
+                      value={String(option.value)}
+                      checked={selectedValue === option.value}
                       onChange={() => handleSelect(option.value)}
                       className="sr-only"
                     />
-                    {/* 커스텀 라디오 */}
                     <span
                       className={clsx(
                         "w-6 h-6 rounded-full border transition-all flex items-center justify-center",
-                        value === option.value
+                        selectedValue === option.value
                           ? "border-rg-400 bg-rg-400"
                           : "border-n-40 bg-white"
                       )}
                     >
-                      {value === option.value && (
+                      {selectedValue === option.value && (
                         <span className="block w-[8px] h-[8px] rounded-full bg-white" />
                       )}
                     </span>
@@ -116,8 +122,8 @@ export default function SelectModalTrigger({
             </ul>
             <div className="bg-white px-4 pb-4">
               <button
-                className="w-full h-[56px] bg-rg-400 rounded-lg text-white title-medium"
-                onClick={() => setIsOpen(false)}
+                className="w-full h-[56px] bg-rg-400 rounded-lg text-white title-medium cursor-pointer"
+                onClick={handleClose}
               >
                 선택 완료
               </button>
