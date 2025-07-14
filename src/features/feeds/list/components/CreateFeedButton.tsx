@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
 import PlusIcon from "@/icons/plus-icon.svg";
+import { pageRoutes } from "@/constants/route";
 
 interface Props {
   isScrolled: boolean;
@@ -11,7 +12,7 @@ interface Props {
 
 export default function CreateFeedButton({ isScrolled }: Props) {
   return (
-    <Link href={"#"} className="flex fixed right-[16px] bottom-[24px]">
+    <Link href={pageRoutes.feeds.write}>
       <div className="bg-rg-400 h-[48px] round-full flex items-center gap-[4px] px-[16px]">
         <PlusIcon />
         <AnimatePresence initial={false}>
