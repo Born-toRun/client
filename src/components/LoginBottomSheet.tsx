@@ -19,12 +19,15 @@ interface Props {
 
 export default function LoginBottomSheet({ onOpenChange, open }: Props) {
   const handleLoginRedirect = () => {
-    window.location.href =
-      "https://api.born-to-run.kro.kr:8443/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login";
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+    window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login`;
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <SheetContent
         className="w-full h-[640px] p-[16px] pb-[164px] bg-white rounded-t-[8px]"
         side="bottom"
