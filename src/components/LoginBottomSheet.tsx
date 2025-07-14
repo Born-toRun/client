@@ -24,20 +24,16 @@ export default function LoginBottomSheet({ onOpenChange, open }: Props) {
   };
 
   return (
-    <Sheet
-      open={open}
-      onOpenChange={onOpenChange}
-    >
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        className="w-full h-[640px] p-[16px] pb-[164px] bg-white rounded-t-[8px]"
+        className="w-full max-w-[768px] mx-auto h-[640px] p-[16px] pb-[164px] bg-white rounded-t-[8px]"
         side="bottom"
       >
         <SheetHeader className="flex w-full items-center h-[32px] justify-end">
-          <button onClick={onOpenChange}>
+          <button onClick={onOpenChange} className="cursor-pointer">
             <CloseIcon />
           </button>
         </SheetHeader>
-
         <div>
           <div className="my-[16px] w-full flex justify-center items-center">
             <DialogImageIcon />
@@ -53,12 +49,11 @@ export default function LoginBottomSheet({ onOpenChange, open }: Props) {
             </SheetDescription>
           </div>
         </div>
-
         <SheetFooter>
           <button
             type="button"
             onClick={handleLoginRedirect}
-            className="text-black bg-[#FEE500] rounded-[12px] w-full flex justify-center items-center h-[56px] gap-[8px] mt-[16px]"
+            className="text-black bg-[#FEE500] rounded-[12px] w-full flex justify-center items-center h-[56px] gap-[8px] mt-[16px] cursor-pointer"
           >
             <KakaoIcon />
             카카오로 간편하게 시작하기

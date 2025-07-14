@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export const useModal = () => {
   const [isActive, setIsActive] = useState(false);
@@ -6,9 +6,11 @@ export const useModal = () => {
   const close = () => {
     setIsActive(false);
   };
+
   const open = () => {
     setIsActive(true);
   };
+
   const toggle = () => {
     setIsActive((prev) => !prev);
   };

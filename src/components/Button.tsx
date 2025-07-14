@@ -84,7 +84,7 @@ export default function Button({
       className={clsx(
         loading ? loadingMap[variants][tone] : styleMap[variants][tone],
         sizeMap[size],
-        "h-[56px] round-xs w-full flex items-center justify-center"
+        "h-[56px] round-xs w-full flex items-center justify-center cursor-pointer"
       )}
       {...rest}
     >

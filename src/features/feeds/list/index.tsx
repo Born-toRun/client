@@ -1,22 +1,18 @@
 "use client";
-import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
-import { useModal } from "@/features/hooks/useModal";
-import { useScrollPosition } from "@/features/hooks/useScroll";
-import { useEffect, useState } from "react";
-import { useGetFeesListQuery } from "./hooks/queries";
 import Button from "@/components/Button";
 import CheckBox from "@/components/CheckBox";
 import CustomDialog from "@/components/CustomDialog";
 import MainHeader from "@/components/header/MainHeader";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
 import Tabs from "@/components/Tabs";
+import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
+import { useModal } from "@/features/hooks/useModal";
+import { useScrollPosition } from "@/features/hooks/useScroll";
+import { useEffect, useState } from "react";
+import { feedCategoryLabel } from "../constants";
 import CreateFeedButton from "./components/CreateFeedButton";
 import FeedList from "./components/FeedList";
-import { runApi } from "@/client/runClient";
-import { ACCESS_TOKEN } from "@/constants/common";
-import { apiRoutes } from "@/constants/route";
-import { deleteCookie } from "cookies-next";
-import { feedCategoryLabel } from "../constants";
+import { useGetFeesListQuery } from "./hooks/queries";
 import { FEEDCategory } from "./types";
 
 export default function FeedContainer() {
@@ -54,22 +50,9 @@ export default function FeedContainer() {
     [error, loginModal]
   );
 
-  // 임시 회원탈퇴
-  const handleWithdraw = async () => {
-    await (
-      await runApi.delete(apiRoutes.auth.withdraw)
-    ).data;
-
-    deleteCookie(ACCESS_TOKEN);
-    return;
-  };
-
   return (
     <>
-      <MainHeader
-        selectedTabs={selectedTabs}
-        isScrolled={isScrolled}
-      />
+      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
       <div className="pt-[68px] mb-[16px]">
         <Tabs
           options={feedListTabOptions}
@@ -102,6 +85,7 @@ export default function FeedContainer() {
             <Button
               onClick={() => {
                 loginModal.close();
+                setIsMyCrew(false);
               }}
               variants="text"
               text="닫기"

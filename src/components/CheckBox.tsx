@@ -18,7 +18,7 @@ export default function CheckBox({ text, ...rest }: Props) {
   const checkedAndDisabled = disabled && checked;
 
   return (
-    <label className="flex items-center gap-[8px] h-full">
+    <label className="flex items-center gap-[8px] h-full cursor-pointer">
       <div
         className={clsx(
           "relative size-[16px] round-xs flex border items-center justify-center",
