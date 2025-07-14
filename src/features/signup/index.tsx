@@ -1,23 +1,24 @@
 "use client";
-import { useState } from "react";
 import Input from "@/components/Input";
+import Select from "@/components/Select";
 import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
 import UnnamedIcon from "@/icons/unnamed-icon.svg";
-import clsx from "clsx";
-import Select from "@/components/Select";
-import { useGetCrewListQuery } from "./hooks";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useGetCrewListQuery } from "./hooks";
 
 interface SignupFormData {
+  userName: string;
+  crewId: number;
+  instagramId?: string;
   crewName?: string;
   crewLocation?: string;
-  selectedCrew?: string;
-  hasCrew: boolean;
 }
 
 export default function Signup() {
-  const { register, handleSubmit, watch } = useForm<SignupFormData>();
-  const [hasCrew, setHasCrew] = useState(true);
+  const router = useRouter();
+  const { register, handleSubmit } = useForm<SignupFormData>();
   const [selectedCrew, setSelectedCrew] = useState<number | null>(null);
   const { data: crewList } = useGetCrewListQuery();
   const crewListOptions = crewList?.details.map((crew) => ({
@@ -25,13 +26,9 @@ export default function Signup() {
     label: crew.crewName,
   }));
 
-  const handleHasCrew = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setHasCrew(!hasCrew);
-  };
-
   const signupClickHandler = (data: SignupFormData) => {
     console.log(data);
+    console.log(selectedCrew);
   };
 
   const handleSelectCrew = (value: number) => {
@@ -41,7 +38,10 @@ export default function Signup() {
   return (
     <main>
       <header className="flex items-center justify-between h-[56px] p-2">
-        <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
+        <button
+          className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+          onClick={() => router.back()}
+        >
           <ChevronBackIcon />
         </button>
         <h1></h1>
@@ -60,80 +60,34 @@ export default function Signup() {
               label="이름"
               variants="default"
               inputSize="lg"
-              name="name"
               autoComplete="name"
               placeholder="실명을 입력해주세요"
               isRequired
+              {...register("userName")}
             />
             <Input
               label="인스타그램 ID"
               variants="default"
               inputSize="lg"
-              name="instagramId"
               autoComplete="off"
               placeholder="ID를 입력해주세요"
               isOptional
+              {...register("instagramId")}
             />
           </div>
-          <div>
-            <p className="mb-2 title-lg text-n-900">크루 정보</p>
-            <p className="mb-6 body-lg text-n-200">
-              소속된 크루를 선택해주세요. 혹시 크루가 없다면, 크루 신규 생성이
-              필요해요.
-            </p>
-            <div className="flex gap-2 mb-6">
-              <button
-                type="button"
-                className={clsx(
-                  "cursor-pointer px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
-                  hasCrew && "border-rg-400 text-rg-400"
-                )}
-                onClick={handleHasCrew}
-              >
-                크루 있음
-              </button>
-              <button
-                type="button"
-                className={clsx(
-                  "cursor-pointer px-4 h-[40px] round-full border border-n-40 text-n-900 font-bold label-sm",
-                  !hasCrew && "border-rg-400 text-rg-400"
-                )}
-                onClick={handleHasCrew}
-              >
-                크루 없음
-              </button>
-            </div>
-            {hasCrew && (
-              <Select
-                label="크루 선택"
-                value={selectedCrew}
-                options={crewListOptions ?? []}
-                variants="default"
-                inputSize="lg"
-                onChange={handleSelectCrew}
-              />
-            )}
-            {!hasCrew && (
-              <div className="flex flex-col gap-6">
-                <Input
-                  label="크루 이름"
-                  variants="default"
-                  inputSize="lg"
-                  name="crewName"
-                  autoComplete="off"
-                  isRequired
-                />
-                <Input
-                  label="크루 활동 지역"
-                  variants="default"
-                  inputSize="lg"
-                  name="crewLocation"
-                  autoComplete="off"
-                  isRequired
-                />
-              </div>
-            )}
-          </div>
+          <p className="mb-2 title-lg text-n-900">크루 정보</p>
+          <p className="mb-6 body-lg text-n-200">
+            소속된 크루를 선택해주세요. 혹시 크루가 없다면, 크루 신규 생성이
+            필요해요.
+          </p>
+          <Select
+            label="크루 선택"
+            value={selectedCrew}
+            options={crewListOptions ?? []}
+            variants="default"
+            inputSize="lg"
+            onChange={handleSelectCrew}
+          />
           <button
             type="submit"
             className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto cursor-pointer"
