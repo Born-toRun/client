@@ -1,6 +1,4 @@
-import clsx from "clsx";
 import { HTMLAttributes } from "react";
-
 interface Props extends HTMLAttributes<HTMLElement> {
   left?: React.ReactNode;
   title?: string;
@@ -9,11 +7,7 @@ interface Props extends HTMLAttributes<HTMLElement> {
 
 export default function Header({ title, left, right }: Props) {
   return (
-    <header
-      className={clsx(
-        "flex items-center justify-between relative py-[14px] px-[8px]"
-      )}
-    >
+    <header className="flex items-center justify-between h-[56px] p-2">
       {left ? <div>{left}</div> : <div />}
 
       <h1 className="title-lg text-black absolute left-1/2 transform -translate-x-1/2">

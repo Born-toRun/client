@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetCrewListQuery, useSignupMutation } from "./hooks";
 import { SignupFormData } from "./types";
+import Header from "@/components/header/Header";
 
 export default function Signup() {
   const router = useRouter();
@@ -62,18 +63,22 @@ export default function Signup() {
 
   return (
     <main>
-      <header className="flex items-center justify-between h-[56px] p-2">
-        <button
-          className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-          onClick={() => router.back()}
-        >
-          <ChevronBackIcon />
-        </button>
-        <h1></h1>
-        <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
-          <UnnamedIcon />
-        </button>
-      </header>
+      <Header
+        left={
+          <button
+            className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+            onClick={() => router.back()}
+          >
+            <ChevronBackIcon />
+          </button>
+        }
+        title="글쓰기"
+        right={
+          <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
+            <UnnamedIcon />
+          </button>
+        }
+      />
       <section className="px-4 pb-[168px]">
         <form onSubmit={handleSubmit(signupClickHandler)}>
           <div className="py-4 mb-6 title-xl text-n-900">
