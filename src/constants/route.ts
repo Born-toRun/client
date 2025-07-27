@@ -4,6 +4,7 @@ export const apiRoutes = {
   },
   auth: {
     withdraw: "/api/v1/users",
+    signup: "/api/v1/users/sign-up",
   },
   crews: {
     list: "/api/v1/crews",

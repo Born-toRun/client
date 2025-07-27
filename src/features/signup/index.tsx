@@ -1,34 +1,59 @@
 "use client";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
+import { pageRoutes } from "@/constants/route";
 import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
 import UnnamedIcon from "@/icons/unnamed-icon.svg";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useGetCrewListQuery } from "./hooks";
-
-interface SignupFormData {
-  userName: string;
-  crewId: number;
-  instagramId?: string;
-  crewName?: string;
-  crewLocation?: string;
-}
+import { useGetCrewListQuery, useSignupMutation } from "./hooks";
+import { SignupFormData } from "./types";
 
 export default function Signup() {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<SignupFormData>();
+  const { register, handleSubmit } = useForm<SignupFormData>({
+    defaultValues: {
+      userName: "",
+      crewId: null,
+      instagramId: "",
+    },
+  });
   const [selectedCrew, setSelectedCrew] = useState<number | null>(null);
   const { data: crewList } = useGetCrewListQuery();
   const crewListOptions = crewList?.details.map((crew) => ({
     value: crew.id,
     label: crew.crewName,
   }));
+  const { mutateAsync: signup, isPending } = useSignupMutation();
 
-  const signupClickHandler = (data: SignupFormData) => {
-    console.log(data);
-    console.log(selectedCrew);
+  const signupClickHandler = async (data: SignupFormData) => {
+    if (!selectedCrew) {
+      alert("크루를 선택해주세요");
+      return;
+    }
+
+    if (!data.userName) {
+      alert("이름을 입력해주세요");
+      return;
+    }
+
+    if (!data.instagramId) {
+      alert("인스타그램 ID를 입력해주세요");
+      return;
+    }
+
+    try {
+      const response = await signup({
+        userName: data.userName,
+        crewId: selectedCrew,
+        instagramId: data.instagramId,
+      });
+      console.log(response);
+      router.push(pageRoutes.feeds.list);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSelectCrew = (value: number) => {
@@ -91,6 +116,7 @@ export default function Signup() {
           <button
             type="submit"
             className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto cursor-pointer"
+            disabled={isPending}
           >
             가입 완료
           </button>

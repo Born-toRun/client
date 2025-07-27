@@ -12,3 +12,9 @@ export interface Crew {
 export interface CrewListResponse {
   details: Crew[];
 }
+
+export interface SignupFormData {
+  userName: string;
+  crewId: number | null;
+  instagramId?: string;
+}
