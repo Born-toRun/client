@@ -16,7 +16,7 @@ export default function Navigation() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="fixed bottom-[0px] w-full max-w-[786px] mx-auto flex h-[58px] border-t border-n-30">
+    <div className="fixed bottom-[0px] w-full max-w-[786px] mx-auto flex h-[58px] border-t border-n-30 bg-white">
       <Link
         href={pageRoutes.feeds.list}
         className="flex-1 flex flex-col gap-1 justify-center items-center cursor-pointer"

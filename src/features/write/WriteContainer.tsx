@@ -93,9 +93,7 @@ export default function WriteContainer() {
       </div>
       <div className="h-[96px] px-4 flex items-center gap-2 border-t border-n-30">
         <div className="w-[64px] h-[64px] bg-n-30 rounded-[8px]" />
-        <div className="w-[64px] h-[64px] bg-n-30 rounded-[8px]" />
-        <div className="w-[64px] h-[64px] bg-n-30 rounded-[8px]" />
-        <div className="w-[64px] h-[64px] bg-n-30 rounded-[8px]" />
+        <div>이미지 추가</div>
       </div>
       <textarea
         value={contents}
