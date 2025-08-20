@@ -5,11 +5,12 @@ import ArrowDownIcon from "@/icons/arrow-down-icon.svg";
 import CloseIcon from "@/icons/close-icon.svg";
 import ImageDeleteIcon from "@/icons/image-delete-icon.svg";
 import ImageIcon from "@/icons/image-icon.svg";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { feedCategoryLabel } from "../feeds/constants";
+import { deleteFile, uploadFile } from "./api";
 import CategorySelectModal from "./CategorySelectModal";
-import Image from "next/image";
 
 export default function WriteContainer() {
   const router = useRouter();
@@ -20,13 +21,20 @@ export default function WriteContainer() {
   const [selectedCategory, setSelectedCategory] = useState<string>(
     feedCategoryLabel.COMMUNITY
   );
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  // selectedImages 타입 변경
+  const [selectedImages, setSelectedImages] = useState<
+    {
+      file: File;
+      fileId: number;
+      fileUri: string;
+    }[]
+  >([]);
 
   const categorySelectClickHandler = () => {
     setIsCategorySelectOpen((prev) => !prev);
   };
 
-  const handleCategorySelect = (value: string) => {
+  const categorySelectHandler = (value: string) => {
     setSelectedCategory(value);
   };
 
@@ -39,24 +47,59 @@ export default function WriteContainer() {
     console.log(selectedCategory, contents, isInCrew, selectedImages);
   };
 
-  const handleImageSelect = () => {
+  const imageSelectHandler = () => {
     fileInputRef.current?.click();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const imageChangeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
-    if (selectedImages.length + imageFiles.length > 5) {
+    // 파일 크기 제한 (10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = imageFiles.filter((file) => file.size <= maxSize);
+
+    if (validFiles.length !== imageFiles.length) {
+      alert("10MB 이하의 이미지만 업로드 가능합니다.");
+    }
+
+    if (selectedImages.length + validFiles.length > 5) {
       alert("이미지는 최대 5개까지 선택할 수 있습니다.");
       return;
     }
 
-    setSelectedImages((prev) => [...prev, ...imageFiles]);
+    // 각 이미지 파일을 업로드하고 fileId와 fileUri를 받아옴
+    for (const file of validFiles) {
+      try {
+        const result = await uploadFile("FEED", file);
+        setSelectedImages((prev) => [
+          ...prev,
+          {
+            file,
+            fileId: result.fileId,
+            fileUri: result.fileUri,
+          },
+        ]);
+      } catch (error) {
+        console.error("이미지 업로드 실패:", error);
+        alert("이미지 업로드에 실패했습니다.");
+      }
+    }
   };
 
-  const removeImage = (index: number) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  const removeImage = async (index: number) => {
+    const imageToRemove = selectedImages[index];
+
+    try {
+      // 서버에서 파일 삭제
+      await deleteFile("FEED", imageToRemove.fileId);
+
+      // 로컬 상태에서 제거
+      setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error("이미지 삭제 실패:", error);
+      alert("이미지 삭제에 실패했습니다.");
+    }
   };
 
   const CATEGORY_OPTIONS = [
@@ -116,13 +159,12 @@ export default function WriteContainer() {
           />
         </div>
       </div>
-
       {/* 이미지 업로드 영역 */}
       <div className="px-4 py-3 border-t border-n-30">
         <div className="flex items-center gap-2 mb-3">
           <div
             className="w-[64px] h-[64px] bg-n-30 rounded-[8px] flex flex-col items-center justify-center cursor-pointer hover:bg-n-40 transition-colors"
-            onClick={handleImageSelect}
+            onClick={imageSelectHandler}
           >
             <div className="w-6 h-6 rounded-full flex items-center justify-center mb-1">
               <ImageIcon className="w-6 h-6" />
@@ -134,7 +176,7 @@ export default function WriteContainer() {
           {selectedImages.length === 0 && (
             <div
               className="text-n-200 text-label-sm font-bold cursor-pointer"
-              onClick={handleImageSelect}
+              onClick={imageSelectHandler}
             >
               이미지 추가
             </div>
@@ -145,7 +187,7 @@ export default function WriteContainer() {
               {selectedImages.map((image, index) => (
                 <div key={index} className="relative flex-shrink-0">
                   <Image
-                    src={URL.createObjectURL(image)}
+                    src={image.fileUri}
                     alt={`선택된 이미지 ${index + 1}`}
                     width={64}
                     height={64}
@@ -169,7 +211,7 @@ export default function WriteContainer() {
         type="file"
         multiple
         accept="image/*"
-        onChange={handleImageChange}
+        onChange={imageChangeHandler}
         className="hidden"
       />
       <textarea
@@ -183,7 +225,7 @@ export default function WriteContainer() {
         onOpenChange={categorySelectModalOpenChangeHandler}
         options={CATEGORY_OPTIONS}
         value={selectedCategory}
-        onChange={handleCategorySelect}
+        onChange={categorySelectHandler}
       />
     </main>
   );
