@@ -18,3 +18,11 @@ export interface DeleteFileParams {
   bucket: BucketType;
   fileId: number;
 }
+
+// 피드 등록 요청 타입
+export interface CreateFeedRequest {
+  imageIds?: number[];
+  contents: string;
+  category: string;
+  accessLevel?: string;
+}

@@ -1,6 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteFile, uploadFile } from "../api";
-import { DeleteFileParams, UploadFileParams } from "../types";
+import { createFeed, deleteFile, uploadFile } from "../api";
+import {
+  CreateFeedRequest,
+  DeleteFileParams,
+  UploadFileParams,
+} from "../types";
 
 export const useUploadFileMutation = () => {
   return useMutation({
@@ -13,5 +17,11 @@ export const useDeleteFileMutation = () => {
   return useMutation({
     mutationFn: ({ bucket, fileId }: DeleteFileParams) =>
       deleteFile(bucket, fileId),
+  });
+};
+
+export const useCreateFeedMutation = () => {
+  return useMutation({
+    mutationFn: (data: CreateFeedRequest) => createFeed(data),
   });
 };

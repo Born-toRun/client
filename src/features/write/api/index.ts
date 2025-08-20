@@ -1,5 +1,5 @@
 import { runApi } from "@/client/runClient";
-import { BucketType, FileUploadResponse } from "../types";
+import { BucketType, CreateFeedRequest, FileUploadResponse } from "../types";
 
 // 파일 업로드 함수
 export const uploadFile = async (
@@ -27,4 +27,13 @@ export const deleteFile = async (bucket: BucketType, fileId: number) => {
     `/api/v1/object-storage/${bucket}/${fileId}`
   );
   return response.data;
+};
+
+// 피드 등록 함수
+export const createFeed = async (data: CreateFeedRequest): Promise<void> => {
+  await runApi.post("/api/v1/feeds", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };

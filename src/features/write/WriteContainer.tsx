@@ -9,8 +9,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { feedCategoryLabel } from "../feeds/constants";
-import { deleteFile, uploadFile } from "./api";
 import CategorySelectModal from "./CategorySelectModal";
+import { CATEGORY_OPTIONS } from "./constants";
+import {
+  useCreateFeedMutation,
+  useDeleteFileMutation,
+  useUploadFileMutation,
+} from "./hooks";
 
 export default function WriteContainer() {
   const router = useRouter();
@@ -21,6 +26,10 @@ export default function WriteContainer() {
   const [selectedCategory, setSelectedCategory] = useState<string>(
     feedCategoryLabel.COMMUNITY
   );
+  const uploadImageFile = useUploadFileMutation();
+  const deleteImageFile = useDeleteFileMutation();
+  const createFeed = useCreateFeedMutation();
+
   // selectedImages 타입 변경
   const [selectedImages, setSelectedImages] = useState<
     {
@@ -42,9 +51,22 @@ export default function WriteContainer() {
     setIsCategorySelectOpen(isOpen);
   };
 
-  const postingClickHandler = () => {
+  const postingClickHandler = async () => {
     const isInCrew = seeOnlyMyCrew ? "IN_CREW" : "ALL";
-    console.log(selectedCategory, contents, isInCrew, selectedImages);
+
+    try {
+      await createFeed.mutateAsync({
+        category: selectedCategory,
+        contents,
+        accessLevel: isInCrew,
+        imageIds: selectedImages.map((image) => image.fileId),
+      });
+
+      router.push("/");
+    } catch (error) {
+      console.error("피드 등록 실패:", error);
+      alert("피드 등록에 실패했습니다.");
+    }
   };
 
   const imageSelectHandler = () => {
@@ -71,7 +93,10 @@ export default function WriteContainer() {
     // 각 이미지 파일을 업로드하고 fileId와 fileUri를 받아옴
     for (const file of validFiles) {
       try {
-        const result = await uploadFile("FEED", file);
+        const result = await uploadImageFile.mutateAsync({
+          bucket: "FEED",
+          file,
+        });
         setSelectedImages((prev) => [
           ...prev,
           {
@@ -92,7 +117,10 @@ export default function WriteContainer() {
 
     try {
       // 서버에서 파일 삭제
-      await deleteFile("FEED", imageToRemove.fileId);
+      await deleteImageFile.mutateAsync({
+        bucket: "FEED",
+        fileId: imageToRemove.fileId,
+      });
 
       // 로컬 상태에서 제거
       setSelectedImages((prev) => prev.filter((_, i) => i !== index));
@@ -101,17 +129,6 @@ export default function WriteContainer() {
       alert("이미지 삭제에 실패했습니다.");
     }
   };
-
-  const CATEGORY_OPTIONS = [
-    {
-      value: feedCategoryLabel.COMMUNITY,
-      label: "커뮤니티",
-    },
-    {
-      value: feedCategoryLabel.MARKET,
-      label: "마켓",
-    },
-  ];
 
   return (
     <main className="flex flex-col h-screen">
