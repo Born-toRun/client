@@ -1,14 +1,15 @@
 "use client";
 import CheckBox from "@/components/CheckBox";
 import Header from "@/components/header/Header";
-import CloseIcon from "@/icons/close-icon.svg";
 import ArrowDownIcon from "@/icons/arrow-down-icon.svg";
-import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
-import CategorySelectModal from "./CategorySelectModal";
-import { feedCategoryLabel } from "../feeds/constants";
-import ImageIcon from "@/icons/image-icon.svg";
+import CloseIcon from "@/icons/close-icon.svg";
 import ImageDeleteIcon from "@/icons/image-delete-icon.svg";
+import ImageIcon from "@/icons/image-icon.svg";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import { feedCategoryLabel } from "../feeds/constants";
+import CategorySelectModal from "./CategorySelectModal";
+import Image from "next/image";
 
 export default function WriteContainer() {
   const router = useRouter();
@@ -70,7 +71,7 @@ export default function WriteContainer() {
   ];
 
   return (
-    <main>
+    <main className="flex flex-col h-screen">
       <Header
         left={
           <button
@@ -132,7 +133,7 @@ export default function WriteContainer() {
           </div>
           {selectedImages.length === 0 && (
             <div
-              className="text-n-200 text-label-sm font-bold"
+              className="text-n-200 text-label-sm font-bold cursor-pointer"
               onClick={handleImageSelect}
             >
               이미지 추가
@@ -140,20 +141,19 @@ export default function WriteContainer() {
           )}
           {/* 선택된 이미지들 표시 */}
           {selectedImages.length > 0 && (
-            <div className="flex gap-2 overflow-x-auto">
+            <div className="flex gap-2">
               {selectedImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative flex-shrink-0"
-                >
-                  <img
+                <div key={index} className="relative flex-shrink-0">
+                  <Image
                     src={URL.createObjectURL(image)}
                     alt={`선택된 이미지 ${index + 1}`}
+                    width={64}
+                    height={64}
                     className="w-[64px] h-[64px] rounded-[8px] object-cover"
                   />
                   <button
                     onClick={() => removeImage(index)}
-                    className="absolute top-[-3px] right-[-3px] w-5 h-5 rounded-full flex items-center justify-center"
+                    className="absolute top-[-3px] right-[-3px] w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
                   >
                     <ImageDeleteIcon className="w-5 h-5" />
                   </button>
@@ -163,7 +163,6 @@ export default function WriteContainer() {
           )}
         </div>
       </div>
-
       {/* 숨겨진 파일 입력 */}
       <input
         ref={fileInputRef}
@@ -173,11 +172,10 @@ export default function WriteContainer() {
         onChange={handleImageChange}
         className="hidden"
       />
-
       <textarea
         value={contents}
         onChange={(e) => setContents(e.target.value)}
-        className="w-full h-[calc(100dvh-216px)] px-4 py-3 border-t border-n-30"
+        className="w-full flex-1 px-4 py-3 border-t border-n-30 resize-none"
         placeholder="러닝 후기를 공유해 보세요!"
       />
       <CategorySelectModal
