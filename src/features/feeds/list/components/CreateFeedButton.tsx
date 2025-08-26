@@ -13,7 +13,7 @@ interface Props {
 export default function CreateFeedButton({ isScrolled }: Props) {
   return (
     <Link href={pageRoutes.feeds.write}>
-      <div className="bg-rg-400 h-[48px] round-full flex items-center gap-[4px] px-[16px]">
+      <div className="bg-rg-400 h-[48px] round-full flex items-center gap-[4px] px-[14px]">
         <PlusIcon />
         <AnimatePresence initial={false}>
           {!isScrolled && (

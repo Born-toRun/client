@@ -52,7 +52,10 @@ export default function FeedContainer() {
 
   return (
     <>
-      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
+      <MainHeader
+        selectedTabs={selectedTabs}
+        isScrolled={isScrolled}
+      />
       <div className="pt-[68px] mb-[16px]">
         <Tabs
           options={feedListTabOptions}

@@ -1,5 +1,4 @@
 "use client";
-
 import FeedBody from "../../components/FeedBody";
 import FeedHeader from "../../components/FeedHeader";
 import FeedFooter from "./FeedFooter";
@@ -31,8 +30,10 @@ export default function FeedItem({ feed }: Props) {
         profileImageUri={profileUrl}
         registerAt={registerAt}
       />
-
-      <FeedBody contents={contents} imageUrl={imageUrls} />
+      <FeedBody
+        contents={contents}
+        imageUrl={imageUrls}
+      />
       <FeedFooter
         commentQty={commentQty}
         recommendationQty={recommendationQty}

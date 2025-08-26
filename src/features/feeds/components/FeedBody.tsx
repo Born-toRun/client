@@ -1,5 +1,12 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+
+// Swiper CSS
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 interface Props {
   imageUrl?: string[];
@@ -26,15 +33,29 @@ export default function FeedBody({ contents, imageUrl }: Props) {
   return (
     <div>
       {isImageUrl && (
-        <ul>
-          {imageUrl.map((img, index) => (
-            <li key={index} className="relative w-full h-[340px]">
-              <Image src={img} fill alt="content-image" />
-            </li>
-          ))}
-        </ul>
+        <div className="w-full">
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={0}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            className="w-full h-[340px]"
+          >
+            {imageUrl.map((img, index) => (
+              <SwiperSlide key={index}>
+                <div className="relative w-full h-[340px]">
+                  <Image
+                    src={img}
+                    fill
+                    alt="content-image"
+                    className="object-cover"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       )}
-
       <p
         ref={paragraphRef}
         className={`body-md text-black whitespace-pre-wrap break-all ${
@@ -43,7 +64,6 @@ export default function FeedBody({ contents, imageUrl }: Props) {
       >
         {contents}
       </p>
-
       {!isExpanded && isTruncated && (
         <button
           type="button"
