@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Swiper CSS
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 interface Props {
   imageUrl?: string[];
@@ -49,6 +49,11 @@ export default function FeedBody({ contents, imageUrl }: Props) {
                     fill
                     alt="content-image"
                     className="object-cover"
+                    unoptimized
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://placehold.co/400x340?text=no+image`;
+                    }}
                   />
                 </div>
               </SwiperSlide>
