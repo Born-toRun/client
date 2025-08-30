@@ -30,10 +30,7 @@ export default function FeedItem({ feed }: Props) {
         profileImageUri={profileUrl}
         registerAt={registerAt}
       />
-      <FeedBody
-        contents={contents}
-        imageUrl={imageUrls}
-      />
+      <FeedBody contents={contents} imageUrl={imageUrls} />
       <FeedFooter
         commentQty={commentQty}
         recommendationQty={recommendationQty}
