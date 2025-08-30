@@ -36,7 +36,7 @@ export default function FeedBody({ contents, imageUrl }: Props) {
   return (
     <div>
       {isImageUrl && (
-        <div className="w-full">
+        <div className="w-full mb-4">
           <Swiper
             modules={[Pagination]}
             spaceBetween={0}
