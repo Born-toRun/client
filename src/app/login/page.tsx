@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { setCookie } from "cookies-next";
 
 import { ACCESS_TOKEN } from "@/constants/common";
 import { pageRoutes } from "@/constants/route";
 
-export default function LoginRequestPage() {
+function LoginContent() {
   const router = useRouter();
   const params = useSearchParams();
   const accessToken = params.get("accessToken");
@@ -35,5 +35,13 @@ export default function LoginRequestPage() {
     [isMember, accessToken, router]
   );
 
-  return <>Loading....</>;
+  return <></>;
+}
+
+export default function LoginRequestPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <LoginContent />
+    </Suspense>
+  );
 }
