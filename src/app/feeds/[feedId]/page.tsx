@@ -60,7 +60,7 @@ export default function FeedDetailPage() {
         </>
       )}
       <Comments feedId={feedId} />
-      <CommentBox onSubmit={refetchCommentList} />
+      <CommentBox onSubmit={refetchCommentList} feedId={feedId} />
     </main>
   );
 }

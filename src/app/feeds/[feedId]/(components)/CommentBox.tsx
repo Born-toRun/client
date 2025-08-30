@@ -1,17 +1,31 @@
 "use client";
-
+import { createComment } from "@/apis/comment";
+import { CreateCommentRequest } from "@/apis/comment/types";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface CommentBoxProps {
+  feedId: number;
   onSubmit: () => void;
   isLoading?: boolean;
 }
 
-export default function CommentBox({ onSubmit }: CommentBoxProps) {
+export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
   const [comment, setComment] = useState("");
 
+  const { mutate: submitComment } = useMutation({
+    mutationFn: ({
+      commentId,
+      data,
+    }: {
+      commentId: number;
+      data: CreateCommentRequest;
+    }) => createComment(commentId, data),
+  });
+
   const handleSubmit = () => {
-    if (comment.trim()) {
+    if (comment !== "") {
+      submitComment({ commentId: feedId, data: { contents: comment } });
       onSubmit();
       setComment("");
     }

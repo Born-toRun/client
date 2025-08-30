@@ -19,3 +19,14 @@ export interface CommentDetail {
   isMyComment: boolean;
   isReComment: boolean;
 }
+
+// 댓글 등록 요청 타입
+export interface CreateCommentRequest {
+  contents: string;
+}
+
+// 댓글 등록 응답 타입
+export interface CreateCommentResponse {
+  id: number;
+  contents: string;
+}

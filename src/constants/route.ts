@@ -5,6 +5,7 @@ export const apiRoutes = {
   },
   comments: {
     list: (feedId: number) => `/api/v1/comments/${feedId}`,
+    create: (commentId: number) => `/api/v1/comments/${commentId}`,
   },
   auth: {
     withdraw: "/api/v1/users",
