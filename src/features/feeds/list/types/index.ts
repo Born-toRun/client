@@ -56,4 +56,32 @@ export type FeedContent = {
     hasMyComment: boolean;
   };
 };
+
+export interface FeedDetailResponse {
+  id: number;
+  contents: string;
+  images: Array<{
+    imageId: number;
+    imageUri: string;
+  }> | null;
+  category: string;
+  accessLevel: string;
+  viewQty: number;
+  recommendationQty: number;
+  commentQty: number;
+  registeredAt: string;
+  writer: {
+    userId: number;
+    userName: string;
+    crewName: string;
+    profileImageUri: string;
+    isAdmin: boolean;
+    isManager: boolean;
+  };
+  viewer: {
+    hasMyRecommendation: boolean;
+    hasMyComment: boolean;
+  };
+}
+
 export type FEEDCategory = keyof typeof feedCategoryLabel;

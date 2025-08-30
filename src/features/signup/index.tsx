@@ -62,7 +62,7 @@ export default function Signup() {
   };
 
   return (
-    <main>
+    <main className="pt-14">
       <Header
         left={
           <button

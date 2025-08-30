@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -12,31 +11,10 @@ interface Props {
   imageUrl?: string[];
   contents?: string;
 }
-
 export default function FeedBody({ contents, imageUrl }: Props) {
-  const isImageUrl = imageUrl && imageUrl.length > 0;
-
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isTruncated, setIsTruncated] = useState(false);
-
-  const paragraphRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const el = paragraphRef.current;
-    if (el && el.scrollHeight > el.clientHeight + 1) {
-      setIsTruncated(true);
-    }
-  }, [contents]);
-
-  const handleExpand = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    setIsExpanded(true);
-  };
-
   return (
     <div>
-      {isImageUrl && (
+      {imageUrl && (
         <div className="w-full mb-4">
           <Swiper
             modules={[Pagination]}
@@ -65,23 +43,9 @@ export default function FeedBody({ contents, imageUrl }: Props) {
           </Swiper>
         </div>
       )}
-      <p
-        ref={paragraphRef}
-        className={`body-md text-black whitespace-pre-wrap break-all ${
-          !isExpanded ? "line-clamp-2" : ""
-        }`}
-      >
+      <p className={`px-4 body-md text-black whitespace-pre-wrap break-all`}>
         {contents}
       </p>
-      {!isExpanded && isTruncated && (
-        <button
-          type="button"
-          onClick={handleExpand}
-          className="label-sm text-green-500 inline-flex mt-[4px] cursor-pointer"
-        >
-          더보기
-        </button>
-      )}
     </div>
   );
 }

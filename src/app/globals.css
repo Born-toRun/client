@@ -39,3 +39,13 @@
   --color-system-r-300: #ff5630;
   --color-system-r-50: #ffebe6;
 }
+
+/* Swiper pagination bullet 커스텀 스타일 */
+.swiper-pagination-bullet {
+  background-color: #d8dfe6 !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: white !important;
+}

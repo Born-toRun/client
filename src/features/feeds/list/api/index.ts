@@ -1,5 +1,5 @@
 import { runApi } from "@/client/runClient";
-import { FeedListParams } from "../types";
+import { FeedListParams, FeedDetailResponse } from "../types";
 import { apiRoutes } from "@/constants/route";
 
 const getFeedList = async (params: FeedListParams) => {
@@ -15,4 +15,11 @@ const getFeedList = async (params: FeedListParams) => {
   return response;
 };
 
-export { getFeedList };
+const getFeedDetail = async (feedId: number): Promise<FeedDetailResponse> => {
+  const response = await (
+    await runApi.get(apiRoutes.feeds.detail(feedId))
+  ).data;
+  return response;
+};
+
+export { getFeedList, getFeedDetail };

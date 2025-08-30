@@ -131,7 +131,7 @@ export default function WriteContainer() {
   };
 
   return (
-    <main className="flex flex-col h-screen">
+    <main className="flex flex-col h-screen pt-14">
       <Header
         left={
           <button
