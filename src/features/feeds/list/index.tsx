@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { feedCategoryLabel } from "../constants";
 import CreateFeedButton from "./components/CreateFeedButton";
 import FeedList from "./components/FeedList";
+import FeedSkeletons from "./components/FeedSkeletons";
 import { useGetFeesListQuery } from "./hooks/queries";
 import { FEEDCategory } from "./types";
 
@@ -52,10 +53,7 @@ export default function FeedContainer() {
 
   return (
     <>
-      <MainHeader
-        selectedTabs={selectedTabs}
-        isScrolled={isScrolled}
-      />
+      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
       <div className="pt-[68px] mb-[16px]">
         <Tabs
           options={feedListTabOptions}
@@ -70,6 +68,7 @@ export default function FeedContainer() {
           checked={isMyCrew}
         />
       </div>
+      {isPending && <FeedSkeletons />}
       <FeedList list={feedList} />
       {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
       <div className="fixed bottom-[58px] w-full max-w-[786px] mx-auto flex justify-end px-[16px] pb-[24px]">

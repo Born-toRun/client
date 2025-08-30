@@ -8,6 +8,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+// Custom Swiper styles
+import "./FeedBody.css";
+
 interface Props {
   imageUrl?: string[];
   contents?: string;
@@ -39,11 +42,11 @@ export default function FeedBody({ contents, imageUrl }: Props) {
             spaceBetween={0}
             slidesPerView={1}
             pagination={{ clickable: true }}
-            className="w-full h-[340px]"
+            className="w-full"
           >
             {imageUrl.map((img, index) => (
               <SwiperSlide key={index}>
-                <div className="relative w-full h-[340px]">
+                <div className="relative w-full aspect-square">
                   <Image
                     src={img}
                     fill
@@ -52,7 +55,7 @@ export default function FeedBody({ contents, imageUrl }: Props) {
                     unoptimized
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = `https://placehold.co/400x340?text=no+image`;
+                      target.src = `https://placehold.co/400x400?text=no+image`;
                     }}
                   />
                 </div>

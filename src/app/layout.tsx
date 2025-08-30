@@ -1,7 +1,8 @@
+import QueryProvider from "@/provider/QueryProvider";
+import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import QueryProvider from "@/provider/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
