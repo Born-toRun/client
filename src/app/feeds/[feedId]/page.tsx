@@ -8,16 +8,26 @@ import { useParams } from "next/navigation";
 import FeedDetailHeader from "./(components)/FeedDetailHeader";
 import FeedDetailSkeleton from "./(components)/FeedDetailSkeleton";
 import FeedBody from "./(components)/FeedBody";
+import Comments from "./(components)/Comments";
+import CommentBox from "./(components)/CommentBox";
 
 export default function FeedDetailPage() {
   const params = useParams();
   const feedId = Number(params.feedId);
 
-  const { data: feed, isLoading } = useQuery({
+  const {
+    data: feed,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["feed", feedId],
     queryFn: () => getFeedDetail(feedId),
     enabled: !!feedId,
   });
+
+  const refetchCommentList = () => {
+    refetch();
+  };
 
   return (
     <main className="flex flex-col h-screen pt-14 w-full">
@@ -49,9 +59,8 @@ export default function FeedDetailPage() {
           <div className="h-[1px] bg-n-30 my-2" />
         </>
       )}
-      <div className="px-4 py-4 text-n-60 body-sm ">
-        {"여러분의 생각을 남겨주세요 :)"}
-      </div>
+      <Comments feedId={feedId} />
+      <CommentBox onSubmit={refetchCommentList} />
     </main>
   );
 }

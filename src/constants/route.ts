@@ -3,6 +3,9 @@ export const apiRoutes = {
     list: "/api/v1/feeds",
     detail: (feedId: number) => `/api/v1/feeds/${feedId}`,
   },
+  comments: {
+    list: (feedId: number) => `/api/v1/comments/${feedId}`,
+  },
   auth: {
     withdraw: "/api/v1/users",
     signup: "/api/v1/users/sign-up",
