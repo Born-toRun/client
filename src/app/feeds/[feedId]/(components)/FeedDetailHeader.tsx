@@ -5,13 +5,16 @@ import { useLikeFeed } from "@/app/feeds/[feedId]/(hooks)/useLikeFeed";
 import BackIcon from "@/icons/back-icon.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import ActiveLikeIcon from "../(icons)/active-like-icon.svg";
 import LikeIcon from "../(icons)/like-icon.svg";
 import MoreIcon from "../(icons)/more-icon.svg";
 import ShareIcon from "../(icons)/share-icon.svg";
+import FeedActionModal from "./FeedActionModal";
 
 export default function FeedDetailHeader({ feedId }: { feedId: number }) {
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: feed } = useQuery({
     queryKey: ["feed", feedId],
@@ -45,47 +48,55 @@ export default function FeedDetailHeader({ feedId }: { feedId: number }) {
   };
 
   const moreClickHandler = () => {
-    console.log("moreClickHandler");
+    setIsModalOpen(true);
   };
 
   return (
-    <Header
-      left={
-        <button
-          className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-          onClick={() => router.back()}
-        >
-          <BackIcon />
-        </button>
-      }
-      title=""
-      right={
-        <div className="flex items-center gap-2">
+    <>
+      <Header
+        left={
           <button
             className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-            onClick={shareClickHandler}
+            onClick={() => router.back()}
           >
-            <ShareIcon />
+            <BackIcon />
           </button>
-          <button
-            className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full disabled:opacity-50"
-            onClick={toggleLike}
-            disabled={isPending}
-          >
-            {feed?.viewer.hasMyRecommendation ? (
-              <ActiveLikeIcon />
-            ) : (
-              <LikeIcon />
-            )}
-          </button>
-          <button
-            className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-            onClick={moreClickHandler}
-          >
-            <MoreIcon />
-          </button>
-        </div>
-      }
-    />
+        }
+        title=""
+        right={
+          <div className="flex items-center gap-2">
+            <button
+              className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+              onClick={shareClickHandler}
+            >
+              <ShareIcon />
+            </button>
+            <button
+              className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full disabled:opacity-50"
+              onClick={toggleLike}
+              disabled={isPending}
+            >
+              {feed?.viewer.hasMyRecommendation ? (
+                <ActiveLikeIcon />
+              ) : (
+                <LikeIcon />
+              )}
+            </button>
+            <button
+              className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+              onClick={moreClickHandler}
+            >
+              <MoreIcon />
+            </button>
+          </div>
+        }
+      />
+
+      <FeedActionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        feedId={feedId}
+      />
+    </>
   );
 }
