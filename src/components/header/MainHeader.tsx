@@ -18,14 +18,23 @@ export default function MainHeader({ selectedTabs, isScrolled }: Props) {
     <div className="fixed w-full bg-white z-20">
       <Header
         left={
-          <div>
-            {isScrolled ? (
+          <div className="h-[40px] flex items-center">
+            <div
+              className={`transition-opacity duration-300 ease-in-out ${
+                isScrolled ? "opacity-0 absolute" : "opacity-100"
+              }`}
+            >
+              <Logo />
+            </div>
+            <div
+              className={`transition-opacity duration-300 ease-in-out ${
+                isScrolled ? "opacity-100" : "opacity-0 absolute"
+              }`}
+            >
               <span className="title-xl text-black block p-[8px]">
                 {tabLabel}
               </span>
-            ) : (
-              <Logo />
-            )}
+            </div>
           </div>
         }
         right={
