@@ -91,7 +91,6 @@ export default function FeedDetailHeader({ feedId }: { feedId: number }) {
           </div>
         }
       />
-
       <FeedActionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
