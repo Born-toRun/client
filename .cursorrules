@@ -1,0 +1,63 @@
+# Cursor AI Coding Rules
+
+## Basic Coding Style (기본 코딩 스타일)
+- Use TypeScript for type safety (타입 안전성을 위해 TypeScript 사용)
+- Follow ESLint and Prettier rules (ESLint와 Prettier 규칙 준수)
+- Use consistent naming conventions (camelCase, PascalCase) (일관된 네이밍 컨벤션 사용)
+- Write appropriate comments and JSDoc (적절한 주석과 JSDoc 작성)
+
+## React/Next.js Rules (React/Next.js 규칙)
+- Use functional components (함수형 컴포넌트 사용)
+- Follow React Hooks rules (React Hooks 규칙 준수)
+- Components should follow single responsibility principle (컴포넌트는 단일 책임 원칙을 따름)
+- Explicitly define Props interfaces (Props 인터페이스 명시적 정의)
+- Prevent unnecessary re-renders (불필요한 리렌더링 방지)
+
+## Code Structure (코드 구조)
+- Organize folders by features (utilize features folder) (기능별로 폴더 구조화)
+- Place reusable components in components folder (재사용 가능한 컴포넌트는 components 폴더에 배치)
+- Separate API calls in apis folder (API 호출은 apis 폴더에 분리)
+- Concentrate type definitions in types folder (타입 정의는 types 폴더에 집중)
+
+## Performance Optimization (성능 최적화)
+- Use React.memo, useMemo, useCallback appropriately (React.memo, useMemo, useCallback 적절히 사용)
+- Optimize images (utilize next/image) (이미지 최적화)
+- Apply code splitting and lazy loading (코드 스플리팅과 지연 로딩 적용)
+- Optimize bundle size (번들 크기 최적화)
+
+## State Management (상태 관리)
+- Use React Query for server state management (서버 상태 관리를 위해 React Query 사용)
+- Use useState, useReducer for local state (로컬 상태는 useState, useReducer 활용)
+- Use global state only when necessary (전역 상태는 필요한 경우에만 사용)
+
+## Error Handling (에러 처리)
+- Implement appropriate error boundaries (적절한 에러 바운더리 구현)
+- Display user-friendly error messages (사용자 친화적인 에러 메시지 표시)
+- Consider logging and monitoring (로깅과 모니터링 고려)
+
+## Accessibility (접근성)
+- Use semantic HTML tags (시맨틱 HTML 태그 사용)
+- Apply ARIA attributes appropriately (ARIA 속성 적절히 적용)
+- Support keyboard navigation (키보드 네비게이션 지원)
+- Consider color contrast (색상 대비 고려)
+
+## Testing (테스트)
+- Write unit tests (단위 테스트 작성)
+- Component testing (컴포넌트 테스트)
+- Consider E2E testing (E2E 테스트 고려)
+
+## Security (보안)
+- Validate user input (사용자 입력 검증)
+- Prevent XSS attacks (XSS 방지)
+- Avoid exposing sensitive information (민감한 정보 노출 방지)
+
+## Performance Monitoring (성능 모니터링)
+- Measure Core Web Vitals (Core Web Vitals 측정)
+- Bundle analysis (번들 분석)
+- Prevent memory leaks (메모리 누수 방지)
+
+## Code Quality (코드 품질)
+- Follow DRY principle (DRY 원칙 준수)
+- Apply SOLID principles (SOLID 원칙 적용)
+- Minimize code complexity (코드 복잡도 최소화)
+- Prioritize readability (가독성 우선)

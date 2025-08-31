@@ -29,7 +29,7 @@ export default function RootLayout({
         />
       </head>
       <QueryProvider>
-        <body className={`${pretendard.className} w-dvw bg-[#fcfcfc]`}>
+        <body className={`${pretendard.className} bg-[#fcfcfc]`}>
           <div className="w-full max-w-[786px] mx-auto min-h-screen bg-white">
             {children}
           </div>

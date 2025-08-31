@@ -23,7 +23,7 @@ export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
     }) => createComment(commentId, data),
   });
 
-  const handleSubmit = () => {
+  const submitCommentHandler = () => {
     if (comment !== "") {
       submitComment({ commentId: feedId, data: { contents: comment } });
       onSubmit();
@@ -44,7 +44,7 @@ export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
         </div>
         <button
           className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
-          onClick={handleSubmit}
+          onClick={submitCommentHandler}
         >
           <p className="text-white title-md leading-[17px]">게시</p>
         </button>

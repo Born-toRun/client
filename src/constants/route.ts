@@ -7,6 +7,12 @@ export const apiRoutes = {
     list: (feedId: number) => `/api/v1/comments/${feedId}`,
     create: (commentId: number) => `/api/v1/comments/${commentId}`,
   },
+  recommendations: {
+    create: (recommendationType: string, contentId: number) =>
+      `/api/v1/recommendations/${recommendationType}/${contentId}`,
+    delete: (recommendationType: string, contentId: number) =>
+      `/api/v1/recommendations/${recommendationType}/${contentId}`,
+  },
   auth: {
     withdraw: "/api/v1/users",
     signup: "/api/v1/users/sign-up",
