@@ -1,7 +1,7 @@
 "use client";
 import { createComment } from "@/apis/comment";
 import { CreateCommentRequest } from "@/apis/comment/types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface CommentBoxProps {
@@ -12,22 +12,25 @@ interface CommentBoxProps {
 
 export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
   const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
 
-  const { mutate: submitComment } = useMutation({
-    mutationFn: ({
-      commentId,
+  const { mutateAsync: submitComment } = useMutation({
+    mutationFn: async ({
+      feedId,
       data,
     }: {
-      commentId: number;
+      feedId: number;
       data: CreateCommentRequest;
-    }) => createComment(commentId, data),
+    }) => createComment(feedId, data),
   });
 
-  const submitCommentHandler = () => {
+  const submitCommentHandler = async () => {
     if (comment !== "") {
-      submitComment({ commentId: feedId, data: { contents: comment } });
-      onSubmit();
+      await submitComment({ feedId, data: { contents: comment } });
       setComment("");
+      // 댓글 목록을 다시 받아오기 위해 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ["comments", feedId] });
+      onSubmit();
     }
   };
 
@@ -45,6 +48,7 @@ export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
         <button
           className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
           onClick={submitCommentHandler}
+          disabled={comment === ""}
         >
           <p className="text-white title-md leading-[17px]">게시</p>
         </button>

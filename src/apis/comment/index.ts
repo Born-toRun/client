@@ -1,9 +1,5 @@
 import { runApi } from "@/client/runClient";
-import {
-  CommentListResponse,
-  CreateCommentRequest,
-  CreateCommentResponse,
-} from "./types";
+import { CommentListResponse, CreateCommentRequest } from "./types";
 import { apiRoutes } from "@/constants/route";
 
 export const getCommentList = async (
@@ -17,11 +13,11 @@ export const getCommentList = async (
 
 // 댓글 등록 API
 export const createComment = async (
-  commentId: number,
+  feedId: number,
   data: CreateCommentRequest
-): Promise<CreateCommentResponse> => {
+): Promise<void> => {
   const response = await (
-    await runApi.put(apiRoutes.comments.create(commentId), data)
+    await runApi.post(apiRoutes.comments.create(feedId), data)
   ).data;
   return response;
 };
