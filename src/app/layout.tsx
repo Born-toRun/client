@@ -32,7 +32,7 @@ export default function RootLayout({
         <body className={`${pretendard.className} bg-[#fcfcfc]`}>
           <div
             id="app-container"
-            className="relative w-full max-w-[786px] mx-auto min-h-screen bg-white"
+            className="w-full max-w-[786px] mx-auto min-h-screen bg-white"
           >
             {children}
           </div>
