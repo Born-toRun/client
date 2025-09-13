@@ -32,7 +32,7 @@ export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-n-30 px-4 py-2 z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border border-n-30 px-4 py-2 z-50 w-full max-w-[786px] mx-auto">
       <div className="flex items-center gap-2">
         <div className="flex-1 ">
           <input

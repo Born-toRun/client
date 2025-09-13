@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { createPortal } from "react-dom";
 import CopyIcon from "../(icons)/copy-icon.svg";
 import EditIcon from "../(icons)/edit-icon.svg";
 import DeleteIcon from "../(icons)/delete-icon.svg";
@@ -58,10 +59,10 @@ export default function FeedActionModal({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <>
       <div className="fixed inset-0 bg-transparent z-40" onClick={onClose} />
-      <div className="fixed top-14 right-6 bg-white rounded-2xl shadow-2xl z-50 min-w-[172px]">
+      <div className="fixed top-14 right-6 sm:right-[calc(50%-393px+24px)] bg-white rounded-2xl shadow-2xl z-50 min-w-[172px]">
         <div className="p-2">
           <button
             onClick={copyClickHandler}
@@ -95,4 +96,10 @@ export default function FeedActionModal({
       </div>
     </>
   );
+
+  // Portal을 사용해서 786px 제한 컨테이너에 렌더링
+  const container = document.getElementById("app-container");
+  if (!container) return null;
+
+  return createPortal(modalContent, container as HTMLElement);
 }

@@ -30,7 +30,10 @@ export default function RootLayout({
       </head>
       <QueryProvider>
         <body className={`${pretendard.className} bg-[#fcfcfc]`}>
-          <div className="w-full max-w-[786px] mx-auto min-h-screen bg-white">
+          <div
+            id="app-container"
+            className="relative w-full max-w-[786px] mx-auto min-h-screen bg-white"
+          >
             {children}
           </div>
         </body>
