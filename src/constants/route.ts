@@ -2,6 +2,8 @@ export const apiRoutes = {
   feeds: {
     list: "/api/v1/feeds",
     detail: (feedId: number) => `/api/v1/feeds/${feedId}`,
+    update: (feedId: number) => `/api/v1/feeds/${feedId}`,
+    delete: (feedId: number) => `/api/v1/feeds/${feedId}`,
   },
   comments: {
     list: (feedId: number) => `/api/v1/comments/${feedId}`,
