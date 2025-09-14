@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
+import { deleteFeed } from "@/apis/feed";
 import CopyIcon from "../(icons)/copy-icon.svg";
 import EditIcon from "../(icons)/edit-icon.svg";
 import DeleteIcon from "../(icons)/delete-icon.svg";
@@ -45,7 +46,7 @@ export default function FeedActionModal({
 
     setIsDeleting(true);
     try {
-      // await deleteFeed(feedId);
+      await deleteFeed(feedId);
       queryClient.invalidateQueries({ queryKey: ["feeds"] });
       router.push("/");
     } catch (error) {
