@@ -29,6 +29,7 @@ export const pageRoutes = {
     list: "/",
     write: "/write",
     detail: (feedId: number) => `/feeds/${feedId}`,
+    edit: (feedId: number) => `/feeds/${feedId}/edit`,
   },
   running: {
     list: "/running",
