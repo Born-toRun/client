@@ -32,7 +32,7 @@ export default function FeedDetailPage() {
   return (
     <>
       <FeedDetailHeader feedId={feedId} />
-      <main className="flex flex-col h-screen pt-14 w-full">
+      <main className="flex flex-col pt-14 w-full">
         {isLoading && <FeedDetailSkeleton />}
         {feed && (
           <>

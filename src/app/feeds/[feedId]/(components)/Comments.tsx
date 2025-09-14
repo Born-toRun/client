@@ -23,7 +23,7 @@ export default function Comments({ feedId }: { feedId: number }) {
         comments.details.map((comment) => (
           <div
             className={`flex flex-col gap-2 ${
-              comment.isMyComment ? "bg-n-200" : ""
+              comment.isMyComment ? "bg-n-10" : ""
             }`}
             key={comment.id}
           >

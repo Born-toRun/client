@@ -1,6 +1,7 @@
 "use client";
 
 import BackIcon from "@/icons/back-icon.svg";
+import Header from "@/components/header/Header";
 
 interface FeedEditHeaderProps {
   onCancel: () => void;
@@ -16,15 +17,17 @@ export default function FeedEditHeader({
   canSubmit,
 }: FeedEditHeaderProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-n-30">
-      <div className="flex items-center justify-between px-4 h-14">
+    <Header
+      title="게시물 수정"
+      left={
         <button
           onClick={onCancel}
           className="flex items-center justify-center w-10 h-10"
         >
           <BackIcon className="w-6 h-6" />
         </button>
-        <h1 className="text-lg font-semibold text-black">게시물 수정</h1>
+      }
+      right={
         <button
           onClick={onSubmit}
           disabled={!canSubmit || isSubmitting}
@@ -32,7 +35,7 @@ export default function FeedEditHeader({
         >
           <p className="text-white title-md leading-[17px]">완료</p>
         </button>
-      </div>
-    </header>
+      }
+    />
   );
 }

@@ -131,7 +131,7 @@ export default function WriteContainer() {
   };
 
   return (
-    <main className="flex flex-col h-screen pt-14">
+    <>
       <Header
         left={
           <button
@@ -152,100 +152,100 @@ export default function WriteContainer() {
           </button>
         }
       />
-      <div className="h-16 px-4 flex items-center justify-between border-t border-n-30">
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={categorySelectClickHandler}
-        >
-          <p className="label-md">
-            {selectedCategory === feedCategoryLabel.COMMUNITY
-              ? "커뮤니티"
-              : "마켓"}
-          </p>
-          {isCategorySelectOpen ? (
-            <ArrowDownIcon className="rotate-180" />
-          ) : (
-            <ArrowDownIcon />
-          )}
-        </div>
-        <div>
-          <CheckBox
-            text="크루만 공개하기"
-            onChange={() => setSeeOnlyMyCrew((prev) => !prev)}
-            checked={seeOnlyMyCrew}
-          />
-        </div>
-      </div>
-      {/* 이미지 업로드 영역 */}
-      <div className="px-4 py-3 border-t border-n-30">
-        <div className="flex items-center gap-2 mb-3">
+      <main className="flex flex-col h-screen pt-14">
+        <div className="h-16 px-4 flex items-center justify-between border-t border-n-30">
           <div
-            className="w-[64px] h-[64px] bg-n-30 rounded-[8px] flex flex-col items-center justify-center cursor-pointer hover:bg-n-40 transition-colors"
-            onClick={imageSelectHandler}
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={categorySelectClickHandler}
           >
-            <div className="w-6 h-6 rounded-full flex items-center justify-center mb-1">
-              <ImageIcon className="w-6 h-6" />
-            </div>
-            <span className="text-n-200 text-xs">
-              {selectedImages.length}/5
-            </span>
+            <p className="label-md">
+              {selectedCategory === feedCategoryLabel.COMMUNITY
+                ? "커뮤니티"
+                : "마켓"}
+            </p>
+            {isCategorySelectOpen ? (
+              <ArrowDownIcon className="rotate-180" />
+            ) : (
+              <ArrowDownIcon />
+            )}
           </div>
-          {selectedImages.length === 0 && (
+          <div>
+            <CheckBox
+              text="크루만 공개하기"
+              onChange={() => setSeeOnlyMyCrew((prev) => !prev)}
+              checked={seeOnlyMyCrew}
+            />
+          </div>
+        </div>
+        {/* 이미지 업로드 영역 */}
+        <div className="px-4 py-3 border-t border-n-30">
+          <div className="flex items-center gap-2 mb-3">
             <div
-              className="text-n-200 text-label-sm font-bold cursor-pointer"
+              className="w-[64px] h-[64px] bg-n-30 rounded-[8px] flex flex-col items-center justify-center cursor-pointer hover:bg-n-40 transition-colors"
               onClick={imageSelectHandler}
             >
-              이미지 추가
+              <div className="w-6 h-6 rounded-full flex items-center justify-center mb-1">
+                <ImageIcon className="w-6 h-6" />
+              </div>
+              <span className="text-n-200 text-xs">
+                {selectedImages.length}/5
+              </span>
             </div>
-          )}
-          {/* 선택된 이미지들 표시 */}
-          {selectedImages.length > 0 && (
-            <div className="flex gap-2">
-              {selectedImages.map((image, index) => (
-                <div key={index} className="relative flex-shrink-0">
-                  <Image
-                    src={image.fileUri}
-                    alt={`선택된 이미지 ${index + 1}`}
-                    width={64}
-                    height={64}
-                    className="w-[64px] h-[64px] rounded-[8px] object-cover"
-                  />
-                  <button
-                    onClick={() => removeImage(index)}
-                    className="absolute top-[-3px] right-[-3px] w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
-                  >
-                    <ImageDeleteIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+            {selectedImages.length === 0 && (
+              <div
+                className="text-n-200 text-label-sm font-bold cursor-pointer"
+                onClick={imageSelectHandler}
+              >
+                이미지 추가
+              </div>
+            )}
+            {/* 선택된 이미지들 표시 */}
+            {selectedImages.length > 0 && (
+              <div className="flex gap-2">
+                {selectedImages.map((image, index) => (
+                  <div key={index} className="relative flex-shrink-0">
+                    <Image
+                      src={image.fileUri}
+                      alt={`선택된 이미지 ${index + 1}`}
+                      width={64}
+                      height={64}
+                      className="w-[64px] h-[64px] rounded-[8px] object-cover"
+                    />
+                    <button
+                      onClick={() => removeImage(index)}
+                      className="absolute top-[-3px] right-[-3px] w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
+                    >
+                      <ImageDeleteIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* 숨겨진 파일 입력 */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={imageChangeHandler}
-        className="hidden"
-      />
-      <textarea
-        value={contents}
-        onChange={(e) => setContents(e.target.value)}
-        className="w-full flex-1 px-4 py-3 border-t border-n-30 resize-none"
-        placeholder="러닝 후기를 공유해 보세요!"
-      />
-      <CategorySelectModal
-        open={isCategorySelectOpen}
-        onOpenChange={categorySelectModalOpenChangeHandler}
-        options={CATEGORY_OPTIONS}
-        value={selectedCategory}
-        onChange={categorySelectHandler}
-      />
-    </main>
+        {/* 숨겨진 파일 입력 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={imageChangeHandler}
+          className="hidden"
+        />
+        <textarea
+          value={contents}
+          onChange={(e) => setContents(e.target.value)}
+          className="w-full flex-1 px-4 py-3 border-t border-n-30 resize-none"
+          placeholder="러닝 후기를 공유해 보세요!"
+        />
+        <CategorySelectModal
+          open={isCategorySelectOpen}
+          onOpenChange={categorySelectModalOpenChangeHandler}
+          options={CATEGORY_OPTIONS}
+          value={selectedCategory}
+          onChange={categorySelectHandler}
+        />
+      </main>
+    </>
   );
 }
-
-// 56 + 64 + 96 = 216
