@@ -21,7 +21,12 @@ export default function Comments({ feedId }: { feedId: number }) {
     <div className="bg-white pb-16">
       {hasComments ? (
         comments.details.map((comment) => (
-          <div className="flex flex-col gap-2" key={comment.id}>
+          <div
+            className={`flex flex-col gap-2 ${
+              comment.isMyComment ? "bg-n-200" : ""
+            }`}
+            key={comment.id}
+          >
             <div className="flex items-center gap-[8px] px-4 pt-2">
               <div className="relative  overflow-hidden size-[40px] shrink-0 round-full border  border-[rgba(0,0,0,0.1)]">
                 {comment.writer.profileImageUri ? (
