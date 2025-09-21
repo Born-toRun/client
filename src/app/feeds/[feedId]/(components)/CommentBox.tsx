@@ -6,11 +6,16 @@ import { useState } from "react";
 
 interface CommentBoxProps {
   feedId: number;
+  parentCommentId?: number;
   onSubmit: () => void;
   isLoading?: boolean;
 }
 
-export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
+export default function CommentBox({
+  onSubmit,
+  feedId,
+  parentCommentId,
+}: CommentBoxProps) {
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
 
@@ -26,7 +31,10 @@ export default function CommentBox({ onSubmit, feedId }: CommentBoxProps) {
 
   const submitCommentHandler = async () => {
     if (comment !== "") {
-      await submitComment({ feedId, data: { contents: comment } });
+      await submitComment({
+        feedId,
+        data: { contents: comment, parentCommentId },
+      });
       setComment("");
       // 댓글 목록을 다시 받아오기 위해 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: ["comments", feedId] });

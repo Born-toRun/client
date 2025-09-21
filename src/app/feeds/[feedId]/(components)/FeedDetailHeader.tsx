@@ -1,15 +1,15 @@
 "use client";
+import { useLikeFeed } from "@/app/feeds/[feedId]/(hooks)/useLikeFeed";
 import Header from "@/components/header/Header";
 import { getFeedDetail } from "@/features/feeds/list/api";
-import { useLikeFeed } from "@/app/feeds/[feedId]/(hooks)/useLikeFeed";
+import ActiveLikeIcon from "@/icons/active-like-icon.svg";
 import BackIcon from "@/icons/back-icon.svg";
+import LikeIcon from "@/icons/like-icon.svg";
+import MoreIcon from "@/icons/more-icon.svg";
+import ShareIcon from "@/icons/share-icon.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ActiveLikeIcon from "../(icons)/active-like-icon.svg";
-import LikeIcon from "../(icons)/like-icon.svg";
-import MoreIcon from "../(icons)/more-icon.svg";
-import ShareIcon from "../(icons)/share-icon.svg";
 import FeedActionModal from "./FeedActionModal";
 
 export default function FeedDetailHeader({ feedId }: { feedId: number }) {

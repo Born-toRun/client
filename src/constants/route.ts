@@ -8,6 +8,10 @@ export const apiRoutes = {
   comments: {
     list: (feedId: number) => `/api/v1/comments/${feedId}`,
     create: (feedId: number) => `/api/v1/comments/${feedId}`,
+    detail: (commentId: number) => `/api/v1/comments/detail/${commentId}`,
+    delete: (commentId: number) => `/api/v1/comments/${commentId}`,
+    update: (commentId: number) => `/api/v1/comments/${commentId}`,
+    count: (feedId: number) => `/api/v1/comments/qty/${feedId}`,
   },
   recommendations: {
     create: (recommendationType: string, contentId: number) =>
@@ -30,6 +34,8 @@ export const pageRoutes = {
     write: "/write",
     detail: (feedId: number) => `/feeds/${feedId}`,
     edit: (feedId: number) => `/feeds/${feedId}/edit`,
+    commentDetail: (feedId: number, commentId: number) =>
+      `/feeds/${feedId}/comments/${commentId}`,
   },
   running: {
     list: "/running",

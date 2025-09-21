@@ -1,10 +1,11 @@
 import { getCommentList } from "@/apis/comment";
 import { formatRelativeTime } from "@/features/utils/formatDate";
+import ActiveCommentIcon from "@/icons/active-comment-icon.svg";
+import CommentIcon from "@/icons/comment-icon.svg";
+import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import CommentIcon from "@/icons/comment-icon.svg";
-import ActiveCommentIcon from "@/icons/active-comment-icon.svg";
-import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
+import Link from "next/link";
 
 export default function Comments({ feedId }: { feedId: number }) {
   const { data: comments, isLoading } = useQuery({
@@ -56,23 +57,25 @@ export default function Comments({ feedId }: { feedId: number }) {
               <div className="w-8 flex justify-center relative">
                 <div className="w-1 absolute top-0 bottom-0 bg-n-30 rounded-full"></div>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 grow">
                 <p className="body-md text-black">{comment.contents}</p>
-                <div className="flex items-center gap-1 h-8">
-                  {comment.reCommentQty === 0 ? (
-                    <>
-                      <CommentIcon />
-                      <span className="text-n-200 body-sm">댓글</span>
-                    </>
-                  ) : (
-                    <>
-                      <ActiveCommentIcon />
-                      <span className="text-rg-400 body-sm">
-                        {comment.reCommentQty}
-                      </span>
-                    </>
-                  )}
-                </div>
+                <Link href={`/feeds/${feedId}/comments/${comment.id}`}>
+                  <div className="flex items-center gap-1 h-8">
+                    {comment.reCommentQty === 0 ? (
+                      <>
+                        <CommentIcon />
+                        <span className="text-n-200 body-sm">댓글</span>
+                      </>
+                    ) : (
+                      <>
+                        <ActiveCommentIcon />
+                        <span className="text-rg-400 body-sm">
+                          {comment.reCommentQty}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

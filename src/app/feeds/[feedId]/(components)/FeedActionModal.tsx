@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { createPortal } from "react-dom";
 import { deleteFeed } from "@/apis/feed";
 import { pageRoutes } from "@/constants/route";
-import CopyIcon from "../(icons)/copy-icon.svg";
-import EditIcon from "../(icons)/edit-icon.svg";
-import DeleteIcon from "../(icons)/delete-icon.svg";
+import CopyIcon from "@/icons/copy-icon.svg";
+import DeleteIcon from "@/icons/delete-icon.svg";
+import EditIcon from "@/icons/edit-icon.svg";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 
 interface FeedActionModalProps {
   isOpen: boolean;
