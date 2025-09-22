@@ -6,6 +6,8 @@ import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import CommentActionModal from "../comments/(modals)/CommentActionModal";
 
 export default function Comments({ feedId }: { feedId: number }) {
   const { data: comments, isLoading } = useQuery({
@@ -15,6 +17,11 @@ export default function Comments({ feedId }: { feedId: number }) {
   });
 
   const hasComments = comments && comments.details.length > 0;
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    commentId: number | null;
+    position: { top: number; left: number } | null;
+  }>({ isOpen: false, commentId: null, position: null });
 
   if (isLoading) return <div></div>;
 
@@ -49,7 +56,21 @@ export default function Comments({ feedId }: { feedId: number }) {
                   <p>{formatRelativeTime(comment.registeredAt)}</p>
                 </div>
               </div>
-              <button type="button">
+              <button
+                type="button"
+                className="w-6 h-6 flex items-center justify-center cursor-pointer hover:bg-n-30 rounded-full"
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setModalState({
+                    isOpen: true,
+                    commentId: comment.id,
+                    position: {
+                      top: rect.bottom + window.scrollY,
+                      left: rect.left + window.scrollX - 172, // 모달 너비(172px)만큼 왼쪽으로 이동
+                    },
+                  });
+                }}
+              >
                 <CommentMenuIcon />
               </button>
             </div>
@@ -92,6 +113,18 @@ export default function Comments({ feedId }: { feedId: number }) {
         <div className="px-4 py-4 text-n-60 body-sm ">
           {"여러분의 생각을 남겨주세요 :)"}
         </div>
+      )}
+
+      {modalState.isOpen && modalState.commentId && modalState.position && (
+        <CommentActionModal
+          isOpen={modalState.isOpen}
+          onClose={() =>
+            setModalState({ isOpen: false, commentId: null, position: null })
+          }
+          commentId={modalState.commentId}
+          feedId={feedId}
+          position={modalState.position}
+        />
       )}
     </div>
   );

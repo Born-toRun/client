@@ -4,13 +4,21 @@ import { ReCommentDetail } from "@/apis/comment/types";
 import { formatRelativeTime } from "@/features/utils/formatDate";
 import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
 import Image from "next/image";
+import { useState } from "react";
+import CommentActionModal from "../(modals)/CommentActionModal";
 
 interface ReCommentsProps {
   reComments: ReCommentDetail[];
+  feedId: number;
 }
 
-export default function ReComments({ reComments }: ReCommentsProps) {
+export default function ReComments({ reComments, feedId }: ReCommentsProps) {
   const isEmpty = reComments.length === 0;
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    commentId: number | null;
+    position: { top: number; left: number } | null;
+  }>({ isOpen: false, commentId: null, position: null });
 
   return (
     <div className="bg-white pb-16">
@@ -49,7 +57,20 @@ export default function ReComments({ reComments }: ReCommentsProps) {
                   <p>{formatRelativeTime(reComment.registeredAt)}</p>
                 </div>
               </div>
-              <button type="button">
+              <button
+                className="w-6 h-6 flex items-center justify-center cursor-pointer hover:bg-n-30 rounded-full"
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setModalState({
+                    isOpen: true,
+                    commentId: reComment.id,
+                    position: {
+                      top: rect.bottom + window.scrollY,
+                      left: rect.left + window.scrollX - 172, // 모달 너비(172px)만큼 왼쪽으로 이동
+                    },
+                  });
+                }}
+              >
                 <CommentMenuIcon />
               </button>
             </div>
@@ -63,6 +84,18 @@ export default function ReComments({ reComments }: ReCommentsProps) {
             </div>
           </div>
         ))
+      )}
+
+      {modalState.isOpen && modalState.commentId && modalState.position && (
+        <CommentActionModal
+          isOpen={modalState.isOpen}
+          onClose={() =>
+            setModalState({ isOpen: false, commentId: null, position: null })
+          }
+          commentId={modalState.commentId}
+          feedId={feedId}
+          position={modalState.position}
+        />
       )}
     </div>
   );

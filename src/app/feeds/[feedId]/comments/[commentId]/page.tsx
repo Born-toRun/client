@@ -57,7 +57,9 @@ export default function CommentDetailPage() {
             <div className="h-[1px] bg-n-30 my-2" />
           </>
         )}
-        {comment && <ReComments reComments={comment.reComments} />}
+        {comment && (
+          <ReComments reComments={comment.reComments} feedId={feedId} />
+        )}
         <CommentBox
           onSubmit={refetchCommentList}
           feedId={feedId}
