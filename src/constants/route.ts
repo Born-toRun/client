@@ -26,6 +26,9 @@ export const apiRoutes = {
   crews: {
     list: "/api/v1/crews",
   },
+  users: {
+    refresh: "/api/v1/users/refresh",
+  },
 };
 
 export const pageRoutes = {

@@ -25,7 +25,7 @@ export default function Comments({ feedId }: { feedId: number }) {
           <div
             className={`flex flex-col gap-2 ${
               comment.isMyComment ? "bg-n-10" : ""
-            }`}
+            } ${comment.parentId ? "ml-[34px] border-l-4 border-n-30" : ""}`}
             key={comment.id}
           >
             <div className="flex items-center gap-[8px] px-4 pt-2">
@@ -55,27 +55,35 @@ export default function Comments({ feedId }: { feedId: number }) {
             </div>
             <div className="px-5 flex gap-2 relative">
               <div className="w-8 flex justify-center relative">
-                <div className="w-1 absolute top-0 bottom-0 bg-n-30 rounded-full"></div>
+                <div
+                  className={`w-1 absolute top-0 bottom-0 ${
+                    comment.parentId ? "bg-n-10" : "bg-n-30"
+                  }`}
+                ></div>
               </div>
               <div className="flex flex-col gap-1 grow">
                 <p className="body-md text-black">{comment.contents}</p>
-                <Link href={`/feeds/${feedId}/comments/${comment.id}`}>
-                  <div className="flex items-center gap-1 h-8">
-                    {comment.reCommentQty === 0 ? (
-                      <>
-                        <CommentIcon />
-                        <span className="text-n-200 body-sm">댓글</span>
-                      </>
-                    ) : (
-                      <>
-                        <ActiveCommentIcon />
-                        <span className="text-rg-400 body-sm">
-                          {comment.reCommentQty}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </Link>
+                {comment.parentId ? (
+                  <div className="h-4"></div>
+                ) : (
+                  <Link href={`/feeds/${feedId}/comments/${comment.id}`}>
+                    <div className="flex items-center gap-1 h-8">
+                      {comment.reCommentQty === 0 ? (
+                        <>
+                          <CommentIcon />
+                          <span className="text-n-200 body-sm">댓글</span>
+                        </>
+                      ) : (
+                        <>
+                          <ActiveCommentIcon />
+                          <span className="text-rg-400 body-sm">
+                            {comment.reCommentQty}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
