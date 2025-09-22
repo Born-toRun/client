@@ -2,9 +2,9 @@
 import { useLikeFeed } from "@/app/feeds/[feedId]/(hooks)/useLikeFeed";
 import Header from "@/components/header/Header";
 import { getFeedDetail } from "@/features/feeds/list/api";
-import ActiveLikeIcon from "@/icons/active-like-icon.svg";
 import BackIcon from "@/icons/back-icon.svg";
-import LikeIcon from "@/icons/like-icon.svg";
+import ActiveLikeIcon from "@/icons/big-active-like-icon.svg";
+import LikeIcon from "@/icons/big-like-icon.svg";
 import MoreIcon from "@/icons/more-icon.svg";
 import ShareIcon from "@/icons/share-icon.svg";
 import { useQuery } from "@tanstack/react-query";
