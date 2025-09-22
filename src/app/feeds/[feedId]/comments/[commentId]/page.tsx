@@ -5,9 +5,11 @@ import FeedHeader from "@/features/feeds/components/FeedHeader";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import CommentDetailBody from "../(components)/CommentDetailBody";
+import CommentDetailFooter from "../(components)/CommentDetailFooter";
 import CommentDetailHeader from "../(components)/CommentDetailHeader";
 import CommentDetailSkeleton from "../(components)/CommentDetailSkeleton";
 import ReComments from "../(components)/ReComments";
+import CommentBox from "../../(components)/CommentBox";
 
 export default function CommentDetailPage() {
   const params = useParams();
@@ -45,16 +47,22 @@ export default function CommentDetailPage() {
                 />
               </div>
               <CommentDetailBody contents={comment.contents} />
+              <CommentDetailFooter
+                reCommentCount={comment.reComments.length}
+                hasMyReComment={comment.reComments.some(
+                  (reComment) => reComment.isMyComment
+                )}
+              />
             </article>
             <div className="h-[1px] bg-n-30 my-2" />
-            <ReComments
-              reComments={comment.reComments}
-              parentCommentId={comment.id}
-              feedId={feedId}
-              onRefresh={refetchCommentList}
-            />
           </>
         )}
+        {comment && <ReComments reComments={comment.reComments} />}
+        <CommentBox
+          onSubmit={refetchCommentList}
+          feedId={feedId}
+          parentCommentId={commentId}
+        />
       </main>
     </>
   );
