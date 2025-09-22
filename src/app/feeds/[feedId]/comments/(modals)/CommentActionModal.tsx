@@ -6,11 +6,13 @@ import EditIcon from "@/icons/edit-icon.svg";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 
 interface CommentActionModalProps {
   isOpen: boolean;
   onClose: () => void;
   commentId: number;
+  feedId: number;
   position: { top: number; left: number };
 }
 
@@ -18,9 +20,11 @@ export default function CommentActionModal({
   isOpen,
   onClose,
   commentId,
+  feedId,
   position,
 }: CommentActionModalProps) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const copyClickHandler = async () => {
@@ -35,8 +39,7 @@ export default function CommentActionModal({
   };
 
   const editClickHandler = () => {
-    // TODO: 댓글 수정 페이지로 이동 또는 인라인 편집
-    console.log("댓글 수정:", commentId);
+    router.push(`/feeds/${feedId}/comments/${commentId}/edit`);
     onClose();
   };
 
