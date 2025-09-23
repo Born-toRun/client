@@ -32,7 +32,7 @@ export default function CommentDetailPage() {
 
   return (
     <>
-      <CommentDetailHeader commentId={commentId} />
+      <CommentDetailHeader commentId={commentId} feedId={feedId} />
       <main className="flex flex-col pt-14 w-full">
         {isLoading && <CommentDetailSkeleton />}
         {comment && (

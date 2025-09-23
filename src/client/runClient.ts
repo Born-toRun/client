@@ -21,19 +21,28 @@ class RunClient extends HttpClient {
         return config;
       },
       async (error) => {
+        console.log("Response interceptor triggered:", {
+          status: error.response?.status,
+          url: error.config?.url,
+          method: error.config?.method,
+          _retry: error.config?._retry,
+        });
+
         const originalRequest = error.config;
 
         // 401 에러이고 아직 재시도하지 않은 요청인 경우
         if (error.response?.status === 401 && !originalRequest._retry) {
+          console.log("401 error detected, attempting token refresh");
           originalRequest._retry = true;
 
-          const currentToken = TokenManager.getAccessToken();
+          const currentToken =
+            typeof window !== "undefined" ? getCookie(ACCESS_TOKEN) : undefined;
 
           if (currentToken) {
             try {
               // 토큰 리프레시 시도
               const newToken = await TokenManager.refreshAccessToken(
-                currentToken
+                currentToken.toString()
               );
 
               // 새로운 토큰으로 원래 요청 재시도
@@ -50,6 +59,11 @@ class RunClient extends HttpClient {
               }
 
               return Promise.reject(refreshError);
+            }
+          } else {
+            // 토큰이 없는 경우에도 로그인 페이지로 리다이렉트
+            if (typeof window !== "undefined") {
+              window.location.href = "/login";
             }
           }
         }
