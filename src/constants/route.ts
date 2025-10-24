@@ -29,6 +29,11 @@ export const apiRoutes = {
   users: {
     refresh: "/api/v1/users/refresh",
   },
+  marathons: {
+    list: "/api/v1/marathons",
+    detail: (marathonId: number) => `/api/v1/marathons/${marathonId}`,
+    bookmark: (marathonId: number) => `/api/v1/marathons/bookmark/${marathonId}`,
+  },
 };
 
 export const pageRoutes = {
@@ -42,6 +47,7 @@ export const pageRoutes = {
   },
   running: {
     list: "/running",
+    detail: (marathonId: number) => `/running/marathons/${marathonId}`,
   },
   crews: {
     list: "/crew",
