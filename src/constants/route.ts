@@ -34,6 +34,17 @@ export const apiRoutes = {
     detail: (marathonId: number) => `/api/v1/marathons/${marathonId}`,
     bookmark: (marathonId: number) => `/api/v1/marathons/bookmark/${marathonId}`,
   },
+  activities: {
+    list: "/api/v1/activities",
+    detail: (activityId: number) => `/api/v1/activities/${activityId}`,
+    participants: (activityId: number) =>
+      `/api/v1/activities/participation/${activityId}`,
+    join: (activityId: number) =>
+      `/api/v1/activities/participation/${activityId}`,
+    cancel: (activityId: number) =>
+      `/api/v1/activities/participation-cancel/${activityId}`,
+    delete: (activityId: number) => `/api/v1/activities/${activityId}`,
+  },
 };
 
 export const pageRoutes = {
@@ -47,7 +58,15 @@ export const pageRoutes = {
   },
   running: {
     list: "/running",
-    detail: (marathonId: number) => `/running/marathons/${marathonId}`,
+    marathons: {
+      detail: (marathonId: number) => `/running/marathons/${marathonId}`,
+    },
+    activities: {
+      list: "/running/activities",
+      new: "/running/activities/new",
+      detail: (activityId: number) => `/running/activities/${activityId}`,
+      edit: (activityId: number) => `/running/activities/${activityId}/edit`,
+    },
   },
   crews: {
     list: "/crew",

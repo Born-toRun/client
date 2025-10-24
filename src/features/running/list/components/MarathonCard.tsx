@@ -35,7 +35,7 @@ export default function MarathonCard({
   });
 
   return (
-    <Link href={pageRoutes.running.detail(marathon.id)}>
+    <Link href={pageRoutes.running.marathons.detail(marathon.id)}>
       <article className="relative p-4 bg-white round-sm elevation-10 hover:elevation-20 transition-shadow cursor-pointer">
         {/* 북마크 버튼 */}
         <div className="absolute top-4 right-4 z-10">

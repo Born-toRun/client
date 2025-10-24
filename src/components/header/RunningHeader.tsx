@@ -15,7 +15,7 @@ interface Props {
  */
 export default function RunningHeader({ isScrolled }: Props) {
   return (
-    <div className="fixed w-full bg-white z-20">
+    <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-[786px] bg-white z-20">
       <Header
         left={
           <div className="h-[40px] flex items-center">

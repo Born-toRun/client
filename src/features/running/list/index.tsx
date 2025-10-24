@@ -15,6 +15,7 @@ import FilterBottomSheet from "./components/FilterBottomSheet";
 import MarathonList from "./components/MarathonList";
 import MarathonSkeletons from "./components/MarathonSkeletons";
 import CompletionMessage from "./components/CompletionMessage";
+import ActivityListContainer from "../activities/list";
 import { pageRoutes } from "@/constants/route";
 import { AxiosError } from "axios";
 import { Marathon } from "@/apis/marathon/types";
@@ -74,12 +75,7 @@ export default function RunningContainer() {
 
   // 탭 전환 핸들러
   const handleTabChange = (tab: RunningTab) => {
-    if (tab === runningTabLabel.CREW) {
-      // 모임 탭은 crew 페이지로 리다이렉트
-      router.push(pageRoutes.crews.list);
-    } else {
-      setSelectedTab(tab);
-    }
+    setSelectedTab(tab);
   };
 
   // 필터 변경 핸들러
@@ -126,35 +122,51 @@ export default function RunningContainer() {
           />
         </div>
 
-        {/* 필터 버튼 */}
-        <div className="flex gap-2 px-4 mb-4">
-          <FilterButton
-            label="지역"
-            selectedLabel={selectedRegionLabel}
-            onClick={regionBottomSheet.open}
-          />
-          <FilterButton
-            label="코스"
-            selectedLabel={selectedCourseLabel}
-            onClick={courseBottomSheet.open}
-          />
-        </div>
-
-        {/* 마라톤 리스트 */}
-        {isPending && <MarathonSkeletons />}
-
-        {!isPending && (
+        {/* 마라톤 탭 */}
+        {selectedTab === runningTabLabel.MARATHON && (
           <>
-            <MarathonList
-              marathons={filteredMarathonList}
-              onBookmarkClick={handleBookmarkClick}
-              isBookmarkDisabled={toggleBookmarkMutation.isPending}
-            />
+            {/* 필터 버튼 */}
+            <div className="flex gap-2 px-4 mb-4">
+              <FilterButton
+                label="지역"
+                selectedLabel={selectedRegionLabel}
+                onClick={regionBottomSheet.open}
+              />
+              <FilterButton
+                label="코스"
+                selectedLabel={selectedCourseLabel}
+                onClick={courseBottomSheet.open}
+              />
+            </div>
 
-            {/* 모든 데이터 표시 완료 메시지 */}
-            {filteredMarathonList.length > 0 && <CompletionMessage />}
+            {/* 마라톤 리스트 */}
+            {isPending && <MarathonSkeletons />}
+
+            {!isPending && (
+              <>
+                <MarathonList
+                  marathons={filteredMarathonList}
+                  onBookmarkClick={handleBookmarkClick}
+                  isBookmarkDisabled={toggleBookmarkMutation.isPending}
+                />
+
+                {/* 모든 데이터 표시 완료 메시지 */}
+                {filteredMarathonList.length > 0 && (
+                  <CompletionMessage
+                    message="모든 마라톤을 확인했어요"
+                    buttonText="모임 둘러보기"
+                    onButtonClick={() =>
+                      setSelectedTab(runningTabLabel.CREW)
+                    }
+                  />
+                )}
+              </>
+            )}
           </>
         )}
+
+        {/* 모임 탭 */}
+        {selectedTab === runningTabLabel.CREW && <ActivityListContainer />}
       </div>
 
       {/* 로그인 모달 */}
