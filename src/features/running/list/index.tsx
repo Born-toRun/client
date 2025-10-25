@@ -1,13 +1,18 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import Tabs from "@/components/Tabs";
 import Button from "@/components/Button";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
 import { useModal } from "@/features/hooks/useModal";
 import { runningTabLabel, REGION_OPTIONS, COURSE_OPTIONS } from "../constants";
+
+// FilterOption 타입 정의
+interface FilterOption {
+  value: string;
+  label: string;
+}
 import { RunningTab, MarathonFilters } from "./types";
 import { useGetMarathonListQuery, useToggleBookmarkMutation } from "./hooks/queries";
 import FilterButton from "./components/FilterButton";
@@ -16,7 +21,6 @@ import MarathonList from "./components/MarathonList";
 import MarathonSkeletons from "./components/MarathonSkeletons";
 import CompletionMessage from "./components/CompletionMessage";
 import ActivityListContainer from "../activities/list";
-import { pageRoutes } from "@/constants/route";
 import { AxiosError } from "axios";
 import { Marathon } from "@/apis/marathon/types";
 
@@ -25,7 +29,6 @@ import { Marathon } from "@/apis/marathon/types";
  * 마라톤/모임 탭, 프론트엔드 필터링 기능 제공
  */
 export default function RunningContainer() {
-  const router = useRouter();
   const loginModal = useModal();
   const loginBottomSheet = useModal();
   const regionBottomSheet = useModal();
@@ -217,7 +220,7 @@ export default function RunningContainer() {
         open={regionBottomSheet.isActive}
         onOpenChange={regionBottomSheet.close}
         title="지역 선택"
-        options={REGION_OPTIONS}
+        options={REGION_OPTIONS as unknown as FilterOption[]}
         selectedValue={filters.region}
         onApply={handleRegionApply}
       />
@@ -227,7 +230,7 @@ export default function RunningContainer() {
         open={courseBottomSheet.isActive}
         onOpenChange={courseBottomSheet.close}
         title="코스 선택"
-        options={COURSE_OPTIONS}
+        options={COURSE_OPTIONS as unknown as FilterOption[]}
         selectedValue={filters.course}
         onApply={handleCourseApply}
       />

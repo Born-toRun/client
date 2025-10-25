@@ -1,6 +1,5 @@
 import { apiRoutes } from "@/constants/route";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import {
   getActivityDetail,
   getParticipants,

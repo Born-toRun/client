@@ -1,4 +1,5 @@
 import QueryProvider from "@/provider/QueryProvider";
+import { LoginBottomSheetProvider } from "@/contexts/LoginBottomSheetContext";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -29,14 +30,16 @@ export default function RootLayout({
         />
       </head>
       <QueryProvider>
-        <body className={`${pretendard.className} bg-[#fcfcfc]`}>
-          <div
-            id="app-container"
-            className="w-full max-w-[786px] mx-auto min-h-screen bg-white"
-          >
-            {children}
-          </div>
-        </body>
+        <LoginBottomSheetProvider>
+          <body className={`${pretendard.className} bg-[#fcfcfc]`}>
+            <div
+              id="app-container"
+              className="w-full max-w-[786px] mx-auto min-h-screen bg-white"
+            >
+              {children}
+            </div>
+          </body>
+        </LoginBottomSheetProvider>
       </QueryProvider>
     </html>
   );

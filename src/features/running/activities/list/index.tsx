@@ -2,12 +2,17 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/Button";
 import { useModal } from "@/features/hooks/useModal";
 import {
   RECRUITMENT_TYPE_OPTIONS,
   ACTIVITY_COURSE_OPTIONS,
 } from "./constants";
+
+// FilterOption 타입 정의
+interface FilterOption {
+  value: string;
+  label: string;
+}
 import { ActivityFilters } from "./types";
 import { useGetActivityListQuery } from "./hooks/queries";
 import FilterButton from "../../list/components/FilterButton";
@@ -120,7 +125,7 @@ export default function ActivityListContainer() {
         open={recruitmentBottomSheet.isActive}
         onOpenChange={recruitmentBottomSheet.close}
         title="모집 상태 선택"
-        options={RECRUITMENT_TYPE_OPTIONS as any}
+        options={RECRUITMENT_TYPE_OPTIONS as unknown as FilterOption[]}
         selectedValue={filters.recruitmentType}
         onApply={handleRecruitmentApply}
       />
@@ -130,7 +135,7 @@ export default function ActivityListContainer() {
         open={courseBottomSheet.isActive}
         onOpenChange={courseBottomSheet.close}
         title="코스 선택"
-        options={ACTIVITY_COURSE_OPTIONS as any}
+        options={ACTIVITY_COURSE_OPTIONS as unknown as FilterOption[]}
         selectedValues={filters.courses}
         onApply={handleCourseApply}
       />

@@ -3,12 +3,21 @@ import HttpClient from "./httpClient";
 import { getCookie } from "cookies-next";
 import { ACCESS_TOKEN } from "@/constants/common";
 import { TokenManager } from "@/utils/token";
+import { showLoginModal } from "@/utils/loginBottomSheetManager";
+
+/**
+ * 토큰 갱신 중복 요청 방지를 위한 전역 플래그와 Promise
+ * 여러 요청이 동시에 401을 받았을 때, 토큰 갱신은 한 번만 실행되도록 합니다.
+ */
+let isRefreshing = false;
+let refreshPromise: Promise<string> | null = null;
 
 class RunClient extends HttpClient {
   constructor() {
     super(BASE_URL.runApiServer);
     this.instance.defaults.withCredentials = true;
 
+    // Request Interceptor: 모든 요청에 Access Token 추가
     this.instance.interceptors.request.use((config) => {
       const token =
         typeof window !== "undefined" ? getCookie(ACCESS_TOKEN) : undefined;
@@ -16,6 +25,7 @@ class RunClient extends HttpClient {
       return config;
     });
 
+    // Response Interceptor: 401 에러 시 토큰 갱신 또는 로그인 확인 모달 표시
     this.instance.interceptors.response.use(
       (config) => {
         return config;
@@ -32,7 +42,7 @@ class RunClient extends HttpClient {
 
         // 401 에러이고 아직 재시도하지 않은 요청인 경우
         if (error.response?.status === 401 && !originalRequest._retry) {
-          console.log("401 error detected, attempting token refresh");
+          console.log("401 error detected");
           originalRequest._retry = true;
 
           const currentToken =
@@ -40,30 +50,51 @@ class RunClient extends HttpClient {
 
           if (currentToken) {
             try {
-              // 토큰 리프레시 시도
-              const newToken = await TokenManager.refreshAccessToken(
+              // 이미 토큰 갱신 중인 경우, 진행 중인 Promise를 재사용
+              if (isRefreshing && refreshPromise) {
+                console.log(
+                  "토큰 갱신이 이미 진행 중입니다. 기존 Promise를 기다립니다."
+                );
+                const newToken = await refreshPromise;
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return this.instance(originalRequest);
+              }
+
+              // 토큰 갱신 시작
+              console.log("토큰 갱신 시작");
+              isRefreshing = true;
+              refreshPromise = TokenManager.refreshAccessToken(
                 currentToken.toString()
               );
 
-              // 새로운 토큰으로 원래 요청 재시도
+              const newToken = await refreshPromise;
+              console.log("토큰 갱신 성공");
+
+              // 원래 요청에 새로운 토큰 적용하여 재시도
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               return this.instance(originalRequest);
             } catch (refreshError) {
-              // 토큰 리프레시 실패 시 로그인 페이지로 리다이렉트 또는 에러 처리
-              console.error("토큰 리프레시 실패:", refreshError);
+              console.error("토큰 갱신 실패:", refreshError);
+
+              // 토큰 제거
               TokenManager.removeAccessToken();
 
-              // 로그인 페이지로 리다이렉트 (클라이언트 사이드에서만)
+              // 로그인 확인 모달 표시 (클라이언트 사이드에서만)
               if (typeof window !== "undefined") {
-                window.location.href = "/login";
+                showLoginModal();
               }
 
               return Promise.reject(refreshError);
+            } finally {
+              // 토큰 갱신 완료 후 플래그 초기화
+              isRefreshing = false;
+              refreshPromise = null;
             }
           } else {
-            // 토큰이 없는 경우에도 로그인 페이지로 리다이렉트
+            // 액세스 토큰이 없는 경우 즉시 로그인 확인 모달 표시
+            console.log("액세스 토큰이 없습니다. 로그인 확인 모달 표시");
             if (typeof window !== "undefined") {
-              window.location.href = "/login";
+              showLoginModal();
             }
           }
         }

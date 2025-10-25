@@ -8,12 +8,11 @@ import { ArrowLeft, Calendar, MapPin, Mail, Phone, Globe, Users } from "lucide-r
 import BookmarkButton from "@/features/running/list/components/BookmarkButton";
 import { useToggleBookmarkMutation } from "@/features/running/list/hooks/queries";
 import { AxiosError } from "axios";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
 import { useModal } from "@/features/hooks/useModal";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
 import Button from "@/components/Button";
+import Map from "@/components/Map";
 
 /**
  * 마라톤 상세 페이지
@@ -222,6 +221,19 @@ export default function MarathonDetailPage() {
               />
             )}
           </div>
+
+          {/* 지도 섹션 */}
+          {marathon.venue && (
+            <div className="mt-8">
+              <h3 className="title-md text-n-900 mb-3">오시는 길</h3>
+              <Map venue={marathon.venue} title={marathon.title} height="400px" />
+              {/* 주소 정보 표시 */}
+              <div className="mt-3 flex items-start gap-2 p-3 bg-n-20 round-sm">
+                <MapPin size={16} className="text-n-500 flex-shrink-0 mt-0.5" />
+                <p className="body-sm text-n-700 flex-1">{marathon.venue}</p>
+              </div>
+            </div>
+          )}
 
           {/* 장소 상세 */}
           {marathon.venueDetail && (

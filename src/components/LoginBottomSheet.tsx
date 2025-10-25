@@ -20,7 +20,8 @@ interface Props {
 export default function LoginBottomSheet({ onOpenChange, open }: Props) {
   const handleLoginRedirect = () => {
     const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
-    window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/login`;
+    const redirectUri = `${window.location.origin}/login`;
+    window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao?redirect_uri=${encodeURIComponent(redirectUri)}`;
   };
 
   return (

@@ -15,7 +15,6 @@ import {
 import {
   MarathonListParams,
   MarathonListResponse,
-  Marathon,
 } from "@/apis/marathon/types";
 
 /**
