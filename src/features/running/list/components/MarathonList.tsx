@@ -12,6 +12,25 @@ interface Props {
 }
 
 /**
+ * 한국어 날짜 문자열을 Date 객체로 변환
+ * 예: "2025년3월1일 출발시간:오후1시" -> Date(2025, 2, 1)
+ */
+function parseKoreanDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+
+  // "2025년3월1일" 형식에서 년, 월, 일 추출
+  const match = dateStr.match(/(\d{4})년(\d{1,2})월(\d{1,2})일/);
+  if (!match) return null;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10) - 1; // JavaScript Date는 0부터 시작
+  const day = parseInt(match[3], 10);
+
+  const date = new Date(year, month, day);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+/**
  * 마라톤 리스트 컴포넌트
  * 마라톤을 월별로 그룹화하여 표시
  */
@@ -25,7 +44,11 @@ export default function MarathonList({
     const groups = new Map<string, Marathon[]>();
 
     marathons.forEach((marathon) => {
-      const monthKey = format(new Date(marathon.schedule), "yyyy-MM");
+      // 한국어 날짜 문자열을 Date 객체로 변환
+      const date = parseKoreanDate(marathon.schedule);
+      if (!date) return;
+
+      const monthKey = format(date, "yyyy-MM");
       const existing = groups.get(monthKey) || [];
       groups.set(monthKey, [...existing, marathon]);
     });
@@ -35,10 +58,12 @@ export default function MarathonList({
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([month, marathons]) => ({
         month,
-        marathons: marathons.sort(
-          (a, b) =>
-            new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
-        ),
+        marathons: marathons.sort((a, b) => {
+          const dateA = parseKoreanDate(a.schedule);
+          const dateB = parseKoreanDate(b.schedule);
+          if (!dateA || !dateB) return 0;
+          return dateA.getTime() - dateB.getTime();
+        }),
       }));
   }, [marathons]);
 

@@ -59,7 +59,12 @@ export default function RunningContainer() {
 
     return data.details.filter((marathon: Marathon) => {
       const regionMatch = filters.region === "all" || marathon.venue.includes(filters.region);
-      const courseMatch = filters.course === "all" || marathon.course === filters.course;
+
+      // 코스 필터링: 선택한 코스를 포함하는지 확인
+      const courseMatch =
+        filters.course === "all" ||
+        marathon.course.split(',').some(c => c.trim() === filters.course);
+
       return regionMatch && courseMatch;
     });
   }, [data, filters]);

@@ -9,6 +9,7 @@ import type {
   CreateActivityRequest,
   CreateActivityResponse,
   UpdateActivityRequest,
+  OpenActivityResponse,
 } from "./types";
 
 /**
@@ -117,4 +118,33 @@ export const updateActivity = async (
   data: UpdateActivityRequest
 ): Promise<void> => {
   await runApi.put(apiRoutes.activities.detail(activityId), data);
+};
+
+/**
+ * 출석 코드 생성 API
+ * @param activityId 모임 식별자
+ * @returns 출석 코드 및 만료 시간
+ */
+export const openActivity = async (
+  activityId: number
+): Promise<OpenActivityResponse> => {
+  const response = await runApi.put<OpenActivityResponse>(
+    apiRoutes.activities.open(activityId)
+  );
+  return response.data;
+};
+
+/**
+ * 출석 체크 API
+ * @param activityId 모임 식별자
+ * @param code 출석 코드
+ */
+export const checkAttendance = async (
+  activityId: number,
+  code: string
+): Promise<void> => {
+  await runApi.post(
+    apiRoutes.activities.attendance(activityId),
+    { code }
+  );
 };

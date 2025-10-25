@@ -44,6 +44,8 @@ export const apiRoutes = {
     cancel: (activityId: number) =>
       `/api/v1/activities/participation-cancel/${activityId}`,
     delete: (activityId: number) => `/api/v1/activities/${activityId}`,
+    open: (activityId: number) => `/api/v1/activities/open/${activityId}`,
+    attendance: (activityId: number) => `/api/v1/activities/attendance/${activityId}`,
   },
 };
 
@@ -66,6 +68,7 @@ export const pageRoutes = {
       new: "/running/activities/new",
       detail: (activityId: number) => `/running/activities/${activityId}`,
       edit: (activityId: number) => `/running/activities/${activityId}/edit`,
+      attendance: (activityId: number) => `/running/activities/${activityId}/attendance`,
     },
   },
   crews: {

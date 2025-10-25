@@ -1,9 +1,7 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
 import Button from "@/components/Button";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
@@ -19,14 +17,13 @@ import {
   useGetActivityDetailQuery,
   useGetParticipantsQuery,
   useJoinActivityMutation,
-  useCancelParticipationMutation,
   useDeleteActivityMutation,
 } from "@/features/running/activities/detail/hooks/queries";
 import {
   RECRUITMENT_TYPE_COLORS,
   RECRUITMENT_TYPE_LABELS,
 } from "@/features/running/activities/list/constants";
-import { getDDay, isWithin24Hours } from "@/utils/date";
+import { getDDay } from "@/utils/date";
 import { pageRoutes } from "@/constants/route";
 import { AxiosError } from "axios";
 
@@ -47,7 +44,6 @@ export default function ActivityDetailPage({ params }: Props) {
   const actionSheet = useModal();
   const loginModal = useModal();
   const loginBottomSheet = useModal();
-  const cancelWarningModal = useModal();
   const deleteCancelModal = useModal();
   const deleteCompleteModal = useModal();
 
@@ -55,7 +51,6 @@ export default function ActivityDetailPage({ params }: Props) {
   const { data: activity, isPending } = useGetActivityDetailQuery(activityId);
   const { data: participantsData } = useGetParticipantsQuery(activityId);
   const joinMutation = useJoinActivityMutation();
-  const cancelMutation = useCancelParticipationMutation();
   const deleteMutation = useDeleteActivityMutation();
 
   // 공유하기
@@ -67,7 +62,7 @@ export default function ActivityDetailPage({ params }: Props) {
           title: activity?.title,
           url,
         });
-      } catch (err) {
+      } catch {
         // 사용자가 공유 취소
       }
     } else {
@@ -123,25 +118,6 @@ export default function ActivityDetailPage({ params }: Props) {
     });
   };
 
-  // 예약 취소
-  const handleCancelParticipation = () => {
-    if (!activity) return;
-
-    // 24시간 전 체크
-    if (isWithin24Hours(activity.startAt)) {
-      cancelWarningModal.open();
-      return;
-    }
-
-    cancelMutation.mutate(activityId, {
-      onError: (error) => {
-        const axiosError = error as AxiosError;
-        if (axiosError?.response?.status === 401) {
-          loginModal.open();
-        }
-      },
-    });
-  };
 
   if (isPending || !activity) {
     return (
@@ -166,7 +142,7 @@ export default function ActivityDetailPage({ params }: Props) {
       />
 
       {/* 컨텐츠 */}
-      <div className="pt-14 pb-24">
+      <div className="pt-14 pb-48">
         {/* D-DAY + 모집 상태 */}
         <div className="flex items-center gap-2 px-4 py-3">
           {dDay && (
@@ -225,40 +201,62 @@ export default function ActivityDetailPage({ params }: Props) {
         )}
       </div>
 
-      {/* 하단 고정 버튼 */}
+      {/* 하단 고정 영역 */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-n-30 p-4 z-40">
         <div className="max-w-[786px] mx-auto">
           {activity.isMyActivity ? (
-            // 작성자인 경우: 버튼 없음 또는 수정 버튼
-            <div className="text-center text-n-500 body-sm">
-              내가 만든 모임입니다
+            // 작성자인 경우: 출석체크 UI
+            <div className="space-y-3">
+              <p className="body-sm text-n-700">
+                모임에 모두 참석 하셨나요? 최종 인원과 금액을 확인하고 출석체크를 해주세요.
+              </p>
+
+              <Button
+                text="출석체크"
+                variants="primary"
+                size="lg"
+                tone="green"
+                onClick={() => {
+                  router.push(pageRoutes.running.activities.attendance(activityId));
+                }}
+              />
             </div>
-          ) : activity.isParticipating ? (
-            // 참여 중인 경우: 예약 취소 버튼
-            <Button
-              text="예약 취소"
-              variants="secondary"
-              size="lg"
-              tone="red"
-              onClick={handleCancelParticipation}
-              disabled={cancelMutation.isPending}
-              loading={cancelMutation.isPending}
-            />
           ) : (
-            // 미참여인 경우: 예약하기 버튼
-            <Button
-              text="예약하기"
-              variants="primary"
-              size="lg"
-              tone="green"
-              onClick={handleJoin}
-              disabled={
-                joinMutation.isPending ||
-                activity.recruitmentType === "FULL" ||
-                activity.recruitmentType === "CLOSED"
-              }
-              loading={joinMutation.isPending}
-            />
+            // 작성자가 아닌 경우: 예약 버튼 또는 출석체크 버튼
+            <>
+              {activity.isParticipating ? (
+                // 참여 중인 경우
+                <div className="space-y-3">
+                  <p className="body-sm text-n-700">
+                    모임에 참석 하셨나요? 모임장에게 코드를 받은 뒤 출석체크를 해주세요.
+                  </p>
+                  <Button
+                    text="출석체크"
+                    variants="primary"
+                    size="lg"
+                    tone="green"
+                    onClick={() => {
+                      router.push(pageRoutes.running.activities.attendance(activityId));
+                    }}
+                  />
+                </div>
+              ) : (
+                // 미참여인 경우: 예약하기 버튼
+                <Button
+                  text="예약하기"
+                  variants="primary"
+                  size="lg"
+                  tone="green"
+                  onClick={handleJoin}
+                  disabled={
+                    joinMutation.isPending ||
+                    activity.recruitmentType === "FULL" ||
+                    activity.recruitmentType === "CLOSED"
+                  }
+                  loading={joinMutation.isPending}
+                />
+              )}
+            </>
           )}
         </div>
       </div>
@@ -319,26 +317,6 @@ export default function ActivityDetailPage({ params }: Props) {
       <LoginBottomSheet
         onOpenChange={loginBottomSheet.close}
         open={loginBottomSheet.isActive}
-      />
-
-      {/* 예약 취소 불가 모달 */}
-      <CustomDialog
-        open={cancelWarningModal.isActive}
-        onOpenChange={cancelWarningModal.close}
-        contents={{
-          title: "예약 취소 불가",
-          description:
-            "예약 24시간 전에는 취소가 불가능해요. 호스트에게 직접 연락해주세요!",
-        }}
-        footer={
-          <Button
-            onClick={cancelWarningModal.close}
-            variants="primary"
-            text="확인"
-            size="lg"
-            tone="green"
-          />
-        }
       />
 
       {/* 모임 취소 확인 모달 */}

@@ -15,6 +15,25 @@ interface Props {
 }
 
 /**
+ * 한국어 날짜 문자열을 Date 객체로 변환
+ * 예: "2025년3월1일 출발시간:오후1시" -> Date(2025, 2, 1)
+ */
+function parseKoreanDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+
+  // "2025년3월1일" 형식에서 년, 월, 일 추출
+  const match = dateStr.match(/(\d{4})년(\d{1,2})월(\d{1,2})일/);
+  if (!match) return null;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10) - 1; // JavaScript Date는 0부터 시작
+  const day = parseInt(match[3], 10);
+
+  const date = new Date(year, month, day);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+/**
  * 마라톤 카드 컴포넌트
  * 마라톤의 기본 정보와 북마크 기능을 제공
  */
@@ -30,9 +49,10 @@ export default function MarathonCard({
   };
 
   // 날짜 포맷팅
-  const formattedDate = format(new Date(marathon.schedule), "M월 d일 (EEE)", {
-    locale: ko,
-  });
+  const date = parseKoreanDate(marathon.schedule);
+  const formattedDate = date
+    ? format(date, "M월 d일 (EEE)", { locale: ko })
+    : marathon.schedule; // 파싱 실패 시 원본 문자열 표시
 
   return (
     <Link href={pageRoutes.running.marathons.detail(marathon.id)}>

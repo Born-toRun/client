@@ -77,6 +77,10 @@ export interface ActivityDetail {
   updatedAt: string; // ISO 8601 날짜
   isMyActivity: boolean; // 작성자 여부
   isParticipating: boolean; // 참여 여부
+  isOpen?: boolean; // 출석 코드 활성화 여부
+  attendanceCode?: string; // 출석 코드 (작성자만)
+  attendanceExpiresAt?: string; // 출석 코드 만료 시간
+  isAttended?: boolean; // 출석 완료 여부
 }
 
 /**
@@ -131,4 +135,19 @@ export interface UpdateActivityRequest {
  */
 export interface CreateActivityResponse {
   activityId: number;
+}
+
+/**
+ * 출석 코드 생성 응답
+ */
+export interface OpenActivityResponse {
+  code: string; // 4자리 코드
+  expiresAt: string; // 만료 시간
+}
+
+/**
+ * 출석 체크 요청
+ */
+export interface AttendanceRequest {
+  code: string; // 4자리 코드
 }
