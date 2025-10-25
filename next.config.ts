@@ -35,6 +35,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: "https://born-to-run.kro.kr:8443/api/v1/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
