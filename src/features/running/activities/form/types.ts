@@ -2,6 +2,7 @@
  * 모임 폼 데이터 타입
  */
 export interface ActivityFormData {
+  imageIds: number[]; // 업로드된 이미지 ID 배열
   title: string;
   contents: string;
   startAt: string; // datetime-local format: YYYY-MM-DDTHH:mm

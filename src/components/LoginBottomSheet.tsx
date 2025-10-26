@@ -19,7 +19,8 @@ interface Props {
 
 export default function LoginBottomSheet({ onOpenChange, open }: Props) {
   const handleLoginRedirect = () => {
-    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+    // OAuth는 브라우저 리다이렉트이므로 직접 백엔드 URL 사용
+    const BACKEND_URL = "https://born-to-run.kro.kr:8443";
     const redirectUri = `${window.location.origin}/login`;
     window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao?redirect_uri=${encodeURIComponent(redirectUri)}`;
   };

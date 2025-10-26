@@ -25,6 +25,8 @@ export const apiRoutes = {
   },
   crews: {
     list: "/api/v1/crews",
+    my: "/api/v1/crews/my",
+    detail: (crewId: number) => `/api/v1/crews/${crewId}`,
   },
   users: {
     refresh: "/api/v1/users/refresh",
@@ -73,6 +75,7 @@ export const pageRoutes = {
   },
   crews: {
     list: "/crew",
+    detail: (crewId: number) => `/crew/${crewId}`,
   },
   myPage: "/my-page",
   auth: {

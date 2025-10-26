@@ -27,6 +27,7 @@ export interface Activity {
   participantsQty: number; // 현재 참여자 수
   participantsLimit: number; // 최대 참여자 수
   recruitmentType: RecruitmentType;
+  imageUrls: string[]; // 모임 이미지 URL 목록
 }
 
 /**
@@ -102,6 +103,7 @@ export interface ParticipationResponse {
  * 모임 등록 요청
  */
 export interface CreateActivityRequest {
+  imageIds?: number[]; // 업로드된 이미지 ID 배열
   title: string;
   contents: string;
   startAt: string; // ISO 8601 format
@@ -118,6 +120,7 @@ export interface CreateActivityRequest {
  * 모임 수정 요청
  */
 export interface UpdateActivityRequest {
+  imageIds?: number[]; // 업로드된 이미지 ID 배열
   title: string;
   contents: string;
   startAt: string; // ISO 8601 format

@@ -10,6 +10,7 @@ import {
   RECRUITMENT_TYPE_COLORS,
   RECRUITMENT_TYPE_LABELS,
 } from "../constants";
+import ActivityImages from "./ActivityImages";
 
 interface Props {
   activity: Activity;
@@ -41,6 +42,12 @@ export default function ActivityCard({ activity }: Props) {
   return (
     <Link href={pageRoutes.running.activities.detail(activity.id)}>
       <article className="p-4 bg-white round-sm elevation-10 hover:elevation-20 transition-shadow cursor-pointer">
+        {/* 이미지 (있는 경우에만 표시) */}
+        <ActivityImages
+          imageUrls={activity.imageUrls}
+          activityTitle={activity.title}
+        />
+
         {/* 제목 */}
         <h3 className="title-md text-n-900 mb-3 line-clamp-2">
           {activity.title}

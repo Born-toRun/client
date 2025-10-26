@@ -33,6 +33,7 @@ export const useActivityForm = ({
       const formattedStartAt = format(startAtDate, "yyyy-MM-dd'T'HH:mm");
 
       return {
+        imageIds: [], // TODO: 수정 모드에서 기존 이미지 ID 로드 로직 필요
         title: initialData.title,
         contents: initialData.contents,
         startAt: formattedStartAt,
@@ -48,6 +49,7 @@ export const useActivityForm = ({
 
     // 등록 모드 기본값
     return {
+      imageIds: [],
       title: "",
       contents: "",
       startAt: "",
@@ -74,6 +76,7 @@ export const useActivityForm = ({
       const isoStartAt = startAtDate.toISOString();
 
       const requestData = {
+        imageIds: data.imageIds.length > 0 ? data.imageIds : undefined,
         title: data.title,
         contents: data.contents,
         startAt: isoStartAt,
