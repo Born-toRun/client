@@ -1,8 +1,13 @@
 import { apiRoutes } from "@/constants/route";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getMyCrew, getCrewList, getCrewDetail } from "../api";
-import { CrewListResponse, CrewDetail, MyCrewResponse } from "../types";
+import { getMyCrew, getCrewList, getCrewDetail, getCrewMembers } from "../api";
+import {
+  CrewListResponse,
+  CrewDetail,
+  MyCrewResponse,
+  CrewMembersResponse,
+} from "../types";
 
 /**
  * 내 크루 조회 쿼리 훅
@@ -43,6 +48,22 @@ export const useGetCrewDetailQuery = (
   return useQuery({
     queryKey: [apiRoutes.crews.detail(crewId)],
     queryFn: () => getCrewDetail(crewId),
+    enabled: !!crewId,
+    ...options,
+  });
+};
+
+/**
+ * 크루 멤버 목록 조회 쿼리 훅
+ * @param crewId 크루 식별자
+ */
+export const useGetCrewMembersQuery = (
+  crewId: number,
+  options?: UseQueryOptions<CrewMembersResponse, AxiosError>
+) => {
+  return useQuery({
+    queryKey: [apiRoutes.crews.members(crewId)],
+    queryFn: () => getCrewMembers(crewId),
     enabled: !!crewId,
     ...options,
   });

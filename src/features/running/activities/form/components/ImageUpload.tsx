@@ -2,7 +2,10 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { uploadFile, deleteFile } from "@/features/write/api";
+import {
+  useUploadFileMutation,
+  useDeleteFileMutation,
+} from "@/features/write/hooks";
 
 interface ImageUploadProps {
   value: number[]; // Array of uploaded image IDs
@@ -30,6 +33,10 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [uploadError, setUploadError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // React Query 훅 사용
+  const uploadImageFile = useUploadFileMutation();
+  const deleteImageFile = useDeleteFileMutation();
 
   // value 변경 시 uploadedImages 동기화
   // 초기 데이터가 있을 경우 처리 (수정 모드)
@@ -74,8 +81,11 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
     setUploadedImages((prev) => [...prev, tempImage]);
 
     try {
-      // 파일 업로드
-      const response = await uploadFile("ACTIVITY", file);
+      // 파일 업로드 - React Query mutation 사용
+      const response = await uploadImageFile.mutateAsync({
+        bucket: "ACTIVITY",
+        file,
+      });
 
       // 업로드 성공: 임시 항목을 실제 데이터로 교체
       setUploadedImages((prev) =>
@@ -108,8 +118,11 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
    */
   const handleRemoveImage = async (fileId: number) => {
     try {
-      // 백엔드에서 이미지 삭제
-      await deleteFile("ACTIVITY", fileId);
+      // 백엔드에서 이미지 삭제 - React Query mutation 사용
+      await deleteImageFile.mutateAsync({
+        bucket: "ACTIVITY",
+        fileId,
+      });
 
       // 상태에서 이미지 제거
       setUploadedImages((prev) => prev.filter((img) => img.fileId !== fileId));

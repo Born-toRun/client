@@ -11,6 +11,11 @@ import { RefreshTokenResponse } from "./types";
  * - 토큰 리프레시 API 자체가 401을 반환할 경우 다시 토큰 리프레시 시도
  * - 따라서 인터셉터를 거치지 않는 직접적인 fetch 호출이 필요
  *
+ * 백엔드 API 스펙:
+ * - Headers: Authorization: Bearer {expired_access_token}
+ * - Cookies: refresh_token (자동으로 포함됨)
+ * - Response: { "accessToken": "new.access.token" }
+ *
  * @param expiredAccessToken - 만료된 access token
  * @returns 새로운 access token
  */
@@ -23,14 +28,22 @@ export const refreshToken = async (
       method: "POST",
       headers: {
         Authorization: `Bearer ${expiredAccessToken}`,
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
-      credentials: "include", // 쿠키 포함
+      credentials: "include", // refresh_token 쿠키 포함
     }
   );
 
   if (!response.ok) {
-    throw new Error("토큰 리프레시에 실패했습니다.");
+    const errorData = await response.json().catch(() => ({}));
+    console.error("토큰 리프레시 실패:", {
+      status: response.status,
+      statusText: response.statusText,
+      error: errorData,
+    });
+    throw new Error(
+      `토큰 리프레시에 실패했습니다. (${response.status}: ${response.statusText})`
+    );
   }
 
   return response.json();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getActivityList } from "@/apis/activity";
+import { getCrewActivities } from "@/apis/activity";
 import { apiRoutes } from "@/constants/route";
 import ActivityCard from "@/features/running/activities/list/components/ActivityCard";
 
@@ -13,19 +13,21 @@ interface Props {
  * 크루 모임 목록 컴포넌트
  * 해당 크루의 진행중인 모임을 표시합니다.
  *
- * Note: 현재 API에서는 크루별 모임 필터링이 지원되지 않으므로
- * 전체 모임을 가져와서 표시합니다.
- * 향후 API 업데이트 시 크루 필터링 기능 추가 필요
+ * GET /api/v1/activities/crew/{crewId}?recruitmentType=RECRUITING를 사용하여
+ * 서버 측에서 모집중 상태인 모임만 필터링하여 조회합니다.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function CrewActivities({ crewId }: Props) {
-  // 모임 목록 조회 (모집중인 모임만)
+  // 크루별 모임 목록 조회 (서버 측 필터링: 모집중인 모임만)
   const { data, isPending, isError } = useQuery({
-    queryKey: [apiRoutes.activities.list, { recruitmentType: "RECRUITING" }],
-    queryFn: () => getActivityList({ recruitmentType: "RECRUITING" }),
+    queryKey: [apiRoutes.activities.crew(crewId), "RECRUITING"],
+    queryFn: () =>
+      getCrewActivities(crewId, {
+        recruitmentType: "RECRUITING",
+      }),
   });
 
-  const activities = data?.details || [];
+  // 서버에서 이미 필터링된 데이터를 바로 사용
+  const recruitingActivities = data?.details || [];
 
   return (
     <section className="px-4 py-6">
@@ -48,18 +50,18 @@ export default function CrewActivities({ crewId }: Props) {
       )}
 
       {/* 빈 상태 */}
-      {!isPending && !isError && activities.length === 0 && (
+      {!isPending && !isError && recruitingActivities.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 px-4 bg-n-10 round-sm">
           <p className="body-md text-n-500 text-center">
-            현재 진행중인 모임이 없습니다.
+            현재 모집중인 모임이 없습니다.
           </p>
         </div>
       )}
 
       {/* 모임 목록 */}
-      {!isPending && !isError && activities.length > 0 && (
+      {!isPending && !isError && recruitingActivities.length > 0 && (
         <div className="grid grid-cols-1 gap-3">
-          {activities.map((activity) => (
+          {recruitingActivities.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
           ))}
         </div>

@@ -27,6 +27,8 @@ export const apiRoutes = {
     list: "/api/v1/crews",
     my: "/api/v1/crews/my",
     detail: (crewId: number) => `/api/v1/crews/${crewId}`,
+    members: (crewId: number) => `/api/v1/crews/${crewId}/members`,
+    update: (crewId: number) => `/api/v1/crews/${crewId}`,
   },
   users: {
     refresh: "/api/v1/users/refresh",
@@ -38,6 +40,7 @@ export const apiRoutes = {
   },
   activities: {
     list: "/api/v1/activities",
+    crew: (crewId: number) => `/api/v1/activities/crew/${crewId}`,
     detail: (activityId: number) => `/api/v1/activities/${activityId}`,
     participants: (activityId: number) =>
       `/api/v1/activities/participation/${activityId}`,
@@ -76,6 +79,7 @@ export const pageRoutes = {
   crews: {
     list: "/crew",
     detail: (crewId: number) => `/crew/${crewId}`,
+    settings: (crewId: number) => `/crew/${crewId}/settings`,
   },
   myPage: "/my-page",
   auth: {

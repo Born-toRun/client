@@ -30,6 +30,25 @@ export const getActivityList = async (
 };
 
 /**
+ * 크루별 모임 목록 조회 API
+ * @param crewId 크루 식별자
+ * @param params 조회 파라미터 (courses, recruitmentType)
+ * @returns 크루의 모임 목록
+ */
+export const getCrewActivities = async (
+  crewId: number,
+  params?: ActivityListParams
+): Promise<ActivityListResponse> => {
+  const response = await runApi.get<ActivityListResponse>(
+    apiRoutes.activities.crew(crewId),
+    {
+      params,
+    }
+  );
+  return response.data;
+};
+
+/**
  * 모임 상세 조회 API
  * @param activityId 모임 식별자
  * @returns 모임 상세 정보
