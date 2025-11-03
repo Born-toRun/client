@@ -12,7 +12,7 @@ export default function MyPage() {
   return (
     <main>
       {/* 헤더 */}
-      <Header title="마이" />
+      <Header title="마이페이지" />
 
       {/* 마이페이지 컨텐츠 */}
       <MyPageContainer />

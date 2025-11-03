@@ -56,6 +56,9 @@ export const apiRoutes = {
     attendance: (activityId: number) => `/api/v1/activities/attendance/${activityId}`,
     myParticipations: "/api/v1/activities/participation/my",
   },
+  feedbacks: {
+    create: "/api/v1/feedbacks",
+  },
 };
 
 export const pageRoutes = {
