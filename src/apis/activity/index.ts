@@ -167,3 +167,14 @@ export const checkAttendance = async (
     { code }
   );
 };
+
+/**
+ * 내가 참여한 모임 목록 조회 API
+ * @returns 참여한 모임 목록
+ */
+export const getMyParticipations = async (): Promise<ActivityListResponse> => {
+  const response = await runApi.get<ActivityListResponse>(
+    apiRoutes.activities.myParticipations
+  );
+  return response.data;
+};

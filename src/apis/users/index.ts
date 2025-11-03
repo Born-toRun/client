@@ -1,6 +1,13 @@
 import { apiRoutes } from "@/constants/route";
 import { BASE_URL } from "../../constants/api";
-import { RefreshTokenResponse } from "./types";
+import { runApi } from "@/client/runClient";
+import type {
+  RefreshTokenResponse,
+  User,
+  MyUser,
+  UserUpdateRequest,
+  UserUpdateResponse,
+} from "./types";
 
 /**
  * 토큰 리프레시 API
@@ -47,4 +54,43 @@ export const refreshToken = async (
   }
 
   return response.json();
+};
+
+/**
+ * 사용자 정보 조회 API (레거시)
+ * @deprecated 대신 getMyUser를 사용하세요
+ * @returns 현재 로그인한 사용자 정보
+ */
+export const getUser = async (): Promise<User> => {
+  const response = await runApi.get<User>("/api/v1/users");
+  return response.data;
+};
+
+/**
+ * 내 정보 조회 API
+ * 현재 로그인한 사용자의 상세 정보를 조회합니다.
+ * 프로필 이미지와 인스타그램 URI를 포함합니다.
+ *
+ * @returns 내 상세 정보
+ */
+export const getMyUser = async (): Promise<MyUser> => {
+  const response = await runApi.get<MyUser>("/api/v1/users/my");
+  return response.data;
+};
+
+/**
+ * 사용자 정보 수정 API
+ * 프로필 이미지와 인스타그램 ID를 수정합니다.
+ *
+ * @param data - 수정할 사용자 정보
+ * @returns 수정된 사용자 정보
+ */
+export const updateUser = async (
+  data: UserUpdateRequest
+): Promise<UserUpdateResponse> => {
+  const response = await runApi.put<UserUpdateResponse>(
+    "/api/v1/users",
+    data
+  );
+  return response.data;
 };

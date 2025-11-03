@@ -1,8 +1,24 @@
+"use client";
+
+import Header from "@/components/header/Header";
+import Navigation from "@/components/Navigation";
+import MyPageContainer from "@/features/mypage";
+
+/**
+ * 마이페이지
+ * 사용자의 정보, 활동 내역, 설정 등을 관리하는 페이지
+ */
 export default function MyPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-6">
-      <h1 className="title-lg text-n-900 mb-4">마이페이지</h1>
-      <p className="body-md text-n-600">준비 중입니다.</p>
+    <main>
+      {/* 헤더 */}
+      <Header title="마이" />
+
+      {/* 마이페이지 컨텐츠 */}
+      <MyPageContainer />
+
+      {/* 네비게이션 */}
+      <Navigation />
     </main>
   );
 }

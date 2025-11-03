@@ -5,7 +5,7 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getActivityList } from "@/apis/activity";
+import { getActivityList, getMyParticipations } from "@/apis/activity";
 import {
   ActivityListParams,
   ActivityListResponse,
@@ -24,6 +24,19 @@ export const useGetActivityListQuery = (
     queryKey: [apiRoutes.activities.list, courses, recruitmentType],
     queryFn: () => getActivityList(params),
     placeholderData: keepPreviousData,
+    ...options,
+  });
+};
+
+/**
+ * 내가 참여한 모임 목록 조회 쿼리 훅
+ */
+export const useGetMyParticipationsQuery = (
+  options?: UseQueryOptions<ActivityListResponse, AxiosError>
+) => {
+  return useQuery({
+    queryKey: [apiRoutes.activities.myParticipations],
+    queryFn: () => getMyParticipations(),
     ...options,
   });
 };

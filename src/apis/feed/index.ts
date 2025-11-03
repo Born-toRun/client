@@ -4,6 +4,7 @@ import type {
   UpdateFeedRequest,
   UpdateFeedResponse,
   DeleteFeedResponse,
+  MyFeedsResponse,
 } from "./types";
 
 /**
@@ -34,5 +35,14 @@ export const deleteFeed = async (
   const response = await runApi.delete<DeleteFeedResponse>(
     apiRoutes.feeds.delete(feedId)
   );
+  return response.data;
+};
+
+/**
+ * 내 피드 목록 조회 API
+ * @returns 내가 작성한 피드 목록
+ */
+export const getMyFeeds = async (): Promise<MyFeedsResponse> => {
+  const response = await runApi.get<MyFeedsResponse>(apiRoutes.feeds.my);
   return response.data;
 };

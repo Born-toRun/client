@@ -39,10 +39,10 @@ export default function Navigation() {
         <span className="body-xs text-n-900">크루</span>
       </Link>
       <Link
-        href={pageRoutes.myPage}
+        href={pageRoutes.myPage.main}
         className="flex-1 flex flex-col gap-1 justify-center items-center cursor-pointer"
       >
-        {isActive(pageRoutes.myPage) ? <PersonFillIcon /> : <PersonIcon />}
+        {isActive(pageRoutes.myPage.main) ? <PersonFillIcon /> : <PersonIcon />}
         <span className="body-xs text-n-900">마이</span>
       </Link>
     </div>

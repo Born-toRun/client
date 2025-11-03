@@ -1,6 +1,7 @@
 export const apiRoutes = {
   feeds: {
     list: "/api/v1/feeds",
+    my: "/api/v1/feeds/my",
     detail: (feedId: number) => `/api/v1/feeds/${feedId}`,
     update: (feedId: number) => `/api/v1/feeds/${feedId}`,
     delete: (feedId: number) => `/api/v1/feeds/${feedId}`,
@@ -29,6 +30,8 @@ export const apiRoutes = {
     detail: (crewId: number) => `/api/v1/crews/${crewId}`,
     members: (crewId: number) => `/api/v1/crews/${crewId}/members`,
     update: (crewId: number) => `/api/v1/crews/${crewId}`,
+    rankings: "/api/v1/crews/rankings",
+    memberRankings: "/api/v1/crews/member-rankings",
   },
   users: {
     refresh: "/api/v1/users/refresh",
@@ -51,6 +54,7 @@ export const apiRoutes = {
     delete: (activityId: number) => `/api/v1/activities/${activityId}`,
     open: (activityId: number) => `/api/v1/activities/open/${activityId}`,
     attendance: (activityId: number) => `/api/v1/activities/attendance/${activityId}`,
+    myParticipations: "/api/v1/activities/participation/my",
   },
 };
 
@@ -81,7 +85,16 @@ export const pageRoutes = {
     detail: (crewId: number) => `/crew/${crewId}`,
     settings: (crewId: number) => `/crew/${crewId}/settings`,
   },
-  myPage: "/my-page",
+  myPage: {
+    main: "/my-page",
+    profile: "/my-page/profile",
+    notifications: "/my-page/notifications",
+    participationHistory: "/my-page/participation-history",
+    feeds: "/my-page/feeds",
+    ranking: "/my-page/ranking",
+    contact: "/my-page/contact",
+    crew: "/my-page/crew",
+  },
   auth: {
     login: "/oauth2/authorization",
     signup: "/signup",
