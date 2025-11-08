@@ -2,6 +2,7 @@
 import CloseIcon from "@/icons/close-icon.svg";
 import DialogImageIcon from "@/icons/dialog-img.svg";
 import KakaoIcon from "@/icons/kakao-icon.svg";
+import { ShieldCheck } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -49,6 +50,14 @@ export default function LoginBottomSheet({ onOpenChange, open }: Props) {
               반가워요! 본투런 회원이 되어 간편한 러닝 모임 관리와 러너들과의
               소통을 경험해보세요!
             </SheetDescription>
+          </div>
+
+          {/* Privacy Notice */}
+          <div className="flex items-center justify-center gap-[6px] mt-[12px]">
+            <ShieldCheck className="w-[14px] h-[14px] text-n-90" />
+            <p className="body-sm text-n-90">
+              본투런은 그 어떠한 개인 민감정보를 요구하지 않습니다.
+            </p>
           </div>
         </div>
         <SheetFooter>
