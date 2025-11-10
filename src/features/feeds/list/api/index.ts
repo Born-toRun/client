@@ -1,25 +1,31 @@
 import { runApi } from "@/client/runClient";
-import { FeedListParams, FeedDetailResponse } from "../types";
+import { FeedListParams, FeedListResponse, FeedDetailResponse } from "../types";
 import { apiRoutes } from "@/constants/route";
 
-const getFeedList = async (params: FeedListParams) => {
-  const response = await (
-    await runApi.get(apiRoutes.feeds.list, {
-      params: {
-        ...params,
-        size: params.size,
-        lastFeedId: params.lastFeedId,
-      },
-    })
-  ).data;
-  return response;
+/**
+ * 피드 목록 조회 API
+ * Cursor-based pagination using lastFeedId
+ * @param params - Query parameters including category, searchKeyword, isMyCrew, size, lastFeedId
+ * @returns Paginated feed list response
+ */
+const getFeedList = async (params: FeedListParams): Promise<FeedListResponse> => {
+  const { data } = await runApi.get<FeedListResponse>(
+    apiRoutes.feeds.list,
+    { params }
+  );
+  return data;
 };
 
+/**
+ * 피드 상세 조회 API
+ * @param feedId - Feed identifier
+ * @returns Feed detail information
+ */
 const getFeedDetail = async (feedId: number): Promise<FeedDetailResponse> => {
-  const response = await (
-    await runApi.get(apiRoutes.feeds.detail(feedId))
-  ).data;
-  return response;
+  const { data } = await runApi.get<FeedDetailResponse>(
+    apiRoutes.feeds.detail(feedId)
+  );
+  return data;
 };
 
 export { getFeedList, getFeedDetail };

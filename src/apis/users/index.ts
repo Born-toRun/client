@@ -94,3 +94,23 @@ export const updateUser = async (
   );
   return response.data;
 };
+
+/**
+ * 회원탈퇴 API
+ * 현재 로그인한 사용자의 계정을 삭제합니다.
+ *
+ * 주의사항:
+ * - 탈퇴 후 모든 사용자 데이터가 삭제되며 복구할 수 없습니다.
+ * - 탈퇴 후 자동으로 로그아웃 처리가 필요합니다.
+ *
+ * 백엔드 API 스펙:
+ * - Method: DELETE
+ * - Path: /api/v1/users
+ * - Headers: Authorization: Bearer {access_token}
+ * - Response: 200 OK (no body)
+ *
+ * @returns void (200 OK response)
+ */
+export const deleteUser = async (): Promise<void> => {
+  await runApi.delete("/api/v1/users");
+};

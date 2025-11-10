@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUser, getMyUser, updateUser } from "@/apis/users";
+import { getUser, getMyUser, updateUser, deleteUser } from "@/apis/users";
 import type { UserUpdateRequest } from "@/apis/users/types";
 
 /**
@@ -71,6 +71,45 @@ export const useUpdateUserMutation = () => {
       // 사용자 정보 쿼리 무효화하여 최신 데이터 다시 불러오기
       queryClient.invalidateQueries({ queryKey: userKeys.detail() });
       queryClient.invalidateQueries({ queryKey: userKeys.myDetail() });
+    },
+  });
+};
+
+/**
+ * 회원탈퇴 뮤테이션 훅
+ * 현재 로그인한 사용자의 계정을 삭제합니다.
+ *
+ * 주의사항:
+ * - 탈퇴 후 모든 사용자 데이터가 삭제되며 복구할 수 없습니다.
+ * - 탈퇴 성공 후 onSuccess 콜백에서 로그아웃 및 리다이렉트 처리가 필요합니다.
+ * - 에러 발생 시 onError 콜백에서 적절한 에러 처리가 필요합니다.
+ *
+ * @example
+ * ```tsx
+ * const deleteUserMutation = useDeleteUserMutation();
+ *
+ * const handleWithdraw = async () => {
+ *   try {
+ *     await deleteUserMutation.mutateAsync();
+ *     // 성공 처리: 토큰 삭제, 홈으로 리다이렉트 등
+ *     TokenManager.removeAccessToken();
+ *     router.push("/");
+ *   } catch (error) {
+ *     // 에러 처리
+ *     toast.error("회원탈퇴에 실패했습니다.");
+ *   }
+ * };
+ * ```
+ */
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      // 모든 사용자 관련 쿼리 캐시 초기화
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
+      queryClient.removeQueries({ queryKey: userKeys.all });
     },
   });
 };

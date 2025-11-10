@@ -8,7 +8,7 @@ import Tabs from "@/components/Tabs";
 import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
 import { useModal } from "@/features/hooks/useModal";
 import { useScrollPosition } from "@/features/hooks/useScroll";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { feedCategoryLabel } from "../constants";
 import CreateFeedButton from "./components/CreateFeedButton";
 import FeedList from "./components/FeedList";
@@ -39,7 +39,15 @@ export default function FeedContainer() {
     },
   });
 
-  const feedList = data?.pages.flatMap((feed) => feed.content) ?? [];
+  // Flatten pages and remove duplicates by ID
+  const feedList = useMemo(() => {
+    const allFeeds = data?.pages.flatMap((page) => page.content) ?? [];
+    // Remove duplicates by creating a Map with feed.id as key
+    const uniqueFeeds = Array.from(
+      new Map(allFeeds.map((feed) => [feed.id, feed])).values()
+    );
+    return uniqueFeeds;
+  }, [data]);
   const isScrolled = useScrollPosition(20);
 
   useEffect(
