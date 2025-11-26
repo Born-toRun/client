@@ -23,7 +23,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: docker image build
-        run: docker buildx build --platform linux/arm64/v8 --build-arg NEXT_PUBLIC_BACKEND_URL=https://born-to-run.kro.kr:8443 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-client -f docker/Dockerfile . --load
+        run: docker buildx build --platform linux/arm64/v8 --build-arg NEXT_PUBLIC_BACKEND_URL=https://born-to-run.kro.kr:8443 -t ${{ secrets.DOCKERHUB_USERNAME }}/b2r-client -f docker/Dockerfile . --load
 
       # docker hub login
       - name: docker login
@@ -34,7 +34,7 @@ jobs:
 
       # docker hub image push
       - name: docker Hub push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-client
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/b2r-client
 
       # discord notify
       - name: discord 알림 전송
