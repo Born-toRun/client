@@ -66,6 +66,7 @@ pipeline {
                             --name ${env.INACTIVE_CONTAINER} \
                             --network ${DOCKER_NETWORK} \
                             -p ${env.INACTIVE_PORT}:${INTERNAL_PORT} \
+                            -e BACKEND_URL=https://be.b2r.kro.kr \
                             --restart unless-stopped \
                             ${DOCKER_IMAGE}
                     """
