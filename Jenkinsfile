@@ -154,12 +154,11 @@ pipeline {
             echo "✅ Blue-Green deployment completed successfully!"
             echo "Active Environment: ${env.NEW_ENV}"
             script {
-                discordNotify(
+                discordSend(
                     webhookURL: "${B2R_DEPLOY_DISCORD}",
-                    title: "🚀 Jenkins 빌드 성공",
-                    description: "배포가 성공적으로 완료되었습니다.",
-                    result: "SUCCESS",
-                    customUsername: "Jenkins Bot"
+                    title: "🚀 Client Jenkins 빌드 성공",
+                    description: "배포가 성공적으로 완료되었습니다.\nActive Environment: ${env.NEW_ENV}\nPort: ${env.INACTIVE_PORT}",
+                    result: "SUCCESS"
                 )
             }
         }
@@ -173,12 +172,11 @@ pipeline {
                 """
                 echo "Rollback completed. Active environment remains: ${env.ACTIVE_CONTAINER}"
 
-                discordNotify(
+                discordSend(
                     webhookURL: "${B2R_DEPLOY_DISCORD}",
-                    title: "❌ ClientJenkins 빌드 실패",
-                    description: "배포 중 오류가 발생했습니다.",
-                    result: "FAILURE",
-                    customUsername: "Jenkins Bot"
+                    title: "❌ Client Jenkins 빌드 실패",
+                    description: "배포 중 오류가 발생했습니다.\nActive environment: ${env.ACTIVE_CONTAINER}",
+                    result: "FAILURE"
                 )
             }
         }
