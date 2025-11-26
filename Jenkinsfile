@@ -5,8 +5,8 @@ pipeline {
         DOCKER_IMAGE = "${DOCKERHUB_CREDENTIALS_USR}/b2r-client:latest"
         BLUE_CONTAINER = 'b2r-client-blue'
         GREEN_CONTAINER = 'b2r-client-green'
-        BLUE_PORT = '3000'
-        GREEN_PORT = '3001'
+        BLUE_PORT = '40101'
+        GREEN_PORT = '41101'
         INTERNAL_PORT = '3000'
         DOCKER_NETWORK = 'bridge'
     }
