@@ -10,17 +10,29 @@ import { FeedListParams, FeedListResponse } from "../../types";
 
 export const useGetFeesListQuery = (
   params: FeedListParams,
-  options?: UseInfiniteQueryOptions<
-    FeedListResponse,
-    AxiosError,
-    InfiniteData<FeedListResponse>
+  options?: Omit<
+    UseInfiniteQueryOptions<
+      FeedListResponse,
+      AxiosError,
+      InfiniteData<FeedListResponse>,
+      FeedListResponse,
+      readonly unknown[],
+      number | undefined
+    >,
+    'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
   >
 ) => {
   const category = params.category;
   const isMyCrew = params.isMyCrew;
   const keyword = params.searchKeyword;
 
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    FeedListResponse,
+    AxiosError,
+    InfiniteData<FeedListResponse>,
+    readonly unknown[],
+    number | undefined
+  >({
     // Remove lastFeedId from queryKey - it changes per page and shouldn't invalidate cache
     queryKey: [apiRoutes.feeds.list, category, isMyCrew, keyword],
     queryFn: async ({ pageParam }) => {
@@ -32,8 +44,8 @@ export const useGetFeesListQuery = (
       return result;
     },
     // First page should not send lastFeedId parameter
-    initialPageParam: undefined,
-    getNextPageParam: (lastPage, allPages) => {
+    initialPageParam: undefined as number | undefined,
+    getNextPageParam: (lastPage): number | undefined => {
       // If this is the last page, return undefined to stop pagination
       if (lastPage.last || lastPage.content.length === 0) {
         return undefined;

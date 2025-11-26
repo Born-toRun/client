@@ -95,7 +95,7 @@ pipeline {
             script {
                 discordNotify(
                     webhookURL: "${B2R_DEPLOY_DISCORD}",
-                    title: "🚀 Jenkins 빌드 성공",
+                    title: "🚀 Client Jenkins 빌드 성공",
                     description: "배포가 성공적으로 완료되었습니다.",
                     result: "SUCCESS",
                     customUsername: "Jenkins Bot"
@@ -107,7 +107,7 @@ pipeline {
             script {
                 discordNotify(
                     webhookURL: "${B2R_DEPLOY_DISCORD}",
-                    title: "❌ Jenkins 빌드 실패",
+                    title: "❌ Client Jenkins 빌드 실패",
                     description: "배포 중 오류가 발생했습니다.",
                     result: "FAILURE",
                     customUsername: "Jenkins Bot"
