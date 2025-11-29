@@ -11,6 +11,7 @@ class HttpClient {
       baseURL: this.baseURL,
       // 임시 timeout
       timeout: 10000,
+      withCredentials: true,
     });
   }
 }
