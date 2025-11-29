@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/v1/:path*",
-        destination: "https://b2r.kro.kr/api/v1/:path*",
+        destination: `${process.env.BACKEND_URL || "https://be.b2r.kro.kr"}/api/v1/:path*`
       },
     ];
   },
