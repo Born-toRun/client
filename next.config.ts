@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
         destination: `${process.env.BACKEND_URL || "https://be.b2r.kro.kr"}/api/v1/:path*`
       },
       {
+        source: "/oauth2/:path*",
+        destination: `${process.env.BACKEND_URL || "https://be.b2r.kro.kr"}/oauth2/:path*`,
+      },
+      {
         source: "/login/oauth2/code/:provider",
         destination: `${process.env.BACKEND_URL || "https://be.b2r.kro.kr"}/login/oauth2/code/:provider`,
       }
