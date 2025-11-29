@@ -1,28 +1,28 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import Tabs from "@/components/Tabs";
+import { Marathon } from "@/apis/marathon/types";
 import Button from "@/components/Button";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
+import Tabs from "@/components/Tabs";
 import { useModal } from "@/features/hooks/useModal";
-import { runningTabLabel, REGION_OPTIONS, COURSE_OPTIONS } from "../constants";
+import { AxiosError } from "axios";
+import { useEffect, useMemo, useState } from "react";
+import ActivityListContainer from "../activities/list";
+import { COURSE_OPTIONS, REGION_OPTIONS, runningTabLabel } from "../constants";
+import CompletionMessage from "./components/CompletionMessage";
+import FilterBottomSheet from "./components/FilterBottomSheet";
+import FilterButton from "./components/FilterButton";
+import MarathonList from "./components/MarathonList";
+import MarathonSkeletons from "./components/MarathonSkeletons";
+import { useGetMarathonListQuery, useToggleBookmarkMutation } from "./hooks/queries";
+import { MarathonFilters, RunningTab } from "./types";
 
 // FilterOption 타입 정의
 interface FilterOption {
   value: string;
   label: string;
 }
-import { RunningTab, MarathonFilters } from "./types";
-import { useGetMarathonListQuery, useToggleBookmarkMutation } from "./hooks/queries";
-import FilterButton from "./components/FilterButton";
-import FilterBottomSheet from "./components/FilterBottomSheet";
-import MarathonList from "./components/MarathonList";
-import MarathonSkeletons from "./components/MarathonSkeletons";
-import CompletionMessage from "./components/CompletionMessage";
-import ActivityListContainer from "../activities/list";
-import { AxiosError } from "axios";
-import { Marathon } from "@/apis/marathon/types";
 
 /**
  * 러닝 페이지 메인 컨테이너 컴포넌트
@@ -122,7 +122,7 @@ export default function RunningContainer() {
     <>
       <div className="pb-[58px]">
         {/* 탭 */}
-        <div className="pt-[68px] mb-4">
+        <div className="pt-[50px] mb-4">
           <Tabs
             options={runningTabOptions}
             selectedTabs={selectedTab}
