@@ -23,13 +23,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.born-to-run.kro.kr",
+        hostname: "cdn.b2r.kro.kr",
         port: "",
         pathname: "/**",
       },
       {
         protocol: "http",
-        hostname: "cdn.born-to-run.kro.kr",
+        hostname: "cdn.b2r.kro.kr",
         port: "",
         pathname: "/**",
       },
