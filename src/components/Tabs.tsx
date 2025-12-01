@@ -21,8 +21,11 @@ export default function Tabs<T extends string>({
         return (
           <li
             key={item.key}
-            onClick={() => onSelectedTab(item.key)}
-            className="px-[8px] h-full flex justify-center items-center relative"
+            onClick={() => {
+              console.log("Tab clicked:", item.label);
+              onSelectedTab(item.key);
+            }}
+            className="px-[8px] h-full flex justify-center items-center relative cursor-pointer"
           >
             <span
               className={clsx(

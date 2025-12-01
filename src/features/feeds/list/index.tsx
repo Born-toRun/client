@@ -62,14 +62,14 @@ export default function FeedContainer() {
   return (
     <>
       <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
-      <div className="pt-[50px] mb-[16px]">
+      <div className="pt-[60px] mb-[16px] relative z-30">
         <Tabs
           options={feedListTabOptions}
           selectedTabs={selectedTabs}
           onSelectedTab={setSelectedTabs}
         />
       </div>
-      <div className="px-[16px] flex items-center h-[40px]">
+      <div className="px-[16px] flex items-center h-[40px] relative z-30">
         <CheckBox
           text="크루 공개 글 보기"
           onChange={() => setIsMyCrew((prev) => !prev)}

@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLElement> {
 
 export default function Header({ title, left, right }: Props) {
   return (
-    <header className="fixed top-0 left-1/2 -translate-x-1/2 z-10 bg-white flex items-center justify-between h-[56px] p-2 w-full max-w-[786px]">
+    <header className="relative left-1/2 -translate-x-1/2 bg-white flex items-center justify-between h-[56px] p-2 w-full max-w-[786px]">
       {left ? <div>{left}</div> : <div />}
 
       <h1 className="title-lg text-black absolute left-1/2 transform -translate-x-1/2">
