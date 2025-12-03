@@ -10,7 +10,7 @@ import { pageRoutes } from "@/constants/route";
 
 /**
  * 크루 설정 폼 컴포넌트
- * 크루 정보를 수정할 수 있는 폼입니다.
+ * 운영진 및 관리자가 크루 정보를 수정할 수 있는 폼입니다.
  */
 export default function CrewSettingsForm() {
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function CrewSettingsForm() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4">
         <div className="text-n-500 body-md text-center">
-          크루 설정은 운영진만 접근할 수 있습니다.
+          크루 설정은 운영진 및 관리자만 접근할 수 있습니다.
         </div>
         <Button
           onClick={() => router.push(pageRoutes.crews.detail(crewId))}

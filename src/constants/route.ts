@@ -6,6 +6,12 @@ export const apiRoutes = {
     update: (feedId: number) => `/api/v1/feeds/${feedId}`,
     delete: (feedId: number) => `/api/v1/feeds/${feedId}`,
   },
+  search: {
+    history: "/api/v1/recent-search-keywords",
+    register: (keyword: string) => `/api/v1/recent-search-keywords/${keyword}`,
+    delete: (keyword: string) => `/api/v1/recent-search-keywords/${keyword}`,
+    deleteAll: "/api/v1/recent-search-keywords",
+  },
   comments: {
     list: (feedId: number) => `/api/v1/comments/${feedId}`,
     create: (feedId: number) => `/api/v1/comments/${feedId}`,

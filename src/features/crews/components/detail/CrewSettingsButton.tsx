@@ -11,16 +11,16 @@ interface Props {
 
 /**
  * 크루 설정 버튼 컴포넌트
- * 운영진인 경우에만 표시되는 설정 버튼입니다.
+ * 운영진 또는 관리자인 경우에만 표시되는 설정 버튼입니다.
  *
  * @description
- * - 현재 사용자가 크루의 운영진(isManager === true)인 경우에만 렌더링
+ * - 현재 사용자가 크루의 운영진(isManager === true) 또는 관리자(isAdmin === true)인 경우에만 렌더링
  * - 버튼 클릭 시 크루 설정 페이지로 이동
  */
 export default function CrewSettingsButton({ crewId, isManager }: Props) {
   const router = useRouter();
 
-  // 운영진이 아니면 버튼을 렌더링하지 않음
+  // 운영진 또는 관리자가 아니면 버튼을 렌더링하지 않음
   if (!isManager) {
     return null;
   }

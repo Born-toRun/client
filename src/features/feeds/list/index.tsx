@@ -8,6 +8,7 @@ import Tabs from "@/components/Tabs";
 import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
 import { useModal } from "@/features/hooks/useModal";
 import { useScrollPosition } from "@/features/hooks/useScroll";
+import SearchOverlay from "@/features/search/SearchOverlay";
 import { useEffect, useMemo, useState } from "react";
 import { feedCategoryLabel } from "../constants";
 import CreateFeedButton from "./components/CreateFeedButton";
@@ -19,16 +20,19 @@ import { FEEDCategory } from "./types";
 export default function FeedContainer() {
   const loginModal = useModal();
   const loginBottomSheet = useModal();
+  const searchOverlay = useModal();
 
   const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(
     feedCategoryLabel.COMMUNITY
   );
   const [isMyCrew, setIsMyCrew] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState<string | undefined>(undefined);
 
   const { data, isPending, hasNextPage, fetchNextPage, error } =
     useGetFeesListQuery({
       isMyCrew,
       category: selectedTabs as FEEDCategory,
+      searchKeyword,
     });
 
   const { setTargetRef } = useIntersectionObserver({
@@ -59,9 +63,32 @@ export default function FeedContainer() {
     [error, loginModal]
   );
 
+  /**
+   * 검색 실행 핸들러
+   */
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword);
+  };
+
+  /**
+   * 검색 오버레이 열기 핸들러
+   */
+  const handleSearchClick = () => {
+    searchOverlay.open();
+  };
+
   return (
     <>
-      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
+      <MainHeader
+        selectedTabs={selectedTabs}
+        isScrolled={isScrolled}
+        onSearchClick={handleSearchClick}
+      />
+      <SearchOverlay
+        isOpen={searchOverlay.isActive}
+        onClose={searchOverlay.close}
+        onSearch={handleSearch}
+      />
       <div className="pt-[60px] mb-[16px] relative z-30">
         <Tabs
           options={feedListTabOptions}
@@ -69,6 +96,20 @@ export default function FeedContainer() {
           onSelectedTab={setSelectedTabs}
         />
       </div>
+      {searchKeyword && (
+        <div className="px-[16px] py-[12px] flex items-center justify-between bg-n-50 relative z-30">
+          <span className="body-md text-n-300">
+            <span className="text-black font-semibold">{searchKeyword}</span> 검색 결과
+          </span>
+          <button
+            onClick={() => setSearchKeyword(undefined)}
+            className="body-md text-n-200 underline"
+            type="button"
+          >
+            검색 취소
+          </button>
+        </div>
+      )}
       <div className="px-[16px] flex items-center h-[40px] relative z-30">
         <CheckBox
           text="크루 공개 글 보기"

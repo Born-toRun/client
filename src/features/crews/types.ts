@@ -24,6 +24,7 @@ export interface CrewListResponse {
  */
 export interface MyCrewResponse extends Crew {
   isManager: boolean;
+  isAdmin: boolean;
 }
 
 /**

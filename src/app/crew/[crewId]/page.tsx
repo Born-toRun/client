@@ -24,16 +24,16 @@ export default function CrewDetailPage() {
   // 크루 상세 조회
   const { data: crew, isPending, isError } = useGetCrewDetailQuery(crewId);
 
-  // 내 크루 조회 (운영진 여부 확인용)
+  // 내 크루 조회 (운영진 및 관리자 여부 확인용)
   const { data: myCrew } = useGetMyCrewQuery();
 
-  // 현재 사용자가 이 크루의 운영진인지 확인
-  // 조건: 로그인 상태 && 내 크루가 존재 && 현재 크루 ID와 일치 && 운영진 권한 보유
-  const isManager =
+  // 현재 사용자가 이 크루의 운영진 또는 관리자인지 확인
+  // 조건: 로그인 상태 && 내 크루가 존재 && 현재 크루 ID와 일치 && (운영진 권한 또는 관리자 권한 보유)
+  const isManagerOrAdmin =
     isAuthenticated &&
     myCrew !== null &&
     myCrew?.id === crewId &&
-    myCrew?.isManager === true;
+    (myCrew?.isManager === true || myCrew?.isAdmin === true);
 
   // 로딩 상태
   if (isPending) {
@@ -87,8 +87,8 @@ export default function CrewDetailPage() {
         {/* 소개 섹션 */}
         <CrewDescription contents={crew.contents} />
 
-        {/* 크루 설정 버튼 (운영진만 표시) */}
-        <CrewSettingsButton crewId={crew.id} isManager={isManager} />
+        {/* 크루 설정 버튼 (운영진 및 관리자만 표시) */}
+        <CrewSettingsButton crewId={crew.id} isManager={isManagerOrAdmin} />
 
         {/* 모임 섹션 */}
         <CrewActivities crewId={crew.id} />

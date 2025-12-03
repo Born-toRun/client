@@ -15,7 +15,7 @@ interface CrewSettingsFormData extends CrewUpdateRequest {
 
 /**
  * 크루 설정 폼 커스텀 훅
- * 크루 정보 수정 폼의 상태 관리 및 제출 로직을 담당합니다.
+ * 운영진 및 관리자를 위한 크루 정보 수정 폼의 상태 관리 및 제출 로직을 담당합니다.
  */
 export const useCrewSettingsForm = () => {
   const params = useParams();
@@ -61,8 +61,8 @@ export const useCrewSettingsForm = () => {
     }
   }, [crew, form]);
 
-  // 운영진 권한 확인
-  const isManager = membersData?.members.some((member) => member.isManager) || false;
+  // 운영진 또는 관리자 권한 확인
+  const isManager = membersData?.members.some((member) => member.isManager || member.isAdmin) || false;
 
   // 폼 제출 핸들러
   const onSubmit = form.handleSubmit(async (data) => {

@@ -20,10 +20,11 @@ export interface CrewListResponse {
 
 /**
  * 내 크루 조회 응답 (단일 크루)
- * 백엔드에서 현재 사용자의 운영진 여부를 포함하여 반환
+ * 백엔드에서 현재 사용자의 운영진 및 관리자 여부를 포함하여 반환
  */
 export interface MyCrewResponse extends Crew {
   isManager: boolean;
+  isAdmin: boolean;
 }
 
 /**

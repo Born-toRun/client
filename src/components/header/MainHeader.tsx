@@ -9,9 +9,10 @@ import { FEEDCategory } from "@/features/feeds/list/types";
 interface Props {
   selectedTabs?: FEEDCategory;
   isScrolled?: boolean;
+  onSearchClick?: () => void;
 }
 
-export default function MainHeader({ selectedTabs, isScrolled }: Props) {
+export default function MainHeader({ selectedTabs, isScrolled, onSearchClick }: Props) {
   const tabLabel = selectedTabs === "COMMUNITY" ? "커뮤니티" : "마켓";
 
   const handleAttendanceClick = () => {
@@ -21,7 +22,7 @@ export default function MainHeader({ selectedTabs, isScrolled }: Props) {
 
   const handleSearchClick = () => {
     console.log("검색 아이콘 클릭");
-    // TODO: 검색 기능 구현
+    onSearchClick?.();
   };
 
   return (
