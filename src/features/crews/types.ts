@@ -55,10 +55,10 @@ export interface CrewMembersResponse {
  * 크루 수정 요청
  */
 export interface CrewUpdateRequest {
-  imageUri?: string;       // 대표이미지
-  logoUri?: string;         // 로고이미지
-  crewName: string;         // 크루명 (필수)
+  imageId?: number;         // 대표이미지 ID
+  logoId?: number;          // 로고이미지 ID
+  name: string;             // 크루명 (필수)
   region: string;           // 크루 활동 지역 (필수)
   contents: string;         // 크루 설명 (필수)
-  crewSnsUri?: string;      // 크루 SNS URI (선택)
+  sns?: string;             // 크루 SNS URI (선택)
 }
