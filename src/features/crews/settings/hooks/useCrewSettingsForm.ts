@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useGetCrewDetailQuery, useGetCrewMembersQuery } from "../../hooks/queries";
 import { useUpdateCrewMutation } from "../../hooks/mutations";
 import { pageRoutes } from "@/constants/route";
-import type { CrewUpdateRequest } from "../../types";
 
 interface CrewSettingsFormData {
   name: string;
