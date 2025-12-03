@@ -8,9 +8,15 @@ import { useUpdateCrewMutation } from "../../hooks/mutations";
 import { pageRoutes } from "@/constants/route";
 import type { CrewUpdateRequest } from "../../types";
 
-interface CrewSettingsFormData extends CrewUpdateRequest {
-  imageUri?: string;
-  logoUri?: string;
+interface CrewSettingsFormData {
+  name: string;
+  region: string;
+  contents: string;
+  sns?: string;
+  imageId?: number;
+  logoId?: number;
+  imageUri?: string; // 미리보기용
+  logoUri?: string;  // 미리보기용
 }
 
 /**
@@ -38,10 +44,12 @@ export const useCrewSettingsForm = () => {
   const form = useForm<CrewSettingsFormData>({
     mode: "onChange",
     defaultValues: {
-      crewName: "",
+      name: "",
       region: "",
       contents: "",
-      crewSnsUri: "",
+      sns: "",
+      imageId: undefined,
+      logoId: undefined,
       imageUri: "",
       logoUri: "",
     },
@@ -51,10 +59,12 @@ export const useCrewSettingsForm = () => {
   useEffect(() => {
     if (crew) {
       form.reset({
-        crewName: crew.crewName,
+        name: crew.crewName,
         region: crew.region,
         contents: crew.contents,
-        crewSnsUri: crew.crewSnsUri || "",
+        sns: crew.crewSnsUri || "",
+        imageId: undefined,
+        logoId: undefined,
         imageUri: crew.imageUri || "",
         logoUri: crew.logoUri || "",
       });
@@ -74,12 +84,12 @@ export const useCrewSettingsForm = () => {
       await updateCrewMutation.mutateAsync({
         crewId,
         data: {
-          crewName: data.crewName,
+          name: data.name,
           region: data.region,
           contents: data.contents,
-          crewSnsUri: data.crewSnsUri || undefined,
-          imageUri: data.imageUri || undefined,
-          logoUri: data.logoUri || undefined,
+          sns: data.sns || undefined,
+          imageId: data.imageId || undefined,
+          logoId: data.logoId || undefined,
         },
       });
 

@@ -9,8 +9,9 @@ import {
 } from "@/features/write/hooks";
 
 interface CrewImageUploadProps {
-  value: string; // 이미지 URI
-  onChange: (imageUri: string) => void;
+  imageUri?: string; // 이미지 URI (미리보기용)
+  imageId?: number; // 이미지 ID
+  onChange: (imageId: number | undefined, imageUri: string) => void;
   label: string;
   aspectRatio?: "16/9" | "1/1"; // 추천 비율
   error?: string;
@@ -24,7 +25,8 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
  * 단일 이미지 업로드를 지원하며, 대표이미지와 로고이미지에 사용됩니다.
  */
 export default function CrewImageUpload({
-  value,
+  imageUri,
+  imageId,
   onChange,
   label,
   aspectRatio = "16/9",
@@ -32,18 +34,19 @@ export default function CrewImageUpload({
 }: CrewImageUploadProps) {
   const [uploadError, setUploadError] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
-  const [previewUri, setPreviewUri] = useState<string>(value);
-  const [currentFileId, setCurrentFileId] = useState<number | null>(null);
+  const [previewUri, setPreviewUri] = useState<string>(imageUri || "");
+  const [currentFileId, setCurrentFileId] = useState<number | undefined>(imageId);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // React Query 훅 사용
   const uploadImageFile = useUploadFileMutation();
   const deleteImageFile = useDeleteFileMutation();
 
-  // value 변경 시 미리보기 동기화
+  // imageUri 변경 시 미리보기 동기화
   useEffect(() => {
-    setPreviewUri(value);
-  }, [value]);
+    setPreviewUri(imageUri || "");
+    setCurrentFileId(imageId);
+  }, [imageUri, imageId]);
 
   /**
    * 파일 선택 핸들러
@@ -95,12 +98,12 @@ export default function CrewImageUpload({
       // 업로드 성공
       setPreviewUri(response.fileUri);
       setCurrentFileId(response.fileId);
-      onChange(response.fileUri);
+      onChange(response.fileId, response.fileUri);
     } catch (uploadError) {
       console.error("이미지 업로드 실패:", uploadError);
       setUploadError("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
       // 업로드 실패 시 미리보기 초기화
-      setPreviewUri(value);
+      setPreviewUri(imageUri || "");
     } finally {
       setIsUploading(false);
     }
@@ -118,7 +121,7 @@ export default function CrewImageUpload({
     if (!currentFileId) {
       // fileId가 없으면 단순히 미리보기만 제거
       setPreviewUri("");
-      onChange("");
+      onChange(undefined, "");
       return;
     }
 
@@ -129,8 +132,8 @@ export default function CrewImageUpload({
       });
 
       setPreviewUri("");
-      setCurrentFileId(null);
-      onChange("");
+      setCurrentFileId(undefined);
+      onChange(undefined, "");
       setUploadError("");
     } catch (deleteError) {
       console.error("이미지 삭제 실패:", deleteError);

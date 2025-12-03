@@ -81,30 +81,38 @@ export default function CrewSettingsForm() {
           <div className="px-4 py-6 flex flex-col gap-6">
             {/* 대표 이미지 업로드 */}
             <Controller
-              name="imageUri"
+              name="imageId"
               control={control}
               render={({ field }) => (
                 <CrewImageUpload
-                  value={field.value || ""}
-                  onChange={field.onChange}
+                  imageId={field.value}
+                  imageUri={form.watch("imageUri")}
+                  onChange={(imageId, imageUri) => {
+                    field.onChange(imageId);
+                    form.setValue("imageUri", imageUri);
+                  }}
                   label="대표 이미지"
                   aspectRatio="16/9"
-                  error={errors.imageUri?.message}
+                  error={errors.imageId?.message}
                 />
               )}
             />
 
             {/* 로고 이미지 업로드 */}
             <Controller
-              name="logoUri"
+              name="logoId"
               control={control}
               render={({ field }) => (
                 <CrewImageUpload
-                  value={field.value || ""}
-                  onChange={field.onChange}
+                  imageId={field.value}
+                  imageUri={form.watch("logoUri")}
+                  onChange={(logoId, logoUri) => {
+                    field.onChange(logoId);
+                    form.setValue("logoUri", logoUri);
+                  }}
                   label="로고 이미지"
                   aspectRatio="1/1"
-                  error={errors.logoUri?.message}
+                  error={errors.logoId?.message}
                 />
               )}
             />
@@ -119,7 +127,7 @@ export default function CrewSettingsForm() {
                 type="text"
                 placeholder="크루 이름을 입력해주세요 (2자 이상)"
                 className="w-full px-4 py-3 border border-n-40 rounded-[8px] body-md placeholder:text-n-200 focus:outline-none focus:border-rg-400"
-                {...register("crewName", {
+                {...register("name", {
                   required: "크루명은 필수입니다",
                   minLength: {
                     value: 2,
@@ -131,9 +139,9 @@ export default function CrewSettingsForm() {
                   },
                 })}
               />
-              {errors.crewName && (
+              {errors.name && (
                 <p className="text-system-r-400 text-sm">
-                  {errors.crewName.message}
+                  {errors.name.message}
                 </p>
               )}
             </div>
@@ -198,16 +206,16 @@ export default function CrewSettingsForm() {
                 type="url"
                 placeholder="https://instagram.com/..."
                 className="w-full px-4 py-3 border border-n-40 rounded-[8px] body-md placeholder:text-n-200 focus:outline-none focus:border-rg-400"
-                {...register("crewSnsUri", {
+                {...register("sns", {
                   pattern: {
                     value: /^https?:\/\/.+/,
                     message: "올바른 URL 형식을 입력해주세요",
                   },
                 })}
               />
-              {errors.crewSnsUri && (
+              {errors.sns && (
                 <p className="text-system-r-400 text-sm">
-                  {errors.crewSnsUri.message}
+                  {errors.sns.message}
                 </p>
               )}
               <p className="text-n-200 text-sm">
