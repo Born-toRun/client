@@ -132,26 +132,28 @@ export default function WriteContainer() {
 
   return (
     <>
-      <Header
-        left={
-          <button
-            className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-            onClick={() => router.back()}
-          >
-            <CloseIcon />
-          </button>
-        }
-        title="글쓰기"
-        right={
-          <button
-            className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
-            disabled={!contents}
-            onClick={postingClickHandler}
-          >
-            <p className="text-white title-md leading-[17px]">게시</p>
-          </button>
-        }
-      />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[786px] h-[56px] bg-white z-50">
+        <Header
+          left={
+            <button
+              className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+              onClick={() => router.back()}
+            >
+              <CloseIcon />
+            </button>
+          }
+          title="글쓰기"
+          right={
+            <button
+              className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
+              disabled={!contents}
+              onClick={postingClickHandler}
+            >
+              <p className="text-white title-md leading-[17px]">게시</p>
+            </button>
+          }
+        />
+      </div>
       <main className="flex flex-col h-screen pt-14">
         <div className="h-16 px-4 flex items-center justify-between border-t border-n-30">
           <div
