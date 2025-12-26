@@ -1,6 +1,7 @@
 import { Trophy } from "lucide-react";
 import { pageRoutes } from "@/constants/route";
 import Link from "next/link";
+import Image from "next/image";
 import type { CrewRankingItem } from "@/apis/crews/types";
 
 /**
@@ -51,12 +52,14 @@ export default function CrewRankingCard({ item }: CrewRankingCardProps) {
         </div>
 
         {/* 크루 로고 */}
-        <div className="w-12 h-12 rounded-full overflow-hidden bg-n-20 flex-shrink-0">
+        <div className="w-12 h-12 rounded-full overflow-hidden bg-n-20 flex-shrink-0 relative">
           {logoUri ? (
-            <img
+            <Image
               src={logoUri}
               alt={`${crewName} 로고`}
-              className="w-full h-full object-cover"
+              width={48}
+              height={48}
+              className="object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import { useLoginBottomSheet } from "@/contexts/LoginBottomSheetContext";
 import { ArrowLeft } from "lucide-react";
@@ -120,11 +121,13 @@ export default function MyFeedsPage() {
 
                     {/* 이미지 (있는 경우에만 표시) */}
                     {feed.imageUris && feed.imageUris.length > 0 && (
-                      <div className="w-full aspect-video rounded-sm overflow-hidden bg-n-20">
-                        <img
+                      <div className="w-full aspect-video rounded-sm overflow-hidden bg-n-20 relative">
+                        <Image
                           src={feed.imageUris[0]}
                           alt="피드 이미지"
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="(max-width: 786px) 100vw, 786px"
+                          className="object-cover"
                         />
                       </div>
                     )}

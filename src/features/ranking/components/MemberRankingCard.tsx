@@ -1,4 +1,5 @@
 import { Medal, User } from "lucide-react";
+import Image from "next/image";
 import type { MemberRankingItem } from "@/apis/crews/types";
 
 /**
@@ -46,12 +47,14 @@ export default function MemberRankingCard({ item }: MemberRankingCardProps) {
       </div>
 
       {/* 프로필 이미지 */}
-      <div className="w-12 h-12 rounded-full overflow-hidden bg-n-20 flex-shrink-0">
+      <div className="w-12 h-12 rounded-full overflow-hidden bg-n-20 flex-shrink-0 relative">
         {profileImageUri ? (
-          <img
+          <Image
             src={profileImageUri}
             alt={`${userName} 프로필`}
-            className="w-full h-full object-cover"
+            width={48}
+            height={48}
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
