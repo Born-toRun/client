@@ -68,9 +68,10 @@ export default function ProfileForm() {
                   value={field.value || ""}
                   onChange={(imageUri, fileId) => {
                     field.onChange(imageUri);
-                    if (fileId) {
-                      setValue("profileImageId", fileId);
-                    }
+                    // 프로필 이미지가 변경되었음을 표시
+                    setValue("profileImageChanged", true);
+                    // fileId 설정 (새 이미지 업로드 시 존재, 삭제 시 undefined)
+                    setValue("profileImageId", fileId);
                   }}
                   error={errors.profileImageUri?.message}
                 />

@@ -12,6 +12,8 @@ interface ProfileFormData {
   profileImageUri?: string;
   profileImageId?: number;
   instagramId?: string;
+  // 프로필 이미지 변경 여부를 추적하기 위한 플래그
+  profileImageChanged?: boolean;
 }
 
 /**
@@ -57,18 +59,23 @@ export const useProfileForm = () => {
       profileImageUri: "",
       profileImageId: undefined,
       instagramId: "",
+      profileImageChanged: false,
     },
   });
 
   // 사용자 데이터가 로드되면 폼에 초기값 설정
   useEffect(() => {
     if (myUser) {
-      // 인스타그램 URI에서 ID 추출
-      const instagramId = extractInstagramId(myUser.instagramUri);
+      // API 응답에서 instagramId를 직접 사용
+      // instagramId가 없으면 instagramUri에서 추출 (하위 호환성)
+      const instagramId =
+        myUser.instagramId || extractInstagramId(myUser.instagramUri);
 
       form.reset({
         profileImageUri: myUser.profileImageUri || "",
+        profileImageId: undefined, // 초기 로드 시 fileId는 undefined
         instagramId: instagramId,
+        profileImageChanged: false, // 초기 로드 시 변경 없음
       });
     }
   }, [myUser, form]);
@@ -87,13 +94,18 @@ export const useProfileForm = () => {
       // 수정할 데이터 준비 (변경된 필드만 전송)
       const updateData: UserUpdateRequest = {};
 
-      // 기존 인스타그램 ID 추출
-      const currentInstagramId = extractInstagramId(myUser?.instagramUri);
+      // 기존 인스타그램 ID 가져오기
+      // API 응답에서 instagramId를 직접 사용, 없으면 instagramUri에서 추출
+      const currentInstagramId =
+        myUser?.instagramId || extractInstagramId(myUser?.instagramUri);
 
-      // 프로필 이미지가 변경되었으면 포함 (fileId 사용)
-      if (data.profileImageId) {
-        updateData.profileImageId = data.profileImageId;
+      // 프로필 이미지 처리
+      // profileImageChanged가 true일 때만 API 요청에 포함
+      if (data.profileImageChanged) {
+        // 프로필 이미지를 새로 업로드했거나 삭제한 경우
+        updateData.profileImageId = data.profileImageId || null;
       }
+      // profileImageChanged가 false면 프로필 이미지는 변경하지 않음 (API 요청에 포함하지 않음)
 
       // 인스타그램 ID가 변경되었으면 포함
       if (cleanedInstagramId !== currentInstagramId) {

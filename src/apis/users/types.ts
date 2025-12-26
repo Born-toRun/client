@@ -25,11 +25,12 @@ export interface MyUser {
   yellowCardQty: number;
   isInstagramIdPublic: boolean;
   instagramUri: string; // 인스타그램 프로필 URL (예: https://www.instagram.com/instagramId)
+  instagramId?: string; // 인스타그램 ID (API 응답에서 직접 제공)
 }
 
 // 사용자 정보 수정 요청 타입
 export interface UserUpdateRequest {
-  profileImageId?: number;
+  profileImageId?: number | null; // null은 프로필 이미지 삭제를 의미
   instagramId?: string;
 }
 
