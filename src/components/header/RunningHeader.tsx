@@ -42,7 +42,7 @@ export default function RunningHeader({ isScrolled }: Props) {
 
   return (
     <>
-      <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-[786px] bg-white z-20">
+      <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-[786px] bg-white z-20 pointer-events-none">
         <Header
           left={
             <div className="h-[40px] flex items-center">
@@ -63,7 +63,7 @@ export default function RunningHeader({ isScrolled }: Props) {
             </div>
           }
           right={
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[8px] pointer-events-auto">
               <button
                 onClick={handleAttendanceClick}
                 className="size-[40px] flex items-center justify-center cursor-pointer hover:bg-n-10 rounded-full transition-colors"
