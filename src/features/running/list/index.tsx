@@ -17,6 +17,7 @@ import MarathonList from "./components/MarathonList";
 import MarathonSkeletons from "./components/MarathonSkeletons";
 import { useGetMarathonListQuery, useToggleBookmarkMutation } from "./hooks/queries";
 import { MarathonFilters, RunningTab } from "./types";
+import { useSearchContext } from "../contexts/SearchContext";
 
 // FilterOption 타입 정의
 interface FilterOption {
@@ -33,6 +34,9 @@ export default function RunningContainer() {
   const loginBottomSheet = useModal();
   const regionBottomSheet = useModal();
   const courseBottomSheet = useModal();
+
+  // 검색 컨텍스트
+  const { searchKeyword, clearSearch } = useSearchContext();
 
   // 탭 상태
   const [selectedTab, setSelectedTab] = useState<RunningTab>(
@@ -56,11 +60,12 @@ export default function RunningContainer() {
   // 북마크 토글 뮤테이션
   const toggleBookmarkMutation = useToggleBookmarkMutation();
 
-  // 프론트엔드 필터링
+  // 프론트엔드 필터링 (지역, 코스, 검색어)
   const filteredMarathonList = useMemo(() => {
     if (!data?.details) return [];
 
     return data.details.filter((marathon: Marathon) => {
+      // 지역 필터
       const regionMatch = filters.region === "all" || marathon.venue.includes(filters.region);
 
       // 코스 필터링: 선택한 코스를 포함하는지 확인
@@ -68,9 +73,14 @@ export default function RunningContainer() {
         filters.course === "all" ||
         marathon.course.split(',').some(c => c.trim() === filters.course);
 
-      return regionMatch && courseMatch;
+      // 검색어 필터링: 제목에 검색어가 포함되는지 확인 (대소문자 구분 없음)
+      const searchMatch =
+        !searchKeyword ||
+        marathon.title.toLowerCase().includes(searchKeyword.toLowerCase());
+
+      return regionMatch && courseMatch && searchMatch;
     });
-  }, [data, filters]);
+  }, [data, filters, searchKeyword]);
 
   // 401 에러 처리
   useEffect(() => {
@@ -129,6 +139,25 @@ export default function RunningContainer() {
             onSelectedTab={handleTabChange}
           />
         </div>
+
+        {/* 검색 상태 표시 */}
+        {searchKeyword && (
+          <div className="px-4 mb-4 relative z-10">
+            <div className="flex items-center gap-2 px-4 py-2 bg-rg-100 round-md">
+              <span className="body-md text-n-700 flex-1">
+                <span className="text-n-500">검색:</span>{" "}
+                <span className="font-semibold">{searchKeyword}</span>
+              </span>
+              <button
+                onClick={clearSearch}
+                className="body-sm text-rg-400 hover:text-rg-500 transition-colors"
+                aria-label="검색어 지우기"
+              >
+                지우기
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 마라톤 탭 */}
         {selectedTab === runningTabLabel.MARATHON && (

@@ -6,6 +6,7 @@ import Logo from "@/icons/logo.svg";
 import ClipboardCheckIcon from "@/icons/clipboard-check-icon.svg";
 import SearchIcon from "@/icons/search-icon.svg";
 import SearchOverlay from "@/features/search/SearchOverlay";
+import { useSearchContext } from "@/features/running/contexts/SearchContext";
 
 interface Props {
   isScrolled?: boolean;
@@ -17,6 +18,7 @@ interface Props {
  */
 export default function RunningHeader({ isScrolled }: Props) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { setSearchKeyword } = useSearchContext();
 
   const handleSearchClick = () => {
     setIsSearchOpen(true);
@@ -27,10 +29,8 @@ export default function RunningHeader({ isScrolled }: Props) {
   };
 
   const handleSearch = (keyword: string) => {
-    // 검색 기능 구현 - 검색 결과 페이지로 이동하거나 필터링 처리
-    console.log("검색어:", keyword);
-    // TODO: 검색 결과 처리 로직 추가
-    // 예: router.push(`/search?q=${encodeURIComponent(keyword)}`);
+    // 검색어를 컨텍스트에 저장하여 RunningContainer에서 필터링
+    setSearchKeyword(keyword);
   };
 
   const handleAttendanceClick = () => {

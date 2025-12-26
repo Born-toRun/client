@@ -7,6 +7,7 @@ import {
   RECRUITMENT_TYPE_OPTIONS,
   ACTIVITY_COURSE_OPTIONS,
 } from "./constants";
+import { useSearchContext } from "../../contexts/SearchContext";
 
 // FilterOption 타입 정의
 interface FilterOption {
@@ -33,6 +34,9 @@ export default function ActivityListContainer() {
   const recruitmentBottomSheet = useModal();
   const courseBottomSheet = useModal();
 
+  // 검색 컨텍스트
+  const { searchKeyword } = useSearchContext();
+
   // 필터 상태
   const [filters, setFilters] = useState<ActivityFilters>({
     recruitmentType: "all",
@@ -58,6 +62,19 @@ export default function ActivityListContainer() {
 
   // 모임 목록 쿼리
   const { data, isPending, isError } = useGetActivityListQuery(apiParams);
+
+  // 검색어로 클라이언트 사이드 필터링
+  const filteredActivities = useMemo(() => {
+    if (!data?.details) return [];
+
+    // 검색어가 없으면 전체 목록 반환
+    if (!searchKeyword) return data.details;
+
+    // 검색어가 있으면 제목에 검색어가 포함된 항목만 필터링 (대소문자 구분 없음)
+    return data.details.filter((activity) =>
+      activity.title.toLowerCase().includes(searchKeyword.toLowerCase())
+    );
+  }, [data, searchKeyword]);
 
   // 필터 변경 핸들러
   const handleRecruitmentApply = (recruitmentType: string) => {
@@ -103,10 +120,10 @@ export default function ActivityListContainer() {
 
         {!isPending && !isError && (
           <>
-            <ActivityList activities={data?.details || []} />
+            <ActivityList activities={filteredActivities} />
 
             {/* 모든 데이터 표시 완료 메시지 */}
-            {data?.details && data.details.length > 0 && (
+            {filteredActivities.length > 0 && (
               <CompletionMessage
                 message="모든 모임을 확인했어요!"
                 buttonText="마라톤 둘러보기"
