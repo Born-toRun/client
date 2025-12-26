@@ -118,8 +118,10 @@ export default function FeedContainer() {
         />
       </div>
       {isPending && <FeedSkeletons />}
-      <FeedList list={feedList} />
-      {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
+      <div className="pb-[82px]">
+        <FeedList list={feedList} />
+        {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
+      </div>
       <div className="fixed bottom-[58px] left-1/2 -translate-x-1/2 w-full max-w-[786px] flex justify-end px-[16px] pb-[24px] z-2">
         <CreateFeedButton isScrolled={isScrolled} />
       </div>

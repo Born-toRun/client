@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Header from "./Header";
 import Logo from "@/icons/logo.svg";
 import ClipboardCheckIcon from "@/icons/clipboard-check-icon.svg";
 import SearchIcon from "@/icons/search-icon.svg";
+import SearchOverlay from "@/features/search/SearchOverlay";
 
 interface Props {
   isScrolled?: boolean;
@@ -14,44 +16,79 @@ interface Props {
  * 로고, 출석체크 아이콘, 검색 아이콘을 표시
  */
 export default function RunningHeader({ isScrolled }: Props) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(true);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearchOpen(false);
+  };
+
+  const handleSearch = (keyword: string) => {
+    // 검색 기능 구현 - 검색 결과 페이지로 이동하거나 필터링 처리
+    console.log("검색어:", keyword);
+    // TODO: 검색 결과 처리 로직 추가
+    // 예: router.push(`/search?q=${encodeURIComponent(keyword)}`);
+  };
+
+  const handleAttendanceClick = () => {
+    // 출석체크 기능 구현
+    console.log("출석체크 클릭");
+    // TODO: 출석체크 페이지로 이동하거나 모달 표시
+    // 예: router.push('/attendance');
+  };
+
   return (
-    <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-[786px] bg-white z-20">
-      <Header
-        left={
-          <div className="h-[40px] flex items-center">
-            <div
-              className={`transition-opacity duration-300 ease-in-out ${
-                isScrolled ? "opacity-0 absolute" : "opacity-100"
-              }`}
-            >
-              <Logo />
+    <>
+      <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-[786px] bg-white z-20">
+        <Header
+          left={
+            <div className="h-[40px] flex items-center">
+              <div
+                className={`transition-opacity duration-300 ease-in-out ${
+                  isScrolled ? "opacity-0 absolute" : "opacity-100"
+                }`}
+              >
+                <Logo />
+              </div>
+              <div
+                className={`transition-opacity duration-300 ease-in-out ${
+                  isScrolled ? "opacity-100" : "opacity-0 absolute"
+                }`}
+              >
+                <span className="title-xl text-black block p-[8px]">러닝</span>
+              </div>
             </div>
-            <div
-              className={`transition-opacity duration-300 ease-in-out ${
-                isScrolled ? "opacity-100" : "opacity-0 absolute"
-              }`}
-            >
-              <span className="title-xl text-black block p-[8px]">러닝</span>
+          }
+          right={
+            <div className="flex items-center gap-[8px]">
+              <button
+                onClick={handleAttendanceClick}
+                className="size-[40px] flex items-center justify-center cursor-pointer hover:bg-n-10 rounded-full transition-colors"
+                aria-label="출석체크"
+              >
+                <ClipboardCheckIcon />
+              </button>
+              <button
+                onClick={handleSearchClick}
+                className="size-[40px] flex items-center justify-center cursor-pointer hover:bg-n-10 rounded-full transition-colors"
+                aria-label="검색"
+              >
+                <SearchIcon />
+              </button>
             </div>
-          </div>
-        }
-        right={
-          <div className="flex items-center gap-[8px]">
-            <button
-              className="size-[40px] flex items-center justify-center"
-              aria-label="출석체크"
-            >
-              <ClipboardCheckIcon />
-            </button>
-            <button
-              className="size-[40px] flex items-center justify-center"
-              aria-label="검색"
-            >
-              <SearchIcon />
-            </button>
-          </div>
-        }
+          }
+        />
+      </div>
+
+      {/* 검색 오버레이 */}
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={handleSearchClose}
+        onSearch={handleSearch}
       />
-    </div>
+    </>
   );
 }

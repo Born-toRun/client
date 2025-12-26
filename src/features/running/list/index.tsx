@@ -122,7 +122,7 @@ export default function RunningContainer() {
     <>
       <div className="pb-[58px]">
         {/* 탭 */}
-        <div className="pt-[50px] mb-4">
+        <div className="pt-[56px] mb-4 relative z-10">
           <Tabs
             options={runningTabOptions}
             selectedTabs={selectedTab}
@@ -134,7 +134,7 @@ export default function RunningContainer() {
         {selectedTab === runningTabLabel.MARATHON && (
           <>
             {/* 필터 버튼 */}
-            <div className="flex gap-2 px-4 mb-4">
+            <div className="flex gap-2 px-4 mb-4 relative z-10">
               <FilterButton
                 label="지역"
                 selectedLabel={selectedRegionLabel}
