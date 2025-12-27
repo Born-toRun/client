@@ -9,7 +9,7 @@ export interface ActivityListParams {
 /**
  * 모집 상태 타입
  */
-export type RecruitmentType = "RECRUITING" | "FULL" | "COMPLETED" | "CLOSED";
+export type RecruitmentType = "RECRUITING" | "FULL" | "COMPLETED" | "CLOSED" | "ALREADY_PARTICIPATING";
 
 /**
  * 코스 타입

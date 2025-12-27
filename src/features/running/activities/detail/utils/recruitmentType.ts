@@ -16,7 +16,12 @@ import type { ActivityDetail, RecruitmentType } from "@/apis/activity/types";
  */
 export function getRecruitmentType(activity: ActivityDetail): RecruitmentType {
   // 백엔드가 recruitmentType을 반환하면 그것을 우선 사용
-  if (activity.recruitmentType) {
+  if (
+    activity.recruitmentType &&
+    ["RECRUITING", "FULL", "COMPLETED", "CLOSED", "ALREADY_PARTICIPATING"].includes(
+      activity.recruitmentType
+    )
+  ) {
     return activity.recruitmentType;
   }
 

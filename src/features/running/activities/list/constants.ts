@@ -28,6 +28,7 @@ export const RECRUITMENT_TYPE_COLORS = {
   FULL: "bg-n-60 text-white", // 정원마감 - 그레이
   COMPLETED: "bg-rg-300 text-white", // 예약완료 - 밝은 그린
   CLOSED: "bg-n-40 text-white", // 종료 - 연한 그레이
+  ALREADY_PARTICIPATING: "bg-rg-300 text-white", // 참여중 - 밝은 그린
 } as const;
 
 /**
@@ -38,4 +39,5 @@ export const RECRUITMENT_TYPE_LABELS = {
   FULL: "정원마감",
   COMPLETED: "예약완료",
   CLOSED: "종료",
+  ALREADY_PARTICIPATING: "참여중",
 } as const;

@@ -20,6 +20,7 @@ export function getRecruitmentTypeForList(activity: Activity): RecruitmentType {
     "FULL",
     "COMPLETED",
     "CLOSED",
+    "ALREADY_PARTICIPATING",
   ];
 
   // 백엔드가 유효한 recruitmentType을 반환하면 그것을 우선 사용
