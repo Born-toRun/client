@@ -8,9 +8,11 @@ import LoginBottomSheet from "@/components/LoginBottomSheet";
 import { useModal } from "@/features/hooks/useModal";
 import ActivityDetailHeader from "@/features/running/activities/detail/components/ActivityDetailHeader";
 import HostInfo from "@/features/running/activities/detail/components/HostInfo";
-import RecruitmentInfoCard from "@/features/running/activities/detail/components/RecruitmentInfoCard";
+import QuickInfoCard from "@/features/running/activities/detail/components/QuickInfoCard";
+import ImageCarousel from "@/features/running/activities/detail/components/ImageCarousel";
 import DetailInfoSection from "@/features/running/activities/detail/components/DetailInfoSection";
 import PrecautionsBox from "@/features/running/activities/detail/components/PrecautionsBox";
+import BottomCTA from "@/features/running/activities/detail/components/BottomCTA";
 import ParticipantsBottomSheet from "@/features/running/activities/detail/components/ParticipantsBottomSheet";
 import ActionSheet from "@/features/running/activities/detail/components/ActionSheet";
 import {
@@ -23,6 +25,7 @@ import {
   RECRUITMENT_TYPE_COLORS,
   RECRUITMENT_TYPE_LABELS,
 } from "@/features/running/activities/list/constants";
+import { getRecruitmentType } from "@/features/running/activities/detail/utils/recruitmentType";
 import { getDDay } from "@/utils/date";
 import { pageRoutes } from "@/constants/route";
 import { AxiosError } from "axios";
@@ -106,19 +109,6 @@ export default function ActivityDetailPage({ params }: Props) {
     router.push(pageRoutes.running.activities.edit(activityId));
   };
 
-  // 예약하기
-  const handleJoin = () => {
-    joinMutation.mutate(activityId, {
-      onError: (error) => {
-        const axiosError = error as AxiosError;
-        if (axiosError?.response?.status === 401) {
-          loginModal.open();
-        }
-      },
-    });
-  };
-
-
   if (isPending || !activity) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -127,11 +117,13 @@ export default function ActivityDetailPage({ params }: Props) {
     );
   }
 
+  // 모집 상태 계산 (백엔드 값이 없으면 클라이언트에서 계산)
+  const recruitmentType = getRecruitmentType(activity);
   const dDay = getDDay(activity.startAt);
   const badgeColor =
-    RECRUITMENT_TYPE_COLORS[activity.recruitmentType] || "bg-n-40 text-white";
+    RECRUITMENT_TYPE_COLORS[recruitmentType] || "bg-n-40 text-white";
   const recruitmentLabel =
-    RECRUITMENT_TYPE_LABELS[activity.recruitmentType] || "종료";
+    RECRUITMENT_TYPE_LABELS[recruitmentType] || "종료";
 
   return (
     <>
@@ -142,39 +134,52 @@ export default function ActivityDetailPage({ params }: Props) {
       />
 
       {/* 컨텐츠 */}
-      <div className="pt-14 pb-48">
-        {/* D-DAY + 모집 상태 */}
-        <div className="flex items-center gap-2 px-4 py-3">
-          {dDay && (
-            <span className="inline-block px-3 py-1 bg-n-900 text-white round-full label-sm">
-              {dDay}
+      <div className="pt-14 pb-32">
+        {/* 이미지 캐러셀 (모든 이미지 표시) */}
+        {activity.imageUrls && activity.imageUrls.length > 0 ? (
+          <ImageCarousel
+            imageUrls={activity.imageUrls}
+            activityTitle={activity.title}
+            dDay={dDay}
+            recruitmentLabel={recruitmentLabel}
+            badgeColor={badgeColor}
+          />
+        ) : (
+          /* 배지 (이미지가 없을 때만 표시) */
+          <div className="flex items-center gap-2 px-5 py-3">
+            {dDay && (
+              <span className="inline-block px-3 py-1 bg-n-900 text-white round-full label-sm">
+                {dDay}
+              </span>
+            )}
+            <span
+              className={`inline-block px-3 py-1 round-full label-sm ${badgeColor}`}
+            >
+              {recruitmentLabel}
             </span>
-          )}
-          <span
-            className={`inline-block px-3 py-1 round-full label-sm ${badgeColor}`}
-          >
-            {recruitmentLabel}
-          </span>
-        </div>
+          </div>
+        )}
 
         {/* 작성자 정보 */}
         <HostInfo host={activity.host} updatedAt={activity.updatedAt} />
 
         {/* 제목 */}
-        <div className="px-4 py-4">
-          <h1 className="title-xl text-n-900 mb-4">{activity.title}</h1>
+        <div className="px-5 py-4">
+          <h1 className="text-3xl font-bold text-n-900 leading-tight">{activity.title}</h1>
         </div>
 
         {/* 내용 */}
-        <div className="px-4 pb-4">
-          <p className="body-md text-n-700 whitespace-pre-wrap">
+        <div className="px-5 pb-6">
+          <p className="text-base text-n-700 leading-relaxed whitespace-pre-wrap">
             {activity.contents}
           </p>
         </div>
 
-        {/* 모집/회비 정보 */}
-        <div className="py-4">
-          <RecruitmentInfoCard
+        {/* Quick Info Card */}
+        <div className="py-8">
+          <QuickInfoCard
+            startAt={activity.startAt}
+            venue={activity.venue}
             participantsQty={activity.participantsQty}
             participantsLimit={activity.participantsLimit}
             entryFee={activity.entryFee}
@@ -182,8 +187,8 @@ export default function ActivityDetailPage({ params }: Props) {
           />
         </div>
 
-        {/* 상세 정보 */}
-        <div className="border-t border-n-30 py-4">
+        {/* 코스 정보 */}
+        <div className="border-t border-n-50">
           <DetailInfoSection
             startAt={activity.startAt}
             venue={activity.venue}
@@ -195,71 +200,27 @@ export default function ActivityDetailPage({ params }: Props) {
 
         {/* 유의사항 */}
         {activity.precautions && (
-          <div className="py-4">
+          <div className="py-8">
             <PrecautionsBox precautions={activity.precautions} />
           </div>
         )}
       </div>
 
       {/* 하단 고정 영역 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-n-30 p-4 z-40">
-        <div className="max-w-[786px] mx-auto">
-          {activity.isMyActivity ? (
-            // 작성자인 경우: 출석체크 UI
-            <div className="space-y-3">
-              <p className="body-sm text-n-700">
-                모임에 모두 참석 하셨나요? 최종 인원과 금액을 확인하고 출석체크를 해주세요.
-              </p>
-
-              <Button
-                text="출석체크"
-                variants="primary"
-                size="lg"
-                tone="green"
-                onClick={() => {
-                  router.push(pageRoutes.running.activities.attendance(activityId));
-                }}
-              />
-            </div>
-          ) : (
-            // 작성자가 아닌 경우: 예약 버튼 또는 출석체크 버튼
-            <>
-              {activity.isParticipating ? (
-                // 참여 중인 경우
-                <div className="space-y-3">
-                  <p className="body-sm text-n-700">
-                    모임에 참석 하셨나요? 모임장에게 코드를 받은 뒤 출석체크를 해주세요.
-                  </p>
-                  <Button
-                    text="출석체크"
-                    variants="primary"
-                    size="lg"
-                    tone="green"
-                    onClick={() => {
-                      router.push(pageRoutes.running.activities.attendance(activityId));
-                    }}
-                  />
-                </div>
-              ) : (
-                // 미참여인 경우: 예약하기 버튼
-                <Button
-                  text="예약하기"
-                  variants="primary"
-                  size="lg"
-                  tone="green"
-                  onClick={handleJoin}
-                  disabled={
-                    joinMutation.isPending ||
-                    activity.recruitmentType === "FULL" ||
-                    activity.recruitmentType === "CLOSED"
-                  }
-                  loading={joinMutation.isPending}
-                />
-              )}
-            </>
-          )}
-        </div>
-      </div>
+      <BottomCTA
+        isMyActivity={activity.isMyActivity}
+        isParticipating={activity.isParticipating}
+        participantsQty={activity.participantsQty}
+        host={participantsData?.host}
+        participants={participantsData?.participants}
+        joinMutation={joinMutation}
+        recruitmentType={recruitmentType}
+        activityId={activityId}
+        onParticipantsClick={participantsSheet.open}
+        onAttendanceClick={() => {
+          router.push(pageRoutes.running.activities.attendance(activityId));
+        }}
+      />
 
       {/* 참여자 바텀시트 */}
       {participantsData && (

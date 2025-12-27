@@ -11,6 +11,7 @@ import {
   RECRUITMENT_TYPE_LABELS,
 } from "../constants";
 import ActivityImages from "./ActivityImages";
+import { getRecruitmentTypeForList } from "../utils/recruitmentType";
 
 interface Props {
   activity: Activity;
@@ -30,14 +31,16 @@ export default function ActivityCard({ activity }: Props) {
     }
   );
 
+  // 모집 상태 계산 (백엔드 값이 없거나 예상치 못한 값이면 클라이언트에서 계산)
+  const recruitmentType = getRecruitmentTypeForList(activity);
+
   // 모집 상태별 색상
   const badgeColor =
-    RECRUITMENT_TYPE_COLORS[activity.recruitmentType] ||
-    "bg-n-40 text-white";
+    RECRUITMENT_TYPE_COLORS[recruitmentType] || "bg-n-40 text-white";
 
   // 모집 상태 라벨
   const recruitmentLabel =
-    RECRUITMENT_TYPE_LABELS[activity.recruitmentType] || "종료";
+    RECRUITMENT_TYPE_LABELS[recruitmentType] || "종료";
 
   return (
     <Link href={pageRoutes.running.activities.detail(activity.id)}>

@@ -44,7 +44,7 @@ export interface Host {
   userId: number;
   userName: string;
   crewName?: string;
-  profileImageUrl?: string;
+  profileImageUri?: string;
 }
 
 /**
@@ -54,7 +54,7 @@ export interface Participant {
   userId: number;
   userName: string;
   crewName?: string;
-  profileImageUrl?: string;
+  profileImageUri?: string;
 }
 
 /**
@@ -72,7 +72,7 @@ export interface ActivityDetail {
   participantsLimit: number;
   participantsQty: number;
   entryFee?: number; // 회비
-  recruitmentType: RecruitmentType;
+  recruitmentType?: RecruitmentType; // 백엔드가 반환하지 않을 수 있음 (클라이언트에서 계산)
   precautions?: string; // 유의사항
   host: Host;
   updatedAt: string; // ISO 8601 날짜
@@ -82,6 +82,7 @@ export interface ActivityDetail {
   attendanceCode?: string; // 출석 코드 (작성자만)
   attendanceExpiresAt?: string; // 출석 코드 만료 시간
   isAttended?: boolean; // 출석 완료 여부
+  imageUrls: string[]; // 모임 이미지 URL 목록
 }
 
 /**

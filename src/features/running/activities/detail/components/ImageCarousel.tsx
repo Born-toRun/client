@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useState } from "react";
 
 // Swiper CSS
 import "swiper/css";
@@ -12,49 +12,70 @@ import "swiper/css/pagination";
 interface Props {
   imageUrls: string[];
   activityTitle: string;
+  dDay?: string;
+  recruitmentLabel: string;
+  badgeColor: string;
 }
 
 /**
- * 모임 카드 이미지 컴포넌트
+ * 모임 상세페이지 이미지 캐러셀 컴포넌트
  *
  * 특징:
  * - Swiper를 사용한 스와이프 가능한 이미지 슬라이더
- * - 페이지네이션 인디케이터 표시 (이미지가 2개 이상일 때)
- * - Next.js Image 컴포넌트로 최적화
- * - Lazy loading 자동 적용
- * - 이미지 로드 실패 시 graceful fallback
+ * - 페이지네이션 인디케이터 표시
+ * - D-DAY 및 모집 상태 배지 오버레이
+ * - 이미지 로드 실패 시 fallback 처리
  */
-export default function ActivityImages({ imageUrls, activityTitle }: Props) {
-  // 이미지가 없으면 렌더링하지 않음
+export default function ImageCarousel({
+  imageUrls,
+  activityTitle,
+  dDay,
+  recruitmentLabel,
+  badgeColor,
+}: Props) {
   if (!imageUrls || imageUrls.length === 0) {
     return null;
   }
 
   return (
-    <div className="relative w-full mb-3">
+    <div className="relative w-full">
       <Swiper
         modules={[Pagination]}
         spaceBetween={0}
         slidesPerView={1}
         pagination={{
           clickable: true,
-          bulletClass: "swiper-pagination-bullet !bg-n-300",
-          bulletActiveClass: "swiper-pagination-bullet-active !bg-rg-400",
+          bulletClass: "swiper-pagination-bullet !bg-white/80",
+          bulletActiveClass: "swiper-pagination-bullet-active !bg-white",
         }}
-        className="w-full aspect-[16/9] rounded-lg overflow-hidden"
+        className="w-full aspect-[4/3]"
       >
         {imageUrls.map((url, index) => (
           <SwiperSlide key={index}>
             <div className="relative w-full h-full bg-n-30">
-              <ActivityImage
+              <CarouselImage
                 src={url}
                 alt={`${activityTitle} 이미지 ${index + 1}`}
-                priority={false}
+                priority={index === 0}
               />
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* 배지 오버레이 */}
+      <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+        {dDay && (
+          <span className="inline-block px-3 py-1.5 bg-black/70 backdrop-blur-md text-white rounded-full text-xs font-semibold shadow-lg">
+            {dDay}
+          </span>
+        )}
+        <span
+          className={`inline-block px-3 py-1.5 backdrop-blur-md rounded-full text-xs font-semibold shadow-lg ${badgeColor}`}
+        >
+          {recruitmentLabel}
+        </span>
+      </div>
     </div>
   );
 }
@@ -62,7 +83,7 @@ export default function ActivityImages({ imageUrls, activityTitle }: Props) {
 /**
  * 개별 이미지 컴포넌트 (에러 처리 포함)
  */
-function ActivityImage({
+function CarouselImage({
   src,
   alt,
   priority,
@@ -77,7 +98,7 @@ function ActivityImage({
   if (error) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-n-30">
-        <span className="text-n-60 body-sm">이미지 없음</span>
+        <span className="text-n-60 body-sm">이미지를 불러올 수 없습니다</span>
       </div>
     );
   }
@@ -88,7 +109,7 @@ function ActivityImage({
       alt={alt}
       fill
       className="object-contain"
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      sizes="(max-width: 768px) 100vw, 786px"
       priority={priority}
       onError={() => setError(true)}
     />

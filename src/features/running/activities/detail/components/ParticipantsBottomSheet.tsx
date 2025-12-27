@@ -14,7 +14,7 @@ interface Props {
   open: boolean;
   onOpenChange: () => void;
   host: Host;
-  participants: Participant[];
+  participants?: Participant[];
 }
 
 /**
@@ -24,9 +24,13 @@ export default function ParticipantsBottomSheet({
   open,
   onOpenChange,
   host,
-  participants,
+  participants = [],
 }: Props) {
-  const totalCount = participants.length + 1; // 호스트 포함
+  // 호스트가 participants 배열에 중복으로 포함되어 있을 수 있으므로 필터링
+  const participantsWithoutHost = participants.filter(
+    (p) => p.userId !== host.userId
+  );
+  const totalCount = participantsWithoutHost.length + 1; // 호스트 포함
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -66,8 +70,8 @@ export default function ParticipantsBottomSheet({
               isHost
             />
 
-            {/* 참여자들 */}
-            {participants.map((participant) => (
+            {/* 참여자들 (호스트 제외) */}
+            {participantsWithoutHost.map((participant) => (
               <ParticipantItem
                 key={participant.userId}
                 user={participant}
@@ -94,9 +98,9 @@ function ParticipantItem({
     <div className="flex items-center gap-3 p-3 bg-white round-sm border border-n-30">
       {/* 프로필 이미지 */}
       <div className="relative size-12 round-full overflow-hidden bg-n-30 flex-shrink-0">
-        {user.profileImageUrl ? (
+        {user.profileImageUri ? (
           <Image
-            src={user.profileImageUrl}
+            src={user.profileImageUri}
             alt={user.userName}
             fill
             className="object-cover"
