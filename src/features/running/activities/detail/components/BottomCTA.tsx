@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Button from "@/components/Button";
-import { Users } from "lucide-react";
 import { Participant, Host, RecruitmentType } from "@/apis/activity/types";
 
 interface Props {
