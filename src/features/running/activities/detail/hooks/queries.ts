@@ -17,6 +17,8 @@ export const useGetActivityDetailQuery = (activityId: number) => {
   return useQuery({
     queryKey: [apiRoutes.activities.detail(activityId)],
     queryFn: () => getActivityDetail(activityId),
+    staleTime: 0, // 데이터를 즉시 stale로 표시
+    refetchOnMount: "always", // 페이지 재진입 시 항상 재조회
   });
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import {
   useUploadFileMutation,
@@ -11,12 +11,14 @@ interface ImageUploadProps {
   value: number[]; // Array of uploaded image IDs
   onChange: (imageIds: number[]) => void;
   error?: string;
+  initialImageUrls?: string[]; // 수정 모드에서 기존 이미지 URL 배열
 }
 
 interface UploadedImage {
   fileId: number;
   fileUri: string;
   isUploading?: boolean;
+  isExisting?: boolean; // 기존 이미지 여부 (수정 모드)
 }
 
 const MAX_IMAGES = 5;
@@ -28,8 +30,9 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
  * - 최대 5장까지 업로드 가능
  * - 각 이미지는 선택 즉시 서버에 업로드
  * - 이미지 미리보기 및 삭제 기능 제공
+ * - 수정 모드에서 기존 이미지 표시 지원
  */
-export default function ImageUpload({ value, onChange, error }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, error, initialImageUrls = [] }: ImageUploadProps) {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [uploadError, setUploadError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,9 +41,17 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
   const uploadImageFile = useUploadFileMutation();
   const deleteImageFile = useDeleteFileMutation();
 
-  // value 변경 시 uploadedImages 동기화
-  // 초기 데이터가 있을 경우 처리 (수정 모드)
-  // TODO: 수정 모드에서 기존 이미지 표시 로직 추가 필요
+  // 수정 모드: 초기 이미지 URL을 uploadedImages에 로드 (최초 1회만)
+  useEffect(() => {
+    if (initialImageUrls.length > 0) {
+      const existingImages: UploadedImage[] = initialImageUrls.map((url, index) => ({
+        fileId: -(index + 1), // 기존 이미지는 음수 ID 사용하여 구분
+        fileUri: url,
+        isExisting: true,
+      }));
+      setUploadedImages(existingImages);
+    }
+  }, []); // 빈 의존성 배열로 마운트 시 1회만 실행
 
   /**
    * 파일 선택 핸들러
@@ -115,10 +126,20 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
 
   /**
    * 이미지 삭제 핸들러
+   * 기존 이미지(음수 ID)는 로컬에서만 제거
+   * 새로 업로드한 이미지는 서버에서도 삭제
    */
   const handleRemoveImage = async (fileId: number) => {
     try {
-      // 백엔드에서 이미지 삭제 - React Query mutation 사용
+      // 기존 이미지(음수 ID)는 서버 삭제 없이 로컬에서만 제거
+      if (fileId < 0) {
+        // 상태에서 이미지 제거
+        setUploadedImages((prev) => prev.filter((img) => img.fileId !== fileId));
+        setUploadError("");
+        return;
+      }
+
+      // 새로 업로드한 이미지는 백엔드에서 삭제
       await deleteImageFile.mutateAsync({
         bucket: "ACTIVITY",
         fileId,

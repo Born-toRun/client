@@ -5,7 +5,7 @@ import { Users, DollarSign } from "lucide-react";
 interface Props {
   participantsQty: number;
   participantsLimit: number;
-  entryFee?: number;
+  participationFee?: number;
   onParticipantsClick: () => void;
 }
 
@@ -15,7 +15,7 @@ interface Props {
 export default function RecruitmentInfoCard({
   participantsQty,
   participantsLimit,
-  entryFee,
+  participationFee,
   onParticipantsClick,
 }: Props) {
   return (
@@ -36,15 +36,15 @@ export default function RecruitmentInfoCard({
         </button>
 
         {/* 회비 */}
-        {entryFee !== undefined && (
+        {participationFee !== undefined && (
           <div className="flex items-center gap-2">
             <DollarSign size={20} className="text-n-500" />
             <div className="flex flex-col items-start">
               <span className="body-sm text-n-500">회비</span>
               <span className="label-md text-n-900">
-                {entryFee === 0
+                {participationFee === 0
                   ? "무료"
-                  : `${entryFee.toLocaleString()}원`}
+                  : `${participationFee.toLocaleString()}원`}
               </span>
             </div>
           </div>

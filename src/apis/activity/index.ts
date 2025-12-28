@@ -1,15 +1,15 @@
 import { runApi } from "@/client/runClient";
 import { apiRoutes } from "@/constants/route";
 import type {
+  ActivityDetail,
   ActivityListParams,
   ActivityListResponse,
-  ActivityDetail,
-  ParticipantsResponse,
-  ParticipationResponse,
   CreateActivityRequest,
   CreateActivityResponse,
-  UpdateActivityRequest,
   OpenActivityResponse,
+  ParticipantsResponse,
+  ParticipationResponse,
+  UpdateActivityRequest,
 } from "./types";
 
 /**
@@ -59,6 +59,7 @@ export const getActivityDetail = async (
   const response = await runApi.get<ActivityDetail>(
     apiRoutes.activities.detail(activityId)
   );
+
   return response.data;
 };
 

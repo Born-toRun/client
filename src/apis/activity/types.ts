@@ -68,10 +68,11 @@ export interface ActivityDetail {
   venue: string; // 장소
   venueUrl?: string; // 장소 URL (지도 링크 등)
   course: CourseType;
-  routeImageUrl?: string; // 경로 이미지 URL
+  path?: string; // 경로 (백엔드 필드명과 일치)
   participantsLimit: number;
   participantsQty: number;
-  entryFee?: number; // 회비
+  participationFee?: number; // 회비 (백엔드 필드명과 일치)
+  courseDetail?: string; // 코스 설명
   recruitmentType?: RecruitmentType; // 백엔드가 반환하지 않을 수 있음 (클라이언트에서 계산)
   precautions?: string; // 유의사항
   host: Host;
@@ -79,7 +80,7 @@ export interface ActivityDetail {
   isMyActivity: boolean; // 작성자 여부
   isParticipating: boolean; // 참여 여부
   isOpen?: boolean; // 출석 코드 활성화 여부
-  attendanceCode?: string; // 출석 코드 (작성자만)
+  attendanceCode?: number; // 출석 코드 (작성자만) - 백엔드는 number로 반환
   attendanceExpiresAt?: string; // 출석 코드 만료 시간
   isAttended?: boolean; // 출석 완료 여부
   imageUrls: string[]; // 모임 이미지 URL 목록
@@ -145,7 +146,7 @@ export interface CreateActivityResponse {
  * 출석 코드 생성 응답
  */
 export interface OpenActivityResponse {
-  code: string; // 4자리 코드
+  attendanceCode: number; // 4자리 코드
   expiresAt: string; // 만료 시간
 }
 

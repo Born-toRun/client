@@ -182,7 +182,7 @@ export default function ActivityDetailPage({ params }: Props) {
             venue={activity.venue}
             participantsQty={activity.participantsQty}
             participantsLimit={activity.participantsLimit}
-            entryFee={activity.entryFee}
+            participationFee={activity.participationFee}
             onParticipantsClick={participantsSheet.open}
           />
         </div>
@@ -194,7 +194,8 @@ export default function ActivityDetailPage({ params }: Props) {
             venue={activity.venue}
             venueUrl={activity.venueUrl}
             course={activity.course}
-            routeImageUrl={activity.routeImageUrl}
+            courseDetail={activity.courseDetail}
+            path={activity.path}
           />
         </div>
 

@@ -3,14 +3,15 @@
 import { use, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Button from "@/components/Button";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
 import { useModal } from "@/features/hooks/useModal";
 import { useGetActivityDetailQuery } from "@/features/running/activities/detail/hooks/queries";
-import { openActivity, checkAttendance } from "@/apis/activity";
+import { openActivity, checkAttendance, getParticipants } from "@/apis/activity";
+import { apiRoutes } from "@/constants/route";
 
 interface Props {
   params: Promise<{ activityId: string }>;
@@ -31,8 +32,18 @@ export default function AttendancePage({ params }: Props) {
   const successModal = useModal();
   const failureModal = useModal();
 
+  // 탭 상태 ('code' | 'status')
+  const [activeTab, setActiveTab] = useState<"code" | "status">("code");
+
   // 쿼리
-  const { data: activity, isPending } = useGetActivityDetailQuery(activityId);
+  const { data: activity, isPending, isSuccess, isFetching, dataUpdatedAt } = useGetActivityDetailQuery(activityId);
+
+  // 참여자 목록 쿼리 (출석 현황 탭에서 사용)
+  const { data: participantsData, isLoading: isParticipantsLoading } = useQuery({
+    queryKey: [apiRoutes.activities.participants(activityId)],
+    queryFn: () => getParticipants(activityId),
+    enabled: activeTab === "status", // 출석 현황 탭일 때만 조회
+  });
 
   // 출석 코드 상태
   const [attendanceCode, setAttendanceCode] = useState<string>("");
@@ -47,10 +58,14 @@ export default function AttendancePage({ params }: Props) {
   const openMutation = useMutation({
     mutationFn: () => openActivity(activityId),
     onSuccess: (data) => {
-      setAttendanceCode(data.code);
+      // 출석 코드를 항상 4자리로 패딩
+      const paddedCode = String(data.attendanceCode).padStart(4, "0");
+      setAttendanceCode(paddedCode);
       setExpiresAt(data.expiresAt);
-      // 모임 상세 정보 다시 조회
-      queryClient.invalidateQueries({ queryKey: ["activity", activityId] });
+
+      // 모임 상세 정보 다시 조회 - refetchQueries로 즉시 강제 재조회
+      const queryKey = [apiRoutes.activities.detail(activityId)];
+      queryClient.refetchQueries({ queryKey });
     },
     onError: (error) => {
       const axiosError = error as AxiosError;
@@ -65,7 +80,8 @@ export default function AttendancePage({ params }: Props) {
     mutationFn: (code: string) => checkAttendance(activityId, code),
     onSuccess: () => {
       successModal.open();
-      queryClient.invalidateQueries({ queryKey: ["activity", activityId] });
+      const queryKey = [apiRoutes.activities.detail(activityId)];
+      queryClient.refetchQueries({ queryKey });
     },
     onError: (error) => {
       const axiosError = error as AxiosError;
@@ -77,15 +93,44 @@ export default function AttendancePage({ params }: Props) {
     },
   });
 
+  // 페이지 로드 시 기존 출석 코드 복원
+  useEffect(() => {
+    // attendanceCode가 존재하고 isOpen이 true일 때만 복원
+    if (activity?.attendanceCode && activity?.isOpen) {
+      // 출석 코드를 항상 4자리로 패딩 (number를 string으로 변환)
+      const paddedCode = String(activity.attendanceCode).padStart(4, "0");
+
+      setAttendanceCode(paddedCode);
+      setExpiresAt(activity.attendanceExpiresAt || null);
+    }
+  }, [activity]);
+
   // 타이머 계산
   useEffect(() => {
     if (!expiresAt) return;
 
-    const interval = setInterval(() => {
+    // 남은 시간을 계산하는 함수
+    const calculateTimeRemaining = () => {
       const now = new Date().getTime();
       const expiry = new Date(expiresAt).getTime();
       const diff = Math.max(0, expiry - now);
-      setTimeRemaining(Math.floor(diff / 1000));
+      const seconds = Math.floor(diff / 1000);
+
+      return { seconds, diff };
+    };
+
+    // 즉시 실행하여 초기값 설정
+    const { seconds: initialSeconds, diff: initialDiff } = calculateTimeRemaining();
+    setTimeRemaining(initialSeconds);
+
+    if (initialDiff <= 0) {
+      return;
+    }
+
+    // 1초마다 업데이트
+    const interval = setInterval(() => {
+      const { seconds, diff } = calculateTimeRemaining();
+      setTimeRemaining(seconds);
 
       if (diff <= 0) {
         clearInterval(interval);
@@ -98,9 +143,18 @@ export default function AttendancePage({ params }: Props) {
   // 활성화 조건 체크: startAt 10분 전부터
   const canActivate = () => {
     if (!activity?.startAt) return false;
-    const now = new Date().getTime();
-    const startTime = new Date(activity.startAt).getTime();
-    const tenMinutesBefore = startTime - 10 * 60 * 1000;
+    const now = new Date();
+
+    // ISO 8601 형식에서 시간대 정보가 없는 경우 로컬 시간으로 처리
+    // "2025-12-28T11:13:00" 형식을 로컬 시간으로 파싱하기 위해 'T'를 ' '로 변경
+    // 이렇게 하면 브라우저가 로컬 시간으로 해석함
+    const startTimeString = activity.startAt.includes("Z") || activity.startAt.includes("+") || activity.startAt.includes("-")
+      ? activity.startAt // 이미 시간대 정보가 있으면 그대로 사용
+      : activity.startAt.replace("T", " "); // 없으면 로컬 시간으로 파싱되도록 변경
+
+    const startTime = new Date(startTimeString);
+    const tenMinutesBefore = new Date(startTime.getTime() - 10 * 60 * 1000);
+
     return now >= tenMinutesBefore;
   };
 
@@ -161,7 +215,7 @@ export default function AttendancePage({ params }: Props) {
             <ArrowLeft size={24} />
           </button>
           <h1 className="title-lg text-black absolute left-1/2 transform -translate-x-1/2">
-            출석 체크
+            {activity?.isMyActivity ? "출석 코드" : "출석 체크"}
           </h1>
           <div />
         </div>
@@ -172,27 +226,55 @@ export default function AttendancePage({ params }: Props) {
         <div className="max-w-[786px] mx-auto">
           {/* Tabs */}
           <div className="flex border-b border-n-30 mb-6">
-            <div className="flex-1 py-4 text-center border-b-2 border-rg-400">
-              <span className="label-lg text-rg-400">출석 코드</span>
-            </div>
-            <div className="flex-1 py-4 text-center">
-              <span className="label-lg text-n-300">출석 현황</span>
-            </div>
+            <button
+              onClick={() => setActiveTab("code")}
+              className={`flex-1 py-4 text-center border-b-2 transition-colors cursor-pointer ${
+                activeTab === "code"
+                  ? "border-rg-400"
+                  : "border-transparent hover:bg-n-10"
+              }`}
+            >
+              <span
+                className={`label-lg ${
+                  activeTab === "code" ? "text-rg-400" : "text-n-300"
+                }`}
+              >
+                출석 코드
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab("status")}
+              className={`flex-1 py-4 text-center border-b-2 transition-colors cursor-pointer ${
+                activeTab === "status"
+                  ? "border-rg-400"
+                  : "border-transparent hover:bg-n-10"
+              }`}
+            >
+              <span
+                className={`label-lg ${
+                  activeTab === "status" ? "text-rg-400" : "text-n-300"
+                }`}
+              >
+                출석 현황
+              </span>
+            </button>
           </div>
 
-          {activity.isMyActivity ? (
-            // 작성자 UI
-            <div className="space-y-6">
-              {/* 안내 문구 */}
-              <div className="bg-n-10 p-4 round-sm">
-                <h2 className="title-md text-n-900 mb-3">모임장 출석 체크리스트</h2>
-                <ol className="space-y-2 body-sm text-n-700">
-                  <li>1. 참여자가 현장에 참석했는지 확인해주세요.</li>
-                  <li>2. 회비를 제출했는지 확인해주세요.</li>
-                  <li>3. 위 사항을 모두 확인한 뒤 출석을 체크해주세요!</li>
-                  <li>4. 예약자가 출석 코드를 입력하면 참석완료 되어요!</li>
-                </ol>
-              </div>
+          {activeTab === "code" ? (
+            // 출석 코드 탭
+            activity.isMyActivity ? (
+              // 작성자 UI
+              <div className="space-y-6">
+                {/* 안내 문구 */}
+                <div className="bg-n-10 p-4 round-sm">
+                  <h2 className="title-md text-n-900 mb-3">모임장 출석 체크리스트</h2>
+                  <ol className="space-y-2 body-sm text-n-700">
+                    <li>1. 참여자가 현장에 참석했는지 확인해주세요.</li>
+                    <li>2. 회비를 제출했는지 확인해주세요.</li>
+                    <li>3. 위 사항을 모두 확인한 뒤 출석을 체크해주세요!</li>
+                    <li>4. 예약자가 출석 코드를 입력하면 참석완료 되어요!</li>
+                  </ol>
+                </div>
 
               {/* 통계 정보 */}
               <div className="flex items-center gap-4 p-4 bg-n-10 round-sm">
@@ -203,7 +285,7 @@ export default function AttendancePage({ params }: Props) {
                 <div className="flex items-center gap-2">
                   <span className="body-md text-n-700">총 참가비</span>
                   <span className="title-md text-rg-400">
-                    {((activity.entryFee ?? 0) * activity.participantsQty).toLocaleString()}원
+                    {((activity.participationFee ?? 0) * activity.participantsQty).toLocaleString()}원
                   </span>
                 </div>
               </div>
@@ -358,6 +440,124 @@ export default function AttendancePage({ params }: Props) {
                   loading={attendanceMutation.isPending}
                 />
               </div>
+            </div>
+          )
+        ) : (
+            // 출석 현황 탭
+            <div className="space-y-6">
+              {isParticipantsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-n-500 body-md">로딩 중...</div>
+                </div>
+              ) : participantsData ? (
+                <>
+                  {/* 통계 정보 */}
+                  <div className="bg-n-10 p-4 round-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="body-sm text-n-500 mb-1">총 예약 인원</p>
+                        <p className="title-lg text-n-900">
+                          {(participantsData.participants?.length ?? 0) + 1}명
+                        </p>
+                      </div>
+                      {activity.isMyActivity && (
+                        <div>
+                          <p className="body-sm text-n-500 mb-1">총 참가비</p>
+                          <p className="title-lg text-rg-400">
+                            {((activity.participationFee ?? 0) * ((participantsData.participants?.length ?? 0) + 1)).toLocaleString()}원
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 모임장 */}
+                  <div>
+                    <h3 className="title-md text-n-900 mb-3">모임장</h3>
+                    <div className="flex items-center gap-3 p-4 bg-n-10 round-sm">
+                      <div className="w-12 h-12 round-full bg-n-100 overflow-hidden flex-shrink-0">
+                        {participantsData.host.profileImageUri ? (
+                          <img
+                            src={participantsData.host.profileImageUri}
+                            alt={participantsData.host.userName}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-n-500 title-md">
+                            {participantsData.host.userName.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="body-md text-n-900 font-semibold">
+                          {participantsData.host.userName}
+                        </p>
+                        {participantsData.host.crewName && (
+                          <p className="body-sm text-n-500">
+                            {participantsData.host.crewName}
+                          </p>
+                        )}
+                      </div>
+                      {activity.isOpen && (
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 round-full bg-rg-400" />
+                          <span className="body-sm text-rg-400 font-semibold">참석</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 참여자 목록 */}
+                  <div>
+                    <h3 className="title-md text-n-900 mb-3">
+                      참여자 ({participantsData.participants?.length ?? 0}명)
+                    </h3>
+                    {(participantsData.participants?.length ?? 0) > 0 ? (
+                      <div className="space-y-2">
+                        {participantsData.participants?.map((participant) => (
+                          <div
+                            key={participant.userId}
+                            className="flex items-center gap-3 p-4 bg-n-10 round-sm"
+                          >
+                            <div className="w-12 h-12 round-full bg-n-100 overflow-hidden flex-shrink-0">
+                              {participant.profileImageUri ? (
+                                <img
+                                  src={participant.profileImageUri}
+                                  alt={participant.userName}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-n-500 title-md">
+                                  {participant.userName.charAt(0)}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <p className="body-md text-n-900 font-semibold">
+                                {participant.userName}
+                              </p>
+                              {participant.crewName && (
+                                <p className="body-sm text-n-500">
+                                  {participant.crewName}
+                                </p>
+                              )}
+                            </div>
+                            {/* 출석 여부는 현재 API에서 제공하지 않으므로 생략 */}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="body-md text-n-500">아직 참여자가 없어요</p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="body-md text-n-500">참여자 정보를 불러올 수 없어요</p>
+                </div>
+              )}
             </div>
           )}
         </div>

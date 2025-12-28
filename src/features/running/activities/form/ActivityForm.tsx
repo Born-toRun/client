@@ -53,6 +53,7 @@ export default function ActivityForm({
                   value={field.value}
                   onChange={field.onChange}
                   error={errors.imageIds?.message}
+                  initialImageUrls={initialData?.imageUrls}
                 />
               )}
             />

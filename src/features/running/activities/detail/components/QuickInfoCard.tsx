@@ -9,7 +9,7 @@ interface Props {
   venue: string;
   participantsQty: number;
   participantsLimit: number;
-  entryFee?: number;
+  participationFee?: number;
   onParticipantsClick: () => void;
 }
 
@@ -23,7 +23,7 @@ export default function QuickInfoCard({
   venue,
   participantsQty,
   participantsLimit,
-  entryFee,
+  participationFee,
   onParticipantsClick,
 }: Props) {
   const formattedDate = format(
@@ -75,11 +75,11 @@ export default function QuickInfoCard({
       </button>
 
       {/* 회비 */}
-      {entryFee !== undefined && (
+      {participationFee !== undefined && (
         <InfoRow
           icon={<DollarSign size={18} className="text-white" />}
           label="회비"
-          value={entryFee === 0 ? "무료" : `${entryFee.toLocaleString()}원`}
+          value={participationFee === 0 ? "무료" : `${participationFee.toLocaleString()}원`}
           iconBgColor="bg-rg-400"
         />
       )}

@@ -33,17 +33,17 @@ export const useActivityForm = ({
       const formattedStartAt = format(startAtDate, "yyyy-MM-dd'T'HH:mm");
 
       return {
-        imageIds: [], // TODO: 수정 모드에서 기존 이미지 ID 로드 로직 필요
+        imageIds: [], // 수정 모드에서는 기존 이미지를 ImageUpload의 initialImageUrls로 전달하고, 새로 업로드한 이미지만 imageIds로 관리
         title: initialData.title,
         contents: initialData.contents,
         startAt: formattedStartAt,
         venue: initialData.venue,
         venueUrl: initialData.venueUrl || "",
         participantsLimit: initialData.participantsLimit,
-        participationFee: initialData.entryFee || 0,
+        participationFee: initialData.participationFee || 0,
         course: initialData.course,
-        courseDetail: "",
-        path: initialData.routeImageUrl || "",
+        courseDetail: initialData.courseDetail || "",
+        path: initialData.path || "",
       };
     }
 
@@ -71,9 +71,7 @@ export const useActivityForm = ({
   // 폼 제출 핸들러
   const onSubmit = async (data: ActivityFormData) => {
     try {
-      // datetime-local 형식을 ISO 8601로 변환
-      const startAtDate = new Date(data.startAt);
-      const isoStartAt = startAtDate.toISOString();
+      const isoStartAt = data.startAt + ":00";
 
       const requestData = {
         imageIds: data.imageIds.length > 0 ? data.imageIds : undefined,
