@@ -19,8 +19,6 @@ export const LOGIN_BOTTOM_SHEET_EVENT = "show-login-bottom-sheet";
  */
 export function showLoginModal() {
   if (typeof window === "undefined") return;
-
-  console.log("로그인 확인 모달 표시 이벤트 발생");
   window.dispatchEvent(new CustomEvent(LOGIN_MODAL_EVENT));
 }
 
@@ -33,8 +31,6 @@ export function showLoginModal() {
  */
 export function showLoginBottomSheet() {
   if (typeof window === "undefined") return;
-
-  console.log("LoginBottomSheet 표시 이벤트 발생 (레거시)");
   window.dispatchEvent(new CustomEvent(LOGIN_BOTTOM_SHEET_EVENT));
 }
 

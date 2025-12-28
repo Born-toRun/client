@@ -36,7 +36,7 @@ export default function AttendancePage({ params }: Props) {
   const [activeTab, setActiveTab] = useState<"code" | "status">("code");
 
   // 쿼리
-  const { data: activity, isPending, isSuccess, isFetching, dataUpdatedAt } = useGetActivityDetailQuery(activityId);
+  const { data: activity, isPending } = useGetActivityDetailQuery(activityId);
 
   // 참여자 목록 쿼리 (출석 현황 탭에서 사용)
   const { data: participantsData, isLoading: isParticipantsLoading } = useQuery({
@@ -157,6 +157,9 @@ export default function AttendancePage({ params }: Props) {
 
     return now >= tenMinutesBefore;
   };
+
+  // 출석 코드 만료 상태 체크
+  const isCodeExpired = activity?.isOpen && !activity?.attendanceCode;
 
   // 시간 포맷 (MM:SS)
   const formatTime = (seconds: number): string => {
@@ -297,58 +300,81 @@ export default function AttendancePage({ params }: Props) {
                   아래 코드를 현장에서 구두로 알려주세요. 예약자가 코드를 입력하면 출석이 완료되어요.
                 </p>
 
-                {/* 코드 표시 영역 */}
-                <div className="flex items-center justify-center gap-3 py-8">
-                  {attendanceCode ? (
-                    <>
-                      {attendanceCode.split("").map((digit, index) => (
-                        <div
-                          key={index}
-                          className="w-16 h-20 flex items-center justify-center bg-rg-50 border-2 border-rg-400 round-sm"
-                        >
-                          <span className="text-4xl font-bold text-rg-400">{digit}</span>
-                        </div>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {[0, 1, 2, 3].map((index) => (
-                        <div
-                          key={index}
-                          className="w-16 h-20 flex items-center justify-center bg-n-20 border-2 border-n-40 round-sm"
-                        >
-                          <span className="text-4xl font-bold text-n-300">-</span>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
+                {isCodeExpired ? (
+                  // 코드 만료 상태
+                  <>
+                    <div className="text-center py-8">
+                      <p className="body-md text-n-700 mb-2">출석 코드가 만료되었습니다</p>
+                      <p className="body-sm text-n-500 mb-4">
+                        새로운 코드를 생성하여 참여자들에게 알려주세요
+                      </p>
+                    </div>
+                    <Button
+                      text="새 출석 코드 생성"
+                      variants="primary"
+                      size="lg"
+                      tone="green"
+                      onClick={() => openMutation.mutate()}
+                      disabled={openMutation.isPending}
+                      loading={openMutation.isPending}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* 코드 표시 영역 */}
+                    <div className="flex items-center justify-center gap-3 py-8">
+                      {attendanceCode ? (
+                        <>
+                          {attendanceCode.split("").map((digit, index) => (
+                            <div
+                              key={index}
+                              className="w-16 h-20 flex items-center justify-center bg-rg-50 border-2 border-rg-400 round-sm"
+                            >
+                              <span className="text-4xl font-bold text-rg-400">{digit}</span>
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {[0, 1, 2, 3].map((index) => (
+                            <div
+                              key={index}
+                              className="w-16 h-20 flex items-center justify-center bg-n-20 border-2 border-n-40 round-sm"
+                            >
+                              <span className="text-4xl font-bold text-n-300">-</span>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </div>
 
-                {/* 남은 시간 */}
-                {attendanceCode && (
-                  <div className="text-center">
-                    <p className="body-sm text-n-500 mb-1">남은 시간</p>
-                    <p className="title-xl text-rg-400">{formatTime(timeRemaining)}</p>
-                  </div>
-                )}
-              </div>
+                    {/* 남은 시간 */}
+                    {attendanceCode && (
+                      <div className="text-center">
+                        <p className="body-sm text-n-500 mb-1">남은 시간</p>
+                        <p className="title-xl text-rg-400">{formatTime(timeRemaining)}</p>
+                      </div>
+                    )}
 
-              {/* 하단 버튼 */}
-              <div className="pt-4">
-                {!attendanceCode && (
-                  <p className="body-sm text-n-500 text-center mb-3">
-                    집합 시간이 되면 출석 코드를 만들 수 있어요.
-                  </p>
+                    {/* 하단 버튼 */}
+                    <div className="pt-4">
+                      {!attendanceCode && (
+                        <p className="body-sm text-n-500 text-center mb-3">
+                          집합 시간이 되면 출석 코드를 만들 수 있어요.
+                        </p>
+                      )}
+                      <Button
+                        text="출석 코드 만들기"
+                        variants="primary"
+                        size="lg"
+                        tone="green"
+                        onClick={() => openMutation.mutate()}
+                        disabled={!canActivate() || openMutation.isPending || !!attendanceCode}
+                        loading={openMutation.isPending}
+                      />
+                    </div>
+                  </>
                 )}
-                <Button
-                  text="출석 코드 만들기"
-                  variants="primary"
-                  size="lg"
-                  tone="green"
-                  onClick={() => openMutation.mutate()}
-                  disabled={!canActivate() || openMutation.isPending || !!attendanceCode}
-                  loading={openMutation.isPending}
-                />
               </div>
             </div>
           ) : (

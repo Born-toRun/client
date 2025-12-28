@@ -68,22 +68,18 @@ export function LoginBottomSheetProvider({
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const showLoginModal = () => {
-    console.log("로그인 확인 모달 표시 요청");
     setIsModalOpen(true);
   };
 
   const hideLoginModal = () => {
-    console.log("로그인 확인 모달 숨김 요청");
     setIsModalOpen(false);
   };
 
   const showLoginBottomSheet = () => {
-    console.log("LoginBottomSheet 표시 요청");
     setIsBottomSheetOpen(true);
   };
 
   const hideLoginBottomSheet = () => {
-    console.log("LoginBottomSheet 숨김 요청");
     setIsBottomSheetOpen(false);
   };
 
