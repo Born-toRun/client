@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { toast } from "sonner";
 import Button from "@/components/Button";
 import CustomDialog from "@/components/CustomDialog";
 import LoginBottomSheet from "@/components/LoginBottomSheet";
@@ -68,9 +69,13 @@ export default function AttendancePage({ params }: Props) {
       queryClient.refetchQueries({ queryKey });
     },
     onError: (error) => {
-      const axiosError = error as AxiosError;
+      const axiosError = error as AxiosError<{ message?: string }>;
       if (axiosError?.response?.status === 401) {
         loginModal.open();
+      } else if (axiosError?.response?.status === 400) {
+        // 400 에러 시 서버에서 받은 메시지를 토스트로 표시
+        const errorMessage = axiosError.response.data?.message || "출석 코드를 생성할 수 없습니다.";
+        toast.error(errorMessage);
       }
     },
   });
