@@ -149,9 +149,18 @@ export function clearAuthStorage() {
   console.log("페이지를 새로고침하세요.");
 }
 
+// Window 인터페이스 확장
+declare global {
+  interface Window {
+    checkAuthStatus: typeof checkAuthStatus;
+    clearAllCookies: typeof clearAllCookies;
+    clearAuthStorage: typeof clearAuthStorage;
+  }
+}
+
 // 브라우저 콘솔에서 사용할 수 있도록 전역 객체에 추가
 if (typeof window !== "undefined") {
-  (window as any).checkAuthStatus = checkAuthStatus;
-  (window as any).clearAllCookies = clearAllCookies;
-  (window as any).clearAuthStorage = clearAuthStorage;
+  window.checkAuthStatus = checkAuthStatus;
+  window.clearAllCookies = clearAllCookies;
+  window.clearAuthStorage = clearAuthStorage;
 }
