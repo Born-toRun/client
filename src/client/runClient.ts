@@ -21,6 +21,14 @@ class RunClient extends HttpClient {
     this.instance.interceptors.request.use((config) => {
       const token =
         typeof window !== "undefined" ? getCookie(ACCESS_TOKEN) : undefined;
+
+      console.log("[Request Interceptor]", {
+        url: config.url,
+        method: config.method,
+        hasToken: !!token,
+        tokenPreview: token ? `${token.toString().substring(0, 20)}...` : "none",
+      });
+
       if (token) config.headers.Authorization = `Bearer ${token}`;
       return config;
     });

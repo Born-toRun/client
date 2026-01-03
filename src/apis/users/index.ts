@@ -29,31 +29,50 @@ import type {
 export const refreshToken = async (
   expiredAccessToken: string
 ): Promise<RefreshTokenResponse> => {
-  const response = await fetch(
-    `${BASE_URL.runApiServer}${apiRoutes.users.refresh}`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${expiredAccessToken}`,
-        "Content-Type": "application/json",
-      },
-      credentials: "include", // refresh_token 쿠키 포함
-    }
-  );
+  const url = `${BASE_URL.runApiServer}${apiRoutes.users.refresh}`;
+
+  console.log("[Token Refresh] 요청 시작:", {
+    url,
+    hasExpiredToken: !!expiredAccessToken,
+    tokenPreview: expiredAccessToken.substring(0, 20) + "...",
+    credentials: "include",
+  });
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${expiredAccessToken}`,
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // refresh_token 쿠키 포함
+  });
+
+  console.log("[Token Refresh] 응답:", {
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok,
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    console.error("토큰 리프레시 실패:", {
+    console.error("[Token Refresh] 실패 상세:", {
       status: response.status,
       statusText: response.statusText,
       error: errorData,
+      headers: Object.fromEntries(response.headers.entries()),
     });
     throw new Error(
       `토큰 리프레시에 실패했습니다. (${response.status}: ${response.statusText})`
     );
   }
 
-  return response.json();
+  const data = await response.json();
+  console.log("[Token Refresh] 성공:", {
+    hasAccessToken: !!data.accessToken,
+    tokenPreview: data.accessToken?.substring(0, 20) + "...",
+  });
+
+  return data;
 };
 
 /**

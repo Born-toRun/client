@@ -5,6 +5,7 @@ import Logo from "@/icons/logo.svg";
 import ClipboardCheckIcon from "@/icons/clipboard-check-icon.svg";
 import SearchIcon from "@/icons/search-icon.svg";
 import { FEEDCategory } from "@/features/feeds/list/types";
+import { useAttendanceCheck } from "@/hooks/useAttendanceCheck";
 
 interface Props {
   selectedTabs?: FEEDCategory;
@@ -13,12 +14,8 @@ interface Props {
 }
 
 export default function MainHeader({ selectedTabs, isScrolled, onSearchClick }: Props) {
+  const { handleAttendanceCheck } = useAttendanceCheck();
   const tabLabel = selectedTabs === "COMMUNITY" ? "커뮤니티" : "마켓";
-
-  const handleAttendanceClick = () => {
-    console.log("출석체크 아이콘 클릭");
-    // TODO: 출석체크 또는 활동 페이지로 이동
-  };
 
   const handleSearchClick = () => {
     console.log("검색 아이콘 클릭");
@@ -46,7 +43,7 @@ export default function MainHeader({ selectedTabs, isScrolled, onSearchClick }: 
         right={
           <div className="flex item-center gap-[8px] relative z-30 pointer-events-auto">
             <button
-              onClick={handleAttendanceClick}
+              onClick={handleAttendanceCheck}
               className="size-[40px] flex items-center justify-center relative z-30 cursor-pointer pointer-events-auto"
               type="button"
             >

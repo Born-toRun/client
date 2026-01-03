@@ -4,6 +4,7 @@ import type {
   ActivityDetail,
   ActivityListParams,
   ActivityListResponse,
+  AvailableForAttendanceResponse,
   CreateActivityRequest,
   CreateActivityResponse,
   OpenActivityResponse,
@@ -176,6 +177,17 @@ export const checkAttendance = async (
 export const getMyParticipations = async (): Promise<ActivityListResponse> => {
   const response = await runApi.get<ActivityListResponse>(
     apiRoutes.activities.myParticipations
+  );
+  return response.data;
+};
+
+/**
+ * 출석 가능한 모임 조회 API
+ * @returns 출석 가능한 모임 정보
+ */
+export const getAvailableForAttendance = async (): Promise<AvailableForAttendanceResponse> => {
+  const response = await runApi.get<AvailableForAttendanceResponse>(
+    apiRoutes.activities.availableForAttendance
   );
   return response.data;
 };

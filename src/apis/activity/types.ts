@@ -156,3 +156,11 @@ export interface OpenActivityResponse {
 export interface AttendanceRequest {
   code: string; // 4자리 코드
 }
+
+/**
+ * 출석 가능한 모임 조회 응답
+ */
+export interface AvailableForAttendanceResponse {
+  hasAvailableActivity: boolean;
+  activityId: number | null;
+}

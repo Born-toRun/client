@@ -61,6 +61,7 @@ export const apiRoutes = {
     open: (activityId: number) => `/api/v1/activities/open/${activityId}`,
     attendance: (activityId: number) => `/api/v1/activities/attendance/${activityId}`,
     myParticipations: "/api/v1/activities/participation/my",
+    availableForAttendance: "/api/v1/activities/participation/my/available-for-attendance",
   },
   feedbacks: {
     create: "/api/v1/feedbacks",
