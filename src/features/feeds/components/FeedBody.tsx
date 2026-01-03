@@ -68,7 +68,7 @@ export default function FeedBody({ contents, imageUrl }: Props) {
       <p
         ref={paragraphRef}
         className={`body-md text-black whitespace-pre-wrap break-all ${
-          !isExpanded ? "line-clamp-2" : ""
+          !isExpanded ? "line-clamp-5" : ""
         }`}
       >
         {contents}

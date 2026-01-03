@@ -1,15 +1,15 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { useGetCrewDetailQuery, useGetMyCrewQuery } from "@/features/crews/hooks/queries";
-import CrewDetailHero from "@/features/crews/components/detail/CrewDetailHero";
-import CrewDescription from "@/features/crews/components/detail/CrewDescription";
+import Button from "@/components/Button";
 import CrewActivities from "@/features/crews/components/detail/CrewActivities";
+import CrewDescription from "@/features/crews/components/detail/CrewDescription";
+import CrewDetailHero from "@/features/crews/components/detail/CrewDetailHero";
 import CrewMembers from "@/features/crews/components/detail/CrewMembers";
 import CrewSettingsButton from "@/features/crews/components/detail/CrewSettingsButton";
-import Button from "@/components/Button";
+import { useGetCrewDetailQuery, useGetMyCrewQuery } from "@/features/crews/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
+import { ArrowLeft } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 
 /**
  * 크루 상세 페이지
@@ -27,13 +27,40 @@ export default function CrewDetailPage() {
   // 내 크루 조회 (운영진 및 관리자 여부 확인용)
   const { data: myCrew } = useGetMyCrewQuery();
 
+  // 디버깅: API 응답 및 권한 확인
+  if (process.env.NODE_ENV === "development") {
+    console.group("=== 크루 권한 디버깅 ===");
+    console.log("1. 인증 상태:", isAuthenticated);
+    console.log("2. 내 크루 정보:", JSON.stringify(myCrew, null, 2));
+    console.log("3. 현재 페이지 crewId:", crewId, `(타입: ${typeof crewId})`);
+
+    if (myCrew) {
+      console.log("4. 내 크루 ID:", myCrew.id, `(타입: ${typeof myCrew.id})`);
+      console.log("5. ID 일치 여부:", {
+        "엄격한 비교 (===)": myCrew.id === crewId,
+        "느슨한 비교 (==)": myCrew.id == crewId,
+      });
+      console.log("6. 권한 정보:", {
+        isManager: myCrew.isManager,
+        isAdmin: myCrew.isAdmin,
+        "isManager 타입": typeof myCrew.isManager,
+        "isAdmin 타입": typeof myCrew.isAdmin,
+      });
+    }
+    console.groupEnd();
+  }
+
   // 현재 사용자가 이 크루의 운영진 또는 관리자인지 확인
   // 조건: 로그인 상태 && 내 크루가 존재 && 현재 크루 ID와 일치 && (운영진 권한 또는 관리자 권한 보유)
   const isManagerOrAdmin =
     isAuthenticated &&
-    myCrew !== null &&
-    myCrew?.id === crewId &&
-    (myCrew?.isManager === true || myCrew?.isAdmin === true);
+    myCrew != null &&
+    myCrew.id === crewId &&
+    (myCrew.isManager === true || myCrew.isAdmin === true);
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("7. 최종 권한 확인 결과:", isManagerOrAdmin);
+  }
 
   // 로딩 상태
   if (isPending) {

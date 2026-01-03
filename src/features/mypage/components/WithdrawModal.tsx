@@ -4,10 +4,10 @@ import { useState } from "react";
 import CustomDialog from "@/components/CustomDialog";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { apiRoutes } from "@/constants/route";
-import { deleteCookie } from "cookies-next";
-import { ACCESS_TOKEN } from "@/constants/common";
+import { toast } from "sonner";
+import { useDeleteUserMutation } from "@/hooks/useUser";
+import { TokenManager } from "@/utils/token";
+import { pageRoutes } from "@/constants/route";
 
 interface WithdrawModalProps {
   open: boolean;
@@ -25,27 +25,37 @@ export default function WithdrawModal({
   onOpenChange,
 }: WithdrawModalProps) {
   const router = useRouter();
+  const deleteUserMutation = useDeleteUserMutation();
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const handleWithdraw = async () => {
     try {
       setIsWithdrawing(true);
 
-      // 회원탈퇴 API 호출
-      await axios.delete(apiRoutes.auth.withdraw);
+      // 회원탈퇴 API 호출 (runApi를 통해 자동으로 토큰 포함)
+      await deleteUserMutation.mutateAsync();
 
-      // 액세스 토큰 삭제
-      deleteCookie(ACCESS_TOKEN);
+      // 액세스 토큰 삭제 (로그아웃)
+      TokenManager.removeAccessToken();
+
+      // 성공 토스트 표시
+      toast.success("회원탈퇴가 완료되었습니다.", {
+        description: "그동안 본투런을 이용해주셔서 감사합니다.",
+      });
 
       // 모달 닫기
       onOpenChange();
 
       // 홈으로 리다이렉트
-      router.push("/");
+      router.push(pageRoutes.feeds.list);
       router.refresh();
     } catch (error) {
       console.error("회원탈퇴 실패:", error);
-      alert("회원탈퇴에 실패했습니다. 다시 시도해주세요.");
+
+      // 에러 토스트 표시
+      toast.error("회원탈퇴에 실패했습니다.", {
+        description: "잠시 후 다시 시도해주세요.",
+      });
     } finally {
       setIsWithdrawing(false);
     }

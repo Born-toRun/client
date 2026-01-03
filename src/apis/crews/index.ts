@@ -8,6 +8,8 @@ import type {
   CrewUpdateRequest,
   CrewRankingsResponse,
   MemberRankingsResponse,
+  CrewCreateRequest,
+  CrewCreateResponse,
 } from "./types";
 
 /**
@@ -92,6 +94,21 @@ export const getCrewRankings = async (): Promise<CrewRankingsResponse> => {
 export const getMemberRankings = async (): Promise<MemberRankingsResponse> => {
   const response = await runApi.get<MemberRankingsResponse>(
     apiRoutes.crews.memberRankings
+  );
+  return response.data;
+};
+
+/**
+ * 크루 생성 API
+ * @param data 크루 생성 데이터
+ * @returns 생성된 크루 정보
+ */
+export const createCrew = async (
+  data: CrewCreateRequest
+): Promise<CrewCreateResponse> => {
+  const response = await runApi.post<CrewCreateResponse>(
+    apiRoutes.crews.list,
+    data
   );
   return response.data;
 };

@@ -103,3 +103,28 @@ export interface MemberRankingItem {
 export interface MemberRankingsResponse {
   rankings: MemberRankingItem[];
 }
+
+/**
+ * 크루 생성 요청
+ */
+export interface CrewCreateRequest {
+  imageId?: number;         // 대표이미지 ID (선택)
+  logoId?: number;          // 로고이미지 ID (선택)
+  name: string;             // 크루명 (필수)
+  region: string;           // 크루 활동 지역 (필수)
+  contents: string;         // 크루 설명 (필수)
+  sns?: string;             // 크루 SNS URI (선택)
+}
+
+/**
+ * 크루 생성 응답
+ */
+export interface CrewCreateResponse {
+  id: number;
+  crewName: string;
+  contents: string;
+  region: string;
+  imageUri?: string;
+  logoUri?: string;
+  crewSnsUri?: string;
+}

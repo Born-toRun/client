@@ -18,3 +18,12 @@ export interface SignupFormData {
   crewId: number | null;
   instagramId?: string;
 }
+
+export interface CrewCreateFormData {
+  name: string;
+  contents: string;
+  region: string;
+  sns?: string;
+  imageId?: number;
+  logoId?: number;
+}

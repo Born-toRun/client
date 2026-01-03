@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getCrewList, signup } from "../api";
+import { getCrewList, signup, createCrew } from "../api";
 import { apiRoutes } from "@/constants/route";
 
 export const useGetCrewListQuery = () => {
@@ -12,5 +12,11 @@ export const useGetCrewListQuery = () => {
 export const useSignupMutation = () => {
   return useMutation({
     mutationFn: signup,
+  });
+};
+
+export const useCreateCrewMutation = () => {
+  return useMutation({
+    mutationFn: createCrew,
   });
 };
