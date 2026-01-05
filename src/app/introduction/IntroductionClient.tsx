@@ -541,7 +541,7 @@ export default function IntroductionClient() {
             className="text-center mt-12"
           >
             <Link
-              href="/signup"
+              href="/"
               className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 text-white rounded-full font-semibold text-lg shadow-lg hover:bg-emerald-600 hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               지금 바로 시작하기
