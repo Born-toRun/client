@@ -31,7 +31,7 @@ export default function TermsPage() {
                 제1조 (목적)
               </h2>
               <p className="text-gray-700 leading-relaxed">
-                본 약관은 Born to Run(이하 "서비스")이 제공하는 러닝 크루
+                본 약관은 Born to Run(이하 &ldquo;서비스&rdquo;)이 제공하는 러닝 크루
                 커뮤니티 서비스의 이용과 관련하여 서비스와 이용자 간의 권리,
                 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
               </p>
@@ -45,19 +45,19 @@ export default function TermsPage() {
                 <p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다:</p>
                 <ul className="list-decimal list-inside space-y-2 ml-4">
                   <li>
-                    "서비스"란 Born to Run이 제공하는 러닝 크루 커뮤니티 플랫폼
+                    &ldquo;서비스&rdquo;란 Born to Run이 제공하는 러닝 크루 커뮤니티 플랫폼
                     및 관련 서비스를 의미합니다.
                   </li>
                   <li>
-                    "이용자"란 본 약관에 따라 서비스를 이용하는 회원 및
+                    &ldquo;이용자&rdquo;란 본 약관에 따라 서비스를 이용하는 회원 및
                     비회원을 말합니다.
                   </li>
                   <li>
-                    "회원"이란 서비스에 가입하여 지속적으로 서비스를 이용할 수
+                    &ldquo;회원&rdquo;이란 서비스에 가입하여 지속적으로 서비스를 이용할 수
                     있는 자를 말합니다.
                   </li>
                   <li>
-                    "크루"란 회원들이 모여 함께 러닝 활동을 하는 그룹을
+                    &ldquo;크루&rdquo;란 회원들이 모여 함께 러닝 활동을 하는 그룹을
                     의미합니다.
                   </li>
                 </ul>
