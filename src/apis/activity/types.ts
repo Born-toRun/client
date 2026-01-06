@@ -45,6 +45,8 @@ export interface Host {
   userName: string;
   crewName?: string;
   profileImageUri?: string;
+  isAdmin: boolean;
+  isManager: boolean;
 }
 
 /**
@@ -55,6 +57,8 @@ export interface Participant {
   userName: string;
   crewName?: string;
   profileImageUri?: string;
+  isAdmin: boolean;
+  isManager: boolean;
 }
 
 /**

@@ -227,9 +227,27 @@ export default function ProfileImageUpload({
       )}
 
       {/* 안내 메시지 */}
-      <p className="text-n-200 text-sm text-center">
-        JPG, PNG, WEBP 형식 / 10MB 이하
-      </p>
+      <div className="flex items-center justify-center gap-2">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="flex-shrink-0"
+        >
+          <circle cx="8" cy="8" r="7" stroke="#9CA3AF" strokeWidth="1.5" />
+          <path
+            d="M8 7V11M8 5V5.5"
+            stroke="#9CA3AF"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+        <p className="text-n-200 text-xs">
+          10MB 이하, JPG/PNG/WEBP 형식만 가능
+        </p>
+      </div>
 
       {/* 에러 메시지 */}
       {(uploadError || error) && (

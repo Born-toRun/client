@@ -95,6 +95,8 @@ export interface MemberRankingItem {
   profileImageUri?: string;
   instagramId?: string;
   participationCount: number;
+  isAdmin: boolean;
+  isManager: boolean;
 }
 
 /**

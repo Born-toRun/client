@@ -2,7 +2,7 @@ name: Next.js CI with pmpm
 
 on:
   push:
-    branches: [ "main", "second-mvp" ] # TODO: prod 준비 되면 main 브랜치로 변경
+    branches: [ "main" ]
 
 permissions:
   contents: read

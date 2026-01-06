@@ -44,6 +44,8 @@ export default function CommentDetailPage() {
                   userName={comment.writer.userName}
                   profileImageUri={comment.writer.profileImageUri}
                   registerAt={comment.registeredAt}
+                  isAdmin={comment.writer.isAdmin}
+                  isManager={comment.writer.isManager}
                 />
               </div>
               <CommentDetailBody contents={comment.contents} />

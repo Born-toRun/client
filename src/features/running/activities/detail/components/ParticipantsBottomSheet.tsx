@@ -8,6 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/Sheet";
+import { Crown } from "lucide-react";
 import Image from "next/image";
 
 interface Props {
@@ -97,17 +98,27 @@ function ParticipantItem({
   return (
     <div className="flex items-center gap-3 p-3 bg-white round-sm border border-n-30">
       {/* 프로필 이미지 */}
-      <div className="relative size-12 round-full overflow-hidden bg-n-30 flex-shrink-0">
+      <div className="relative size-12 flex-shrink-0">
         {user.profileImageUri ? (
           <Image
             src={user.profileImageUri}
             alt={user.userName}
-            fill
-            className="object-cover"
+            width={48}
+            height={48}
+            className="round-full object-cover"
           />
         ) : (
-          <div className="size-full flex items-center justify-center bg-rg-300 text-white label-md">
+          <div className="size-12 round-full flex items-center justify-center bg-rg-300 text-white label-md">
             {user.userName[0]}
+          </div>
+        )}
+        {/* 관리자 왕관 아이콘 */}
+        {user.isAdmin && (
+          <div
+            className="absolute -top-1 -right-1 bg-white rounded-full p-0.5"
+            title="관리자"
+          >
+            <Crown size={14} className="text-yellow-500 fill-yellow-500" />
           </div>
         )}
       </div>
@@ -119,6 +130,11 @@ function ParticipantItem({
           {isHost && (
             <span className="inline-block px-2 py-0.5 bg-rg-400 text-white round-full label-xs">
               호스트
+            </span>
+          )}
+          {user.isManager && (
+            <span className="inline-block px-2 py-0.5 bg-rg-50 text-rg-400 round-full label-xs flex-shrink-0">
+              운영진
             </span>
           )}
         </div>

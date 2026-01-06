@@ -43,6 +43,8 @@ export default function FeedDetailPage() {
                   userName={feed.writer.userName}
                   profileImageUri={feed.writer.profileImageUri}
                   registerAt={feed.registeredAt}
+                  isAdmin={feed.writer.isAdmin}
+                  isManager={feed.writer.isManager}
                 />
               </div>
               <FeedBody

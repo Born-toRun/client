@@ -21,6 +21,8 @@ export default function FeedItem({ feed }: Props) {
   const commentQty = feed?.commentQty;
   const hasMyComment = feed?.viewer.hasMyComment;
   const hasMyRecommendation = feed?.viewer.hasMyRecommendation;
+  const isAdmin = feed?.writer.isAdmin;
+  const isManager = feed?.writer.isManager;
 
   return (
     <article className="p-[16px] flex flex-col gap-[16px]">
@@ -29,6 +31,8 @@ export default function FeedItem({ feed }: Props) {
         userName={userName}
         profileImageUri={profileUrl}
         registerAt={registerAt}
+        isAdmin={isAdmin}
+        isManager={isManager}
       />
       <FeedBody contents={contents} imageUrl={imageUrls} />
       <FeedFooter

@@ -1,4 +1,4 @@
-import { Medal, User } from "lucide-react";
+import { Crown, Medal, User } from "lucide-react";
 import Image from "next/image";
 import type { MemberRankingItem } from "@/apis/crews/types";
 
@@ -32,7 +32,7 @@ const getRankColor = (rank: number): string => {
  * 1-3위는 메달 아이콘을, 4위 이하는 순위 숫자를 표시합니다.
  */
 export default function MemberRankingCard({ item }: MemberRankingCardProps) {
-  const { rank, userName, profileImageUri, instagramId, participationCount } =
+  const { rank, userName, profileImageUri, instagramId, participationCount, isAdmin, isManager } =
     item;
 
   return (
@@ -47,25 +47,41 @@ export default function MemberRankingCard({ item }: MemberRankingCardProps) {
       </div>
 
       {/* 프로필 이미지 */}
-      <div className="w-12 h-12 rounded-full overflow-hidden bg-n-20 flex-shrink-0 relative">
+      <div className="w-12 h-12 flex-shrink-0 relative">
         {profileImageUri ? (
           <Image
             src={profileImageUri}
             alt={`${userName} 프로필`}
             width={48}
             height={48}
-            className="object-cover"
+            className="rounded-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-n-20 flex items-center justify-center">
             <User size={24} className="text-n-300" />
+          </div>
+        )}
+        {/* 관리자 왕관 아이콘 */}
+        {isAdmin && (
+          <div
+            className="absolute -top-1 -right-1 bg-white rounded-full p-0.5"
+            title="관리자"
+          >
+            <Crown size={14} className="text-yellow-500 fill-yellow-500" />
           </div>
         )}
       </div>
 
       {/* 크루원 정보 */}
       <div className="flex-1 min-w-0">
-        <h3 className="title-md text-n-900 truncate">{userName}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="title-md text-n-900 truncate">{userName}</h3>
+          {isManager && (
+            <span className="inline-block px-2 py-0.5 bg-rg-50 text-rg-400 round-full label-xs flex-shrink-0">
+              운영진
+            </span>
+          )}
+        </div>
         {instagramId && (
           <p className="body-sm text-n-500">@{instagramId}</p>
         )}

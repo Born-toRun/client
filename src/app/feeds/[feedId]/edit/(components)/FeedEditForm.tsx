@@ -197,6 +197,28 @@ export default function FeedEditForm({
             </div>
           )}
         </div>
+        {/* 안내 메시지 */}
+        <div className="flex items-start gap-2 px-1">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="flex-shrink-0 mt-0.5"
+          >
+            <circle cx="8" cy="8" r="7" stroke="#9CA3AF" strokeWidth="1.5" />
+            <path
+              d="M8 7V11M8 5V5.5"
+              stroke="#9CA3AF"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+          <p className="text-n-200 text-xs">
+            최대 5장, 각 10MB 이하 (이미지 형식만 가능)
+          </p>
+        </div>
       </div>
 
       {/* 숨겨진 파일 입력 */}
