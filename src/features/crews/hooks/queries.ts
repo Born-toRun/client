@@ -1,7 +1,8 @@
 import { apiRoutes } from "@/constants/route";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { getMyCrew, getCrewList, getCrewDetail, getCrewMembers } from "../api";
+import { kickCrewMember } from "@/apis/crews";
 import {
   CrewListResponse,
   CrewDetail,
@@ -66,5 +67,37 @@ export const useGetCrewMembersQuery = (
     queryFn: () => getCrewMembers(crewId),
     enabled: !!crewId,
     ...options,
+  });
+};
+
+/**
+ * 크루원 강퇴 뮤테이션 훅
+ * 크루원을 강퇴하고 멤버 목록을 자동으로 갱신합니다.
+ *
+ * @example
+ * ```tsx
+ * const kickMemberMutation = useKickCrewMemberMutation(crewId);
+ *
+ * const handleKick = async (userId: number) => {
+ *   try {
+ *     await kickMemberMutation.mutateAsync(userId);
+ *     toast.success("크루원이 강퇴되었습니다.");
+ *   } catch (error) {
+ *     toast.error("크루원 강퇴에 실패했습니다.");
+ *   }
+ * };
+ * ```
+ */
+export const useKickCrewMemberMutation = (crewId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userId: number) => kickCrewMember(crewId, userId),
+    onSuccess: () => {
+      // 크루 멤버 목록 쿼리 무효화하여 최신 데이터 다시 불러오기
+      queryClient.invalidateQueries({
+        queryKey: [apiRoutes.crews.members(crewId)]
+      });
+    },
   });
 };

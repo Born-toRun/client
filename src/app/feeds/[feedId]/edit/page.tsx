@@ -9,6 +9,7 @@ import { pageRoutes } from "@/constants/route";
 import FeedEditHeader from "./(components)/FeedEditHeader";
 import FeedEditSkeleton from "./(components)/FeedEditSkeleton";
 import FeedEditForm from "./(components)/FeedEditForm";
+import { toast } from "sonner";
 
 export default function FeedEditPage() {
   const params = useParams();
@@ -45,10 +46,11 @@ export default function FeedEditPage() {
         accessLevel: feed.accessLevel,
         imageIds: feed.images?.map((img) => img.imageId),
       });
+      toast.success("피드가 수정되었습니다.");
       router.push(pageRoutes.feeds.detail(feedId));
     } catch (error) {
       console.error("피드 수정 중 오류가 발생했습니다:", error);
-      // TODO: 에러 토스트 메시지 표시
+      toast.error("피드 수정에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
     }

@@ -2,6 +2,7 @@
 
 import { Share2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 /**
  * 크루 목록 하단 공유 섹션 컴포넌트
@@ -28,10 +29,7 @@ export default function ShareSection() {
       } else {
         // Fallback: 클립보드에 복사
         await navigator.clipboard.writeText(window.location.origin);
-
-        // TODO: 토스트 메시지 표시
-        // showToast("링크가 복사되었습니다!");
-        alert("링크가 클립보드에 복사되었습니다!");
+        toast.success("링크가 클립보드에 복사되었습니다!");
       }
     } catch (error) {
       // 사용자가 공유를 취소한 경우는 에러로 처리하지 않음

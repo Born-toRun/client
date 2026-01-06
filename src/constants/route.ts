@@ -35,6 +35,7 @@ export const apiRoutes = {
     my: "/api/v1/crews/my",
     detail: (crewId: number) => `/api/v1/crews/${crewId}`,
     members: (crewId: number) => `/api/v1/crews/${crewId}/members`,
+    kickMember: (crewId: number, userId: number) => `/api/v1/crews/${crewId}/members/${userId}`,
     update: (crewId: number) => `/api/v1/crews/${crewId}`,
     rankings: "/api/v1/crews/rankings",
     memberRankings: "/api/v1/crews/member-rankings",

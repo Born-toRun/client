@@ -130,3 +130,11 @@ export interface CrewCreateResponse {
   logoUri?: string;
   crewSnsUri?: string;
 }
+
+/**
+ * 크루원 강퇴 요청
+ */
+export interface KickCrewMemberRequest {
+  crewId: number;
+  userId: number;
+}

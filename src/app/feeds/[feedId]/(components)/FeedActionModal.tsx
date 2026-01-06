@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { toast } from "sonner";
 
 interface FeedActionModalProps {
   isOpen: boolean;
@@ -27,11 +28,11 @@ export default function FeedActionModal({
   const copyClickHandler = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      // TODO: 토스트 메시지 표시
-      console.log("링크가 클립보드에 복사되었습니다.");
+      toast.success("링크가 클립보드에 복사되었습니다.");
       onClose();
     } catch (error) {
       console.error("복사 중 오류가 발생했습니다:", error);
+      toast.error("링크 복사에 실패했습니다.");
     }
   };
 
@@ -49,10 +50,11 @@ export default function FeedActionModal({
     try {
       await deleteFeed(feedId);
       queryClient.invalidateQueries({ queryKey: ["feeds"] });
+      toast.success("피드가 삭제되었습니다.");
       router.push("/");
     } catch (error) {
       console.error("피드 삭제 중 오류가 발생했습니다:", error);
-      // TODO: 에러 토스트 메시지 표시
+      toast.error("피드 삭제에 실패했습니다.");
     } finally {
       setIsDeleting(false);
       onClose();

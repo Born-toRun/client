@@ -112,3 +112,16 @@ export const createCrew = async (
   );
   return response.data;
 };
+
+/**
+ * 크루원 강퇴 API
+ * @param crewId 크루 식별자
+ * @param userId 강퇴할 사용자 식별자
+ * @returns void
+ */
+export const kickCrewMember = async (
+  crewId: number,
+  userId: number
+): Promise<void> => {
+  await runApi.delete(apiRoutes.crews.kickMember(crewId, userId));
+};
