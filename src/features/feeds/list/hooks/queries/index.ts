@@ -1,7 +1,6 @@
 import { apiRoutes } from "@/constants/route";
 import {
   InfiniteData,
-  keepPreviousData,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
@@ -11,34 +10,51 @@ import { FeedListParams, FeedListResponse } from "../../types";
 
 export const useGetFeesListQuery = (
   params: FeedListParams,
-  options?: UseInfiniteQueryOptions<
-    FeedListResponse,
-    AxiosError,
-    InfiniteData<FeedListResponse>
+  options?: Omit<
+    UseInfiniteQueryOptions<
+      FeedListResponse,
+      AxiosError,
+      InfiniteData<FeedListResponse>,
+      FeedListResponse,
+      readonly unknown[],
+      number | undefined
+    >,
+    'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
   >
 ) => {
   const category = params.category;
-  const lastId = params.lastFeedId;
-  const isMayCrew = params.isMyCrew;
+  const isMyCrew = params.isMyCrew;
   const keyword = params.searchKeyword;
-  return useInfiniteQuery({
-    queryKey: [apiRoutes.feeds.list, category, lastId, isMayCrew, keyword],
-    queryFn: ({ pageParam = 0 }) =>
-      getFeedList({
+
+  return useInfiniteQuery<
+    FeedListResponse,
+    AxiosError,
+    InfiniteData<FeedListResponse>,
+    readonly unknown[],
+    number | undefined
+  >({
+    // Remove lastFeedId from queryKey - it changes per page and shouldn't invalidate cache
+    queryKey: [apiRoutes.feeds.list, category, isMyCrew, keyword],
+    queryFn: async ({ pageParam }) => {
+      const result = await getFeedList({
         ...params,
-        // size는 default로 10
-        size: 10,
-        lastFeedId: typeof pageParam === "number" ? pageParam : 0,
-      }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
-      const lastBoardIndex = lastPage.content.length - 1;
-      if (lastPage.content.length > 0 && !lastPage.last) {
-        return lastPage.content[lastBoardIndex].id;
-      }
-      return;
+        size: 10, // Default size
+        lastFeedId: pageParam, // Will be undefined for first page, number for subsequent pages
+      });
+      return result;
     },
-    placeholderData: keepPreviousData,
+    // First page should not send lastFeedId parameter
+    initialPageParam: undefined as number | undefined,
+    getNextPageParam: (lastPage): number | undefined => {
+      // If this is the last page, return undefined to stop pagination
+      if (lastPage.last || lastPage.content.length === 0) {
+        return undefined;
+      }
+      // Return the ID of the last feed item for cursor-based pagination
+      const lastFeedIndex = lastPage.content.length - 1;
+      const nextPageParam = lastPage.content[lastFeedIndex].id;
+      return nextPageParam;
+    },
     ...options,
   });
 };

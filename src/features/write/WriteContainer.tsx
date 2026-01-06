@@ -132,26 +132,28 @@ export default function WriteContainer() {
 
   return (
     <>
-      <Header
-        left={
-          <button
-            className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
-            onClick={() => router.back()}
-          >
-            <CloseIcon />
-          </button>
-        }
-        title="글쓰기"
-        right={
-          <button
-            className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
-            disabled={!contents}
-            onClick={postingClickHandler}
-          >
-            <p className="text-white title-md leading-[17px]">게시</p>
-          </button>
-        }
-      />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[786px] h-[56px] bg-white z-50">
+        <Header
+          left={
+            <button
+              className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full"
+              onClick={() => router.back()}
+            >
+              <CloseIcon />
+            </button>
+          }
+          title="글쓰기"
+          right={
+            <button
+              className="px-4 py-[11.5px] bg-rg-400 rounded-[8px] disabled:bg-n-40 cursor-pointer"
+              disabled={!contents}
+              onClick={postingClickHandler}
+            >
+              <p className="text-white title-md leading-[17px]">게시</p>
+            </button>
+          }
+        />
+      </div>
       <main className="flex flex-col h-screen pt-14">
         <div className="h-16 px-4 flex items-center justify-between border-t border-n-30">
           <div
@@ -221,6 +223,28 @@ export default function WriteContainer() {
                 ))}
               </div>
             )}
+          </div>
+          {/* 안내 메시지 */}
+          <div className="flex items-start gap-2 px-1">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="flex-shrink-0 mt-0.5"
+            >
+              <circle cx="8" cy="8" r="7" stroke="#9CA3AF" strokeWidth="1.5" />
+              <path
+                d="M8 7V11M8 5V5.5"
+                stroke="#9CA3AF"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+            <p className="text-n-200 text-xs">
+              최대 5장, 각 10MB 이하 (이미지 형식만 가능)
+            </p>
           </div>
         </div>
         {/* 숨겨진 파일 입력 */}

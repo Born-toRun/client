@@ -3,6 +3,7 @@
 import { ReCommentDetail } from "@/apis/comment/types";
 import { formatRelativeTime } from "@/features/utils/formatDate";
 import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
+import { Crown } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import CommentActionModal from "../(modals)/CommentActionModal";
@@ -35,22 +36,40 @@ export default function ReComments({ reComments, feedId }: ReCommentsProps) {
             key={reComment.id}
           >
             <div className="flex items-center gap-[8px] px-4 pt-2">
-              <div className="relative overflow-hidden size-[40px] shrink-0 rounded-full border border-[rgba(0,0,0,0.1)]">
+              <div className="relative size-[40px] shrink-0">
                 {reComment.writer.profileImageUri ? (
                   <Image
                     src={reComment.writer.profileImageUri}
-                    fill
+                    width={40}
+                    height={40}
                     alt="profile-image"
-                    className="rounded-full"
+                    className="rounded-full object-cover border border-[rgba(0,0,0,0.1)]"
                   />
                 ) : (
-                  <div className="absolute w-full h-full" />
+                  <div className="size-[40px] bg-n-30 rounded-full border border-[rgba(0,0,0,0.1)]" />
+                )}
+
+                {/* 관리자 왕관 아이콘 */}
+                {reComment.writer.isAdmin && (
+                  <div
+                    className="absolute -top-1 -right-1 bg-white rounded-full p-0.5"
+                    title="관리자"
+                  >
+                    <Crown size={14} className="text-yellow-500 fill-yellow-500" />
+                  </div>
                 )}
               </div>
               <div className="flex flex-col gap-[4px] py-[2px] w-full">
-                <p className="body-sm text-black">
-                  {reComment.writer.userName}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="body-sm text-black">
+                    {reComment.writer.userName}
+                  </p>
+                  {reComment.writer.isManager && (
+                    <span className="inline-block px-2 py-0.5 bg-rg-50 text-rg-400 round-full label-xs flex-shrink-0">
+                      운영진
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center body-sm text-n-60 gap-[4px]">
                   <p>{reComment.writer.crewName}</p>
                   <span>·</span>

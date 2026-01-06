@@ -19,3 +19,15 @@ export interface DeleteFeedResponse {
   success: boolean;
   message?: string;
 }
+
+// 내 피드 조회 응답 타입
+export interface MyFeedsResponse {
+  feeds: MyFeed[];
+}
+
+// 내 피드 타입
+export interface MyFeed {
+  feedId: number;
+  contents: string; // 피드 내용
+  imageUris: string[]; // 피드 이미지 URL 배열
+}

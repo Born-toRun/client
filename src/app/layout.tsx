@@ -1,8 +1,15 @@
 import QueryProvider from "@/provider/QueryProvider";
+import { LoginBottomSheetProvider } from "@/contexts/LoginBottomSheetContext";
+import { Toaster } from "sonner";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
+// 개발 환경에서만 디버깅 도구 로드
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+  import("@/utils/authDebug");
+}
 
 export const metadata: Metadata = {
   title: "Born-to-run",
@@ -29,14 +36,17 @@ export default function RootLayout({
         />
       </head>
       <QueryProvider>
-        <body className={`${pretendard.className} bg-[#fcfcfc]`}>
-          <div
-            id="app-container"
-            className="w-full max-w-[786px] mx-auto min-h-screen bg-white"
-          >
-            {children}
-          </div>
-        </body>
+        <LoginBottomSheetProvider>
+          <body className={`${pretendard.className} bg-[#fcfcfc]`}>
+            <Toaster position="top-center" richColors />
+            <div
+              id="app-container"
+              className="w-full max-w-[786px] mx-auto min-h-screen bg-white"
+            >
+              {children}
+            </div>
+          </body>
+        </LoginBottomSheetProvider>
       </QueryProvider>
     </html>
   );

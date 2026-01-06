@@ -4,6 +4,7 @@ import ActiveCommentIcon from "@/icons/active-comment-icon.svg";
 import CommentIcon from "@/icons/comment-icon.svg";
 import CommentMenuIcon from "@/icons/comment-menu-icon.svg";
 import { useQuery } from "@tanstack/react-query";
+import { Crown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -36,20 +37,37 @@ export default function Comments({ feedId }: { feedId: number }) {
             key={comment.id}
           >
             <div className="flex items-center gap-[8px] px-4 pt-2">
-              <div className="relative  overflow-hidden size-[40px] shrink-0 round-full border  border-[rgba(0,0,0,0.1)]">
+              <div className="relative size-[40px] shrink-0">
                 {comment.writer.profileImageUri ? (
                   <Image
                     src={comment.writer.profileImageUri}
-                    fill
+                    width={40}
+                    height={40}
                     alt="profile-image"
-                    className="round-full"
+                    className="round-full object-cover border border-[rgba(0,0,0,0.1)]"
                   />
                 ) : (
-                  <div className="absolute w-full h-full" />
+                  <div className="size-[40px] bg-n-30 round-full border border-[rgba(0,0,0,0.1)]" />
+                )}
+                {/* 관리자 왕관 아이콘 */}
+                {comment.writer.isAdmin && (
+                  <div
+                    className="absolute -top-1 -right-1 bg-white rounded-full p-0.5"
+                    title="관리자"
+                  >
+                    <Crown size={14} className="text-yellow-500 fill-yellow-500" />
+                  </div>
                 )}
               </div>
               <div className="flex flex-col gap-[4px] py-[2px] w-full">
-                <p className="body-sm text-black">{comment.writer.userName}</p>
+                <div className="flex items-center gap-2">
+                  <p className="body-sm text-black">{comment.writer.userName}</p>
+                  {comment.writer.isManager && (
+                    <span className="inline-block px-2 py-0.5 bg-rg-50 text-rg-400 round-full label-xs flex-shrink-0">
+                      운영진
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center body-sm text-n-60 gap-[4px]">
                   <p>{comment.writer.crewName}</p>
                   <span>·</span>

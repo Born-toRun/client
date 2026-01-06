@@ -1,6 +1,7 @@
 import { runApi } from "@/client/runClient";
 import { apiRoutes } from "@/constants/route";
-import { CrewListResponse, SignupFormData } from "../types";
+import { CrewListResponse, SignupFormData, CrewCreateFormData } from "../types";
+import { CrewCreateResponse } from "@/apis/crews/types";
 
 const getCrewList = async () => {
   const response = await runApi.get<CrewListResponse>(apiRoutes.crews.list);
@@ -12,4 +13,9 @@ const signup = async (data: SignupFormData) => {
   return response.data;
 };
 
-export { getCrewList, signup };
+const createCrew = async (data: CrewCreateFormData): Promise<CrewCreateResponse> => {
+  const response = await runApi.post<CrewCreateResponse>(apiRoutes.crews.list, data);
+  return response.data;
+};
+
+export { getCrewList, signup, createCrew };

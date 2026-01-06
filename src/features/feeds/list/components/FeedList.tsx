@@ -14,7 +14,7 @@ export default function FeedList({ list }: Props) {
     <ul>
       {list?.map((feed) => (
         <Link href={pageRoutes.feeds.detail(feed.id)} key={feed.id}>
-          <li key={feed.id}>
+          <li>
             <FeedItem feed={feed} />
             <Divider size={1} />
           </li>

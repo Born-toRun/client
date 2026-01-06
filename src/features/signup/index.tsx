@@ -3,16 +3,17 @@ import Input from "@/components/Input";
 import Select from "@/components/Select";
 import { pageRoutes } from "@/constants/route";
 import ChevronBackIcon from "@/icons/chevron-back-icon.svg";
-import UnnamedIcon from "@/icons/unnamed-icon.svg";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useGetCrewListQuery, useSignupMutation } from "./hooks";
 import { SignupFormData } from "./types";
 import Header from "@/components/header/Header";
+import Link from "next/link";
 
 export default function Signup() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, handleSubmit } = useForm<SignupFormData>({
     defaultValues: {
       userName: "",
@@ -21,12 +22,24 @@ export default function Signup() {
     },
   });
   const [selectedCrew, setSelectedCrew] = useState<number | null>(null);
-  const { data: crewList } = useGetCrewListQuery();
+  const { data: crewList, refetch } = useGetCrewListQuery();
   const crewListOptions = crewList?.details.map((crew) => ({
     value: crew.id,
     label: crew.crewName,
   }));
   const { mutateAsync: signup, isPending } = useSignupMutation();
+
+  // URL 파라미터로 전달된 새 크루 ID가 있으면 자동 선택
+  useEffect(() => {
+    const newCrewId = searchParams.get("newCrewId");
+    if (newCrewId) {
+      // 크루 목록 새로고침
+      refetch().then(() => {
+        const crewIdNum = parseInt(newCrewId, 10);
+        setSelectedCrew(crewIdNum);
+      });
+    }
+  }, [searchParams, refetch]);
 
   const signupClickHandler = async (data: SignupFormData) => {
     if (!selectedCrew) {
@@ -36,11 +49,6 @@ export default function Signup() {
 
     if (!data.userName) {
       alert("이름을 입력해주세요");
-      return;
-    }
-
-    if (!data.instagramId) {
-      alert("인스타그램 ID를 입력해주세요");
       return;
     }
 
@@ -72,12 +80,7 @@ export default function Signup() {
             <ChevronBackIcon />
           </button>
         }
-        title="글쓰기"
-        right={
-          <button className="flex items-center justify-center w-[40px] h-[40px] cursor-pointer hover:bg-n-30 rounded-full">
-            <UnnamedIcon />
-          </button>
-        }
+        title="회원가입"
       />
       <section className="px-4 pb-[168px]">
         <form onSubmit={handleSubmit(signupClickHandler)}>
@@ -106,7 +109,7 @@ export default function Signup() {
             />
           </div>
           <p className="mb-2 title-lg text-n-900">크루 정보</p>
-          <p className="mb-6 body-lg text-n-200">
+          <p className="mb-4 body-lg text-n-200">
             소속된 크루를 선택해주세요. 혹시 크루가 없다면, 크루 신규 생성이
             필요해요.
           </p>
@@ -118,6 +121,12 @@ export default function Signup() {
             inputSize="lg"
             onChange={handleSelectCrew}
           />
+          <Link
+            href="/signup/create-crew"
+            className="mt-4 flex items-center justify-center h-[48px] bg-n-10 text-n-900 font-bold label-md round-xs border border-n-40 hover:border-n-60 cursor-pointer"
+          >
+            새 크루 등록하기
+          </Link>
           <button
             type="submit"
             className="fixed left-4 right-4 bottom-4 h-[56px] bg-rg-400 text-white font-bold label-lg round-sm max-w-[754px] mx-auto cursor-pointer"

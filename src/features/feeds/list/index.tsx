@@ -8,7 +8,8 @@ import Tabs from "@/components/Tabs";
 import { useIntersectionObserver } from "@/features/hooks/useIntersectionObserver";
 import { useModal } from "@/features/hooks/useModal";
 import { useScrollPosition } from "@/features/hooks/useScroll";
-import { useEffect, useState } from "react";
+import SearchOverlay from "@/features/search/SearchOverlay";
+import { useEffect, useMemo, useState } from "react";
 import { feedCategoryLabel } from "../constants";
 import CreateFeedButton from "./components/CreateFeedButton";
 import FeedList from "./components/FeedList";
@@ -19,16 +20,19 @@ import { FEEDCategory } from "./types";
 export default function FeedContainer() {
   const loginModal = useModal();
   const loginBottomSheet = useModal();
+  const searchOverlay = useModal();
 
   const [selectedTabs, setSelectedTabs] = useState<FEEDCategory>(
     feedCategoryLabel.COMMUNITY
   );
   const [isMyCrew, setIsMyCrew] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState<string | undefined>(undefined);
 
   const { data, isPending, hasNextPage, fetchNextPage, error } =
     useGetFeesListQuery({
       isMyCrew,
       category: selectedTabs as FEEDCategory,
+      searchKeyword,
     });
 
   const { setTargetRef } = useIntersectionObserver({
@@ -39,7 +43,15 @@ export default function FeedContainer() {
     },
   });
 
-  const feedList = data?.pages.flatMap((feed) => feed.content) ?? [];
+  // Flatten pages and remove duplicates by ID
+  const feedList = useMemo(() => {
+    const allFeeds = data?.pages.flatMap((page) => page.content) ?? [];
+    // Remove duplicates by creating a Map with feed.id as key
+    const uniqueFeeds = Array.from(
+      new Map(allFeeds.map((feed) => [feed.id, feed])).values()
+    );
+    return uniqueFeeds;
+  }, [data]);
   const isScrolled = useScrollPosition(20);
 
   useEffect(
@@ -51,17 +63,54 @@ export default function FeedContainer() {
     [error, loginModal]
   );
 
+  /**
+   * 검색 실행 핸들러
+   */
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword);
+  };
+
+  /**
+   * 검색 오버레이 열기 핸들러
+   */
+  const handleSearchClick = () => {
+    searchOverlay.open();
+  };
+
   return (
     <>
-      <MainHeader selectedTabs={selectedTabs} isScrolled={isScrolled} />
-      <div className="pt-[68px] mb-[16px]">
+      <MainHeader
+        selectedTabs={selectedTabs}
+        isScrolled={isScrolled}
+        onSearchClick={handleSearchClick}
+      />
+      <SearchOverlay
+        isOpen={searchOverlay.isActive}
+        onClose={searchOverlay.close}
+        onSearch={handleSearch}
+      />
+      <div className="pt-[60px] mb-[16px] relative z-30">
         <Tabs
           options={feedListTabOptions}
           selectedTabs={selectedTabs}
           onSelectedTab={setSelectedTabs}
         />
       </div>
-      <div className="px-[16px] flex items-center h-[40px]">
+      {searchKeyword && (
+        <div className="px-[16px] py-[12px] flex items-center justify-between bg-n-50 relative z-30">
+          <span className="body-md text-n-300">
+            <span className="text-black font-semibold">{searchKeyword}</span> 검색 결과
+          </span>
+          <button
+            onClick={() => setSearchKeyword(undefined)}
+            className="body-md text-n-200 underline"
+            type="button"
+          >
+            검색 취소
+          </button>
+        </div>
+      )}
+      <div className="px-[16px] flex items-center h-[40px] relative z-30">
         <CheckBox
           text="크루 공개 글 보기"
           onChange={() => setIsMyCrew((prev) => !prev)}
@@ -69,9 +118,11 @@ export default function FeedContainer() {
         />
       </div>
       {isPending && <FeedSkeletons />}
-      <FeedList list={feedList} />
-      {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
-      <div className="fixed bottom-[58px] w-full max-w-[786px] mx-auto flex justify-end px-[16px] pb-[24px] z-2">
+      <div className="pb-[82px]">
+        <FeedList list={feedList} />
+        {feedList && feedList.length > 0 && <div ref={setTargetRef} />}
+      </div>
+      <div className="fixed bottom-[58px] left-1/2 -translate-x-1/2 w-full max-w-[786px] flex justify-end px-[16px] pb-[24px] z-2">
         <CreateFeedButton isScrolled={isScrolled} />
       </div>
       <CustomDialog
